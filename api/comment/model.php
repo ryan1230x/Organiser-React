@@ -9,9 +9,7 @@ class CommentModel extends Database {
     */
     protected function get_comments() {
         $query = "SELECT * FROM {$this->db_table} ORDER BY id DESC";
-        $conn = $this->connect();
-        $stmt = $conn->prepare($query);
-        $stmt->execute([]);
+        $stmt = $this->connect()->query($query);
         return $stmt;
     }
 
@@ -19,7 +17,7 @@ class CommentModel extends Database {
         Get all comments for a unique reference
     */
     protected function get_single_comment(string $reference) {
-        $query = "SELECT * FROM {$this->db_table} WHERE reference =? ORDER BY id DESC";
+        $query = "SELECT * FROM {$this->db_table} WHERE ticket_id =? ORDER BY id DESC";
         $conn = $this->connect();
         $stmt = $conn->prepare($query);
         $stmt->execute([$reference]);
@@ -30,18 +28,18 @@ class CommentModel extends Database {
         Add a comment/ insert a comment
     */
     protected function post_comment(
-        string $comment, string $author, string $reference
+        string $comment, string $author, string $ticket_id
     ) {
         $query = "INSERT INTO {$this->db_table} 
         SET
             comment = :comment,
             author = :author,
-            reference = :reference";
+            ticket_id = :ticket_id";
         $conn = $this->connect();
         $stmt = $conn->prepare($query);
         $stmt->bindValue(":comment", $comment);
         $stmt->bindValue(":author", $author);
-        $stmt->bindValue(":reference", $reference);
+        $stmt->bindValue(":ticket_id", $ticket_id);
         $stmt->execute();
         return $stmt;
     }

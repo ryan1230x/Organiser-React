@@ -1,5 +1,5 @@
 <?php
-include_once "../comments/model.php";
+include_once "../comment/model.php";
 class CommentView extends CommentModel {
     
     /*
@@ -20,11 +20,11 @@ class CommentView extends CommentModel {
         while($row = $results->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $comment_item = array(
-                "comment" => $comment,
+                "id" => $id,
                 "author" => $author,
+                "comment" => $comment,
                 "added_at" => $added_at,
-                "reference" => $reference,
-                "id" => $id
+                "ticketId" => $ticket_id,
             );
             array_push($comments_array, $comment_item);
         }
@@ -54,11 +54,11 @@ class CommentView extends CommentModel {
         while($row = $result->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $comment_item = array(
-                "comment" => $comment,
+                "id" => $id,
                 "author" => $author,
-                "added_at" => $added_at,
-                "reference" => $reference,
-                "id" => $id
+                "comment" => $comment,
+                "addedAt" => $added_at,
+                "ticketId" => $reference,
             );
             array_push($comments_array, $comment_item);
         }
@@ -74,9 +74,9 @@ class CommentView extends CommentModel {
         Add comment
     */
     public function add_comment(
-        string $comment, string $author, string $reference
+        string $comment, string $author, string $ticket_id
     ) {
-        $result = $this->post_comment($comment, $author, $reference);
+        $result = $this->post_comment($comment, $author, $ticket_id);
         if(!$result) return false;
         else return true;
     }

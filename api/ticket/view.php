@@ -18,8 +18,20 @@ class TicketView extends TicketModel  {
             extract($row);
             $ticket_item = array(
                 "id" => $id,
-                "created_by" => $created_by,
-                "created_at" => $created_at
+                "reference" => $reference,
+                "name" => $name,
+                "address" => $address,
+                "landline" => $landline,
+                "contactNumber" => $contact_number,
+                "network" => $network,
+                "service" => $service,
+                "portability" => $portability,
+                "package" => $package,
+                "status" => $status,
+                "requestedDate" => $requested_date,
+                "createdBy" => $created_by,
+                "createdAt" => $created_at,
+                "ticketId" => $ticket_id
             );
             array_push($ticket_array, $ticket_item);
         }
@@ -31,7 +43,7 @@ class TicketView extends TicketModel  {
         ));
     }
 
-    public function show_single_ticket(int $ticket_id) {
+    public function show_single_ticket(string $ticket_id) {
         $results = $this->get_single_ticket($ticket_id);
         $num_of_rows = $results->rowCount();
 
@@ -47,8 +59,20 @@ class TicketView extends TicketModel  {
             extract($row);
             $ticket_item = array(
                 "id" => $id,
-                "created_by" => $created_by,
-                "created_at" => $created_at
+                "reference" => $reference,
+                "name" => $name,
+                "address" => $address,
+                "landline" => $landline,
+                "contactNumber" => $contact_number,
+                "network" => $network,
+                "service" => $service,
+                "portability" => $portability,
+                "package" => $package,
+                "status" => $status,
+                "requestedDate" => $requested_date,
+                "createdBy" => $created_by,
+                "createdAt" => $created_at,
+                "ticketId" => $ticket_id,
             );
             array_push($ticket_array, $ticket_item);
         }
@@ -60,5 +84,46 @@ class TicketView extends TicketModel  {
         ));
     }
 
-    public function add_ticket() {}
+    public function add_ticket(
+        string $name,
+        string $landline,
+        string $contact_number,
+        string $reference,
+        string $address,
+        string $network,
+        string $portability,
+        string $package,
+        string $service,
+        string $requested_date,
+        string $created_by,
+        string $ticket_id,
+        string $status
+    ) {
+        $results = $this->post_ticket(
+            $name,
+            $landline,
+            $contact_number,
+            $reference,
+            $address,
+            $network,
+            $portability,
+            $package,
+            $service,
+            $requested_date,
+            $created_by,
+            $ticket_id,
+            $status
+        );
+        if(!$results) return false;
+        else return true;
+    }
+
+    public function update_ticket(
+        string $address,
+        string $ticket_id
+    ) {
+        $results = $this->put_ticket($address, $ticket_id);
+        if(!$results) return false;
+        else return true;
+    }
 }

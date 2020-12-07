@@ -3,10 +3,10 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 include "../config/Database.php";
-include "../comments/view.php";
+include "../comment/view.php";
 
 // Global variables
-$reference = $_GET["reference"];
+$ticket_id = $_GET["ticket_id"];
 
 
 /**
@@ -18,12 +18,12 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
     $comment_view = new CommentView();
     
     /**
-     * route        /api/comments/?reference=?
+     * route        /api/comments/?ticket_id=?
      * description  get all comments from a single client reference
      * method       GET
      */
-    if(isset($reference)) {
-        $comment_view->show_single_comment($reference);
+    if(isset($ticket_id)) {
+        $comment_view->show_single_comment($ticket_id);
         exit;
     }
 
@@ -41,8 +41,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $comment = $data["comment"];
     $author = $data["author"];
-    $reference = $data["reference"];
-    $data_array = array($comment, $author, $reference);
+    $data_array = array($comment, $author, $ticket_id);
 
     foreach($data_array as $value) {
         if(empty($value)) {
@@ -54,7 +53,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $comment_view = new CommentView();
-    $set_user = $comment_view->add_comment($comment, $author, $reference);
+    $set_user = $comment_view->add_comment($comment, $author, $ticket_id);
     if(!$set_user) {
         echo json_encode(array(
             "success" => false,
