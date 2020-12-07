@@ -8,7 +8,7 @@ class ErrorHandler {
 	 * */
 	public function validate_empty_values(array $json_values) {
 		foreach($json_values as $value) {
-			if(emtpy($value)) {
+			if(empty($value)) {
 				return false;
 			}
 		}
@@ -34,7 +34,7 @@ class ErrorHandler {
 	 * */
 	public function sanitize_int(array $numbers) {
 		foreach($numbers as $value) {
-			if(!filter_var($value, FILTER_SANITIZE_NUMBER_INT) {
+			if(!filter_var($value, FILTER_SANITIZE_NUMBER_INT)) {
 				return false;
 			}
 		}
@@ -51,7 +51,7 @@ class ErrorHandler {
 		$options = array("options" => array("regexp" => $pattern));
 		
 		foreach($strings as $value) {
-			if(!filter_var($value,  FILTER_VALIDATE_REGEX, $options)) {
+			if(!filter_var($value,  FILTER_VALIDATE_REGEXP, $options)) {
 				return false;
 			}
 		}
@@ -63,8 +63,9 @@ class ErrorHandler {
 	 * return false if the values are not integers
 	 * */
 	public function validate_int(array $numbers) {
+		$options = array("options" => array("min_range" => 0));
 		foreach($numbers as $value) {
-			if(!filter_var($value, FILTER_VALIDATE_INT)) {
+			if(!filter_var($value, FILTER_VALIDATE_INT, $options)) {
 				return false;
 			}
 		}
