@@ -153,7 +153,7 @@ class TicketModel extends Database {
     }
 
     /*-------- helper functions for updating a ticket -----------*/
-    private function set_put_address(
+    protected function set_put_address(
         string $address,
         string $ticket_id
     ) {
@@ -165,7 +165,7 @@ class TicketModel extends Database {
         return $stmt;
     }
 
-    private function set_put_info(
+    protected function set_put_info(
         string $name,
         string $landline,
         string $contact_number,
@@ -173,22 +173,16 @@ class TicketModel extends Database {
     ) {
         $query = "UPDATE client_info
         SET 
-            name = :name
-            landline = :landline
-            contact_number = :contact_number
+            name = ?, landline = ?, contact_number = ?
         WHERE 
-            ticket_id = :ticket_id";
+            ticket_id = ?";
         $conn = $this->connect();
         $stmt = $conn->prepare($query);
-        $stmt->bindValue(":name", $name);
-        $stmt->bindValue(":landline", $landline);
-        $stmt->bindValue(":contact_number", $contact_number);
-        $stmt->bindValue(":ticket_id", $ticket_id);
-        $stmt->execute();
+        $stmt->execute([$name, $landline, $contact_number, $ticket_id]);
         return $stmt;
     }
 
-    private function set_put_service(
+    protected function set_put_service(
         string $network,
         string $service,
         string $portability,
@@ -198,10 +192,10 @@ class TicketModel extends Database {
     ) {
         $query = "UPDATE client_service
         SET
-            network = :network
-            service = :service
-            portability = :portability
-            package = :package
+            network = :network,
+            service = :service,
+            portability = :portability,
+            package = :package,
             requested_date = :requested_date
         WHERE 
             ticket_id = :ticket_id";
@@ -217,7 +211,7 @@ class TicketModel extends Database {
         return $stmt;
     }
 
-    private function set_put_status(
+    protected function set_put_status(
         string $status,
         string $ticket_id
     ) {
@@ -236,9 +230,18 @@ class TicketModel extends Database {
     /*--------- end of helper functions ------------------------*/
     /**
      *  Updated a ticket
-     */
+     */ 
     protected function put_ticket(
         string $address,
+        string $name,
+        string $landline,
+        string $contact_number,
+        string $network,
+        string $service,
+        string $portability,
+        string $package,
+        string $requested_date,
+        string $status,
         string $ticket_id
     ) {
         // Init database connection
@@ -250,6 +253,10 @@ class TicketModel extends Database {
              */
             $conn->beginTransaction();
             $this->set_put_address($address, $ticket_id);
+            $this->set_put_info($name, $landline, $contact_number, $ticket_id);
+            $this->set_put_service($network, $service, $portability, $package, $requested_date, $ticket_id);
+            $this->set_put_status($status, $ticket_id);
+            
             return true;
         } catch (PDOException $e) {
             /**
