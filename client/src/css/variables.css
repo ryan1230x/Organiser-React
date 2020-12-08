@@ -1,0 +1,20 @@
+:root {
+    /* Fonts */
+    --font-family:'Catamaran', sans-serif;
+    --font-weight-light:300;
+    --font-weight-regular:400;
+    --font-weight-bold:700;
+    --font-weight-extra-bold:800;
+
+    /* Colors */
+    --color-green: #16a085;
+    --color-blue:#2980b9;
+    --color-red: #c0392b;
+
+    /* Darker Color with opacity */
+    --color-blue-opacity: rgba(49, 162, 238, 0.8);
+    --color-green-opacity: rgba(25, 192, 159, 0.8);
+    --color-red-opacity: rgba(228, 68, 51, 0.8);
+
+    --box-shadow:0 0 0 0.2rem;
+}

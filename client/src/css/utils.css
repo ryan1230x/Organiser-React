@@ -1,0 +1,19 @@
+.d-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.ml-1 {
+    margin-left: 0.5em;
+}
+
+.mr-1 {
+    margin-right: 0.5em;
+}
