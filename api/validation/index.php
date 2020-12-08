@@ -9,10 +9,10 @@ class ErrorHandler {
 	public function validate_empty_values(array $json_values) {
 		foreach($json_values as $value) {
 			if(empty($value)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 	
 	/*
@@ -47,7 +47,7 @@ class ErrorHandler {
 	 * */
 	public function validate_string(array $strings) {
 		
-		$pattern = "^[a-z A-Z]+$";
+		$pattern = "/^[a-z A-Z 0-9]+$/";
 		$options = array("options" => array("regexp" => $pattern));
 		
 		foreach($strings as $value) {
