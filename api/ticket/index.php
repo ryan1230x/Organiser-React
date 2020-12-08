@@ -1,5 +1,5 @@
 <?php
-header("Access-Allow-Control-Origin: *");
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 include_once "../ticket/view.php";
 include_once "../validation/index.php";
