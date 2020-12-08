@@ -120,9 +120,79 @@ class TicketView extends TicketModel  {
 
     public function update_ticket(
         string $address,
+        string $name,
+        string $landline,
+        string $contact_number,
+        string $network,
+        string $service,
+        string $portability,
+        string $package,
+        string $requested_date,
+        string $status,
         string $ticket_id
     ) {
-        $results = $this->put_ticket($address, $ticket_id);
+        $results = $this->put_ticket(
+            $address,
+            $name,
+            $landline,
+            $contact_number,
+            $network,
+            $service,
+            $portability,
+            $package,
+            $requested_date,
+            $status,
+            $ticket_id
+        );
+        echo json_encode(array(
+            "message" => array()
+        ));
+        if(!$results) return false;
+        else return true;       
+    }
+
+    public function update_address(
+        string $address, 
+        string $ticket_id
+    ) {
+        $results = $this->set_put_address($address, $ticket_id);
+        if(!$results) return false;
+        else return true;
+    }
+
+    public function update_info(
+        string $name,
+        string $landline,
+        string $contact_number,
+        string $ticket_id
+    ) {
+        $results = $this->set_put_info($name, $landline, $contact_number, $ticket_id);
+        if(!$results) return false;
+        else return true;
+    }
+
+    public function update_service(
+        string $network,
+        string $service,
+        string $portability,
+        string $package,
+        string $requested_date,
+        string $ticket_id
+    ) {
+        $results = $this->set_put_service(
+            $network, 
+            $service, 
+            $portability, 
+            $package, 
+            $requested_date, 
+            $ticket_id
+        );
+        if(!$results) return false;
+        else return true;
+    }
+
+    public function update_status(string $status, string $ticket_id) {
+        $results = $this->set_put_status($status, $ticket_id);
         if(!$results) return false;
         else return true;
     }
