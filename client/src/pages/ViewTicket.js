@@ -6,6 +6,7 @@ import Heading from "../components/Heading";
 import ViewTicketInformation from "../components/ViewTicketInformation";
 import ViewTicketComments from "../components/ViewTicketComments";
 import ViewTicketCloseComment from "../components/ViewTicketCloseComment";
+import ViewTicketHistroy from "../components/ViewTicketHistroy";
 
 function TicketView() {
   /**
@@ -21,6 +22,7 @@ function TicketView() {
       <ViewTicketInformation />
       <ViewTicketComments />
       <ViewTicketCloseComment />
+      <ViewTicketHistroy />
     </main>
   );
 }
