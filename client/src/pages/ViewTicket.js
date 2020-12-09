@@ -10,6 +10,8 @@ import ViewTicketCloseComment from "../components/ViewTicketCloseComment";
 function TicketView() {
   /**
    * Get the ticket id from the URL
+   * ---
+   * URL-> /ticket/:id
    **/
   const { id } = useParams();
 
