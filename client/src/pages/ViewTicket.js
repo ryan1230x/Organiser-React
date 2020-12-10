@@ -9,16 +9,24 @@ import ViewTicketCloseComment from "../components/ViewTicketCloseComment";
 import ViewTicketHistory from "../components/ViewTicketHistory";
 
 function TicketView() {
-  // Get the ticket id from the URL 
+  // Get the ticket id from the URL
   // URL-> /ticket/:id
   const { id } = useParams();
 
-  // GET all comments
+  // GET comments
   const [comments, setComment] = useState([]);
   useEffect(() => {
     fetch(`http://localhost/2020-organiser/api/comment/?ticket_id=${id}`)
-      .then(res => res.json())
-      .then(data => setComment(data.data));
+      .then((res) => res.json())
+      .then((data) => setComment(data.data));
+  }, []);
+
+  // GET history
+  const [historys, setHistory] = useState([]);
+  useEffect(() => {
+    fetch(`http://localhost/2020-organiser/api/history/?ticket_id=${id}`)
+      .then((res) => res.json())
+      .then((data) => setHistory(data.data));
   }, []);
 
   return (
@@ -26,8 +34,8 @@ function TicketView() {
       <Heading title="John Doe" subtitle="Calle Alemania" />
       <ViewTicketInformation />
       <ViewTicketComments comments={comments} />
-      {/*<ViewTicketCloseComment />
-      <ViewTicketHistory /> */}
+      <ViewTicketCloseComment historys={historys} />
+      {/*<ViewTicketHistory /> */}
     </main>
   );
 }
