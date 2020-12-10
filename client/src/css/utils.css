@@ -17,3 +17,8 @@
 .mr-1 {
     margin-right: 0.5em;
 }
+
+.no-padding {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}

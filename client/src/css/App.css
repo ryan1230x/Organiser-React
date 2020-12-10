@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
 @import "./variables.css";
 @import "./defaults.css";
 @import "./components.css";
@@ -29,7 +29,7 @@ body {
 /* Header Start */
 header {
     margin-bottom: 2em;
-    padding: 1em;
+    padding: 0.5em;
     background-color: rgba(0,0,0,0.8);
 }
 
@@ -62,16 +62,16 @@ header form {
 
 header .form-inline {
     width: 100%;
-    height: 50px;
+    height: 45px;
     padding: 0.5em;
     margin-right: 0.25em;
 }
 
 header form input {
     font-size: 1rem;
-    background-color: #666;
+    background-color: #403f3f;
     color: white;
-    border: 1px solid #666;
+    border: 1px solid #403f3f;
     padding-left: 35px !important;
 }
 
@@ -84,6 +84,10 @@ header form input[type="text"]::placeholder {
 /* Ticket Table start */
 .ticket-table {
     margin-top: 1em;
+}
+
+.ticket-table th {
+    font-weight: var(--font-weight-bold);
 }
 
 .ticket-table td,
