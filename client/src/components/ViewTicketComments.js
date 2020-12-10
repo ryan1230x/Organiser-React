@@ -1,31 +1,40 @@
 import React from "react";
 
-function ViewTicketComment() {
+function ViewTicketComment(props) {
+  const { author, comment, added_at } = props.comment
+  console.log(props.comment);
   return (
     <article className="view-ticket-comment">
       <div className="comment-head">
-        <span>{/* Comment head goes here */}</span>
+        <span>Note added at { added_at } by { author }</span>
       </div>
       <div className="comment-body">
-        <p>{/* Comment body goes here */}</p>
+        <p>{ comment }</p>
       </div>
     </article>
   );
 }
 
-function ViewTicketCommentsList() {
+function ViewTicketCommentsList(props) {
   return (
     <section className="view-ticket-comment-list">
-      <h4>Comments</h4>
-      <div className="comment-list-container">{/* Comments go here */}</div>
+      <h2>Comments</h2>
+      <div className="comment-list-container">
+        {
+          props.comments.map((comment, index) => (
+            <ViewTicketComment key={index} comment={comment} />
+          ))
+        }        
+      </div>
     </section>
   );
 }
 
-function ViewTicketComments() {
+function ViewTicketComments(props) {
+  const { comments } = props
   return (
     <section>
-      <ViewTicketCommentsList />
+      <ViewTicketCommentsList comments={comments} />
     </section>
   );
 }
