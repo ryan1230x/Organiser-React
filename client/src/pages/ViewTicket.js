@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // import components
-import Heading from "../components/Heading";
 import ViewTicketInformation from "../components/ViewTicketInformation";
 import ViewTicketComments from "../components/ViewTicketComments";
 import ViewTicketCloseComment from "../components/ViewTicketCloseComment";
@@ -33,13 +32,12 @@ function TicketView() {
   const [ticketInformation, setTicketInformation] = useState({});
   useEffect(() => {
     fetch(`http://localhost/2020-organiser/api/ticket/?ticket_id=${id}`)
-      .then(res => res.json())
-      .then(data => setTicketInformation(data.data))
+      .then((res) => res.json())
+      .then((data) => setTicketInformation(data.data));
   }, []);
 
   return (
     <main className="container">
-      <Heading />
       <ViewTicketInformation ticketInformation={ticketInformation} />
       <ViewTicketComments comments={comments} />
       <ViewTicketCloseComment historys={historys} />

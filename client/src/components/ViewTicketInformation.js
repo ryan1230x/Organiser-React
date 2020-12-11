@@ -1,57 +1,61 @@
 import React from "react";
 
+// Import Components
+import Heading from "./Heading";
+
 function ViewTicketInformation(props) {
-  const { 
-    name, 
-    address, 
-    landline, 
-    contactNumber, 
+  const {
+    name,
+    address,
+    landline,
+    contactNumber,
     requestedDate,
     status,
     clientPackage,
     network,
     portability
-  } = props.ticketInformation[0]
+  } = props.ticketInformation[0];
   return (
     <section className="view-ticket-information">
+      <Heading title={name} />
       <div className="row">
         {/* View ticket information left side start */}
         <div className="view-ticket-information-left col-lg-6 no-padding">
           <p>
             <strong>Address: </strong>
-            { address }
+            {address}
           </p>
           <p>
             <strong>Landline Number:</strong>
-            --Landline Number goes here--
+            {landline}
           </p>
           <p>
             <strong>Contact Number:</strong>
-            --Contact Number goes here--
+            {contactNumber}
           </p>
           <p>
             <strong>Requested Date:</strong>
-            --Requested Date goes here--
-          </p>          
+            {requestedDate}
+          </p>
         </div>
         {/* View ticket information left side end */}
         {/* View ticket information right side start */}
         <div className="view-ticket-information-right col-lg-6 no-padding">
           <p>
             <strong>Status:</strong>
-            --Status goes here--
+            {status}
           </p>
           <p>
             <strong>Network:</strong>
-            --Network goes here--
+            {network}
           </p>
           <p>
             <strong>Client Package: </strong>
-            { clientPackage }
+            {clientPackage}
           </p>
           <p>
             <strong>Portability:</strong>
-            --Portability goes here--
+            {portability}
           </p>
         </div>
         {/* View ticket information right side end */}
