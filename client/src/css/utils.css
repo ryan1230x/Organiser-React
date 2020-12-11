@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.justify-content-between {
+    justify-content: space-between;
+}
+
 .ml-auto {
     margin-left: auto;
 }

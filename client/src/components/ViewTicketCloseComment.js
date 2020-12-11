@@ -9,22 +9,29 @@ function ViewTicketCloseComment() {
   };
 
   return (
-    <section className="view-ticket-close-comment">
-      <h2>Closing Comment</h2>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label htmlfor="close-comment">Add Comment</label>
-          <textarea
-            onChange={(e) => setComment(e.target.value)}
-            id="close-comment"
-            className="form-control"
-            name="close-comment"
-            row="5"
-            col="5"
-          ></textarea>
+    <section className="view-ticket-close-comment row">
+      <div className="col-12 col-lg-9 no-padding">
+        <h2 style={{marginBottom:"1em"}}>Closing Comment</h2>
+        <form onSubmit={onSubmit}>
+          <div className="form-group">
+            <textarea
+              onChange={(e) => setComment(e.target.value)}
+              id="close-comment"
+              className="form-control"
+              name="close-comment"
+              rows="7"
+              draggable="false"
+            ></textarea>
+          </div>
+          <div className="d-flex">
+            <input 
+              type="submit" 
+              className="btn btn-success ml-auto" 
+              value="Close Ticket"
+            />
+          </div>
+        </form>
         </div>
-        <input type="submit" className="btn btn-primary" value="Close Ticket" />
-      </form>
     </section>
   );
 }

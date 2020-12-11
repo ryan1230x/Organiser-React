@@ -1,14 +1,25 @@
 import React from "react";
 
-function ViewTicketInformation() {
+function ViewTicketInformation(props) {
+  const { 
+    name, 
+    address, 
+    landline, 
+    contactNumber, 
+    requestedDate,
+    status,
+    clientPackage,
+    network,
+    portability
+  } = props.ticketInformation[0]
   return (
     <section className="view-ticket-information">
       <div className="row">
         {/* View ticket information left side start */}
         <div className="view-ticket-information-left col-lg-6 no-padding">
           <p>
-            <strong>Address:</strong>
-            --address goes here--
+            <strong>Address: </strong>
+            { address }
           </p>
           <p>
             <strong>Landline Number:</strong>
@@ -35,8 +46,8 @@ function ViewTicketInformation() {
             --Network goes here--
           </p>
           <p>
-            <strong>Client Package:</strong>
-            --Package goes here--
+            <strong>Client Package: </strong>
+            { clientPackage }
           </p>
           <p>
             <strong>Portability:</strong>

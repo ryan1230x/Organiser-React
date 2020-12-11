@@ -112,3 +112,30 @@ header form input[type="text"]::placeholder {
 }
 
 /* Ticket Table End */
+
+/* view ticket start */
+.view-ticket-comment-list,
+.view-ticket-add-comment {
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.view-ticket-comment {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    margin-bottom: 1em;
+}
+
+.view-ticket-comment .comment-head {
+    background: #e0e0e0;
+    padding: 0.5em 1em;
+    color: #333;
+    font-weight: var(--font-weight-regular);
+}
+
+.view-ticket-comment .comment-body {
+    padding: 1em;
+}
+
+/* view ticket end */

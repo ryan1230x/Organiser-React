@@ -29,10 +29,18 @@ function TicketView() {
       .then((data) => setHistory(data.data));
   }, []);
 
+  // GET ticket information
+  const [ticketInformation, setTicketInformation] = useState({});
+  useEffect(() => {
+    fetch(`http://localhost/2020-organiser/api/ticket/?ticket_id=${id}`)
+      .then(res => res.json())
+      .then(data => setTicketInformation(data.data))
+  }, []);
+
   return (
     <main className="container">
-      <Heading title="John Doe" subtitle="Calle Alemania" />
-      <ViewTicketInformation />
+      <Heading />
+      <ViewTicketInformation ticketInformation={ticketInformation} />
       <ViewTicketComments comments={comments} />
       <ViewTicketCloseComment historys={historys} />
       {/*<ViewTicketHistory /> */}
