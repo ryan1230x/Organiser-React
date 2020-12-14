@@ -73,14 +73,13 @@ class TicketView extends TicketModel  {
                 "createdBy" => $created_by,
                 "createdAt" => $created_at,
                 "ticketId" => $ticket_id,
-            );
-            array_push($ticket_array, $ticket_item);
+            );            
         }
 
         echo json_encode(array(
             "count" => $num_of_rows,
             "success" => true,
-            "data" => $ticket_array
+            "data" => $ticket_item
         ));
     }
 

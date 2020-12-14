@@ -11,7 +11,7 @@
 include_once "../config/Database.php";
 class HistoryModel extends Database {
 
-  protected function get_histroy() {
+  protected function get_history() {
     $query = "SELECT * FROM history";
     $stmt = $this->connect()->query($query);
     return $stmt;

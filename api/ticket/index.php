@@ -62,14 +62,14 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $address = $data["address"]; 
     $name = $data["name"];
     $landline = $data["landline"];
-    $contact_number = $data["contact_number"];
+    $contact_number = $data["contactNumber"];
     $network = $data["network"];
     $portability = $data["portability"];
-    $package = $data["package"];
-    $requested_date = $data["requested_date"];
+    $package = $data["clientPackage"];
+    $requested_date = $data["requestedDate"];
     $service = $data["service"];
     $status = $data["status"];
-    $created_by = $data["created_by"];
+    $created_by = $data["createdBy"];
     $ticket_id = sha1(date("U") . $reference);
     $data_array = array(
         $name,
@@ -122,7 +122,22 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     echo json_encode(array(
         "success" => true,
-        "message" => "Created successfully"
+        "message" => "Created successfully",
+        "data" => array(
+            "reference" => $reference,
+            "name" => $name,
+            "address" => $address,
+            "landline" => $landline,
+            "contactNumber" => $contact_number,
+            "network" => $network,
+            "service" => $service,
+            "portability" => $portability,
+            "clientPackage" => $package,
+            "status" => $status,
+            "requestedDate" => $requested_date,
+            "createdBy" => $created_by,
+            "ticketId" => $ticket_id,
+        )
     ));
     exit;  
 }

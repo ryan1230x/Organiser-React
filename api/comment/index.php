@@ -41,6 +41,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $comment = $data["comment"];
     $author = $data["author"];
+    $ticket_id = $data["ticketId"];
+
     $data_array = array($comment, $author, $ticket_id);
 
     foreach($data_array as $value) {
@@ -64,7 +66,12 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     
     echo json_encode(array(
         "success" => true,
-        "message" => "Added successfully"
+        "message" => "Added successfully",
+        "data" => array(
+            "author" => $author,
+            "comment" => $comment,
+            "ticketId" => $ticket_id
+        )
     ));
     exit;
 }
@@ -94,7 +101,7 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
     if(!$set_update) {
         echo json_encode(array(
             "success" => false,
-            "message" => "comment cound not be updated"
+            "message" => "comment cound not be updated"   
         ));
         exit;
     }

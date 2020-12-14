@@ -1,7 +1,7 @@
 <?php
 header("Content-Type:application/json");
 header("Access-Control-Allow-Origin: *");
-include_once "./view.php";
+include_once "../history/view.php";
 include_once "../validation/index.php";
 
 // Global variables
@@ -12,7 +12,7 @@ $ticket_id = $_GET["ticket_id"];
  * description  get all history
  * method       GET
  */
-if($_SERVER["REQUEST_METHOD"] == "GET") {
+if($_SERVER["REQUEST_METHOD"] === "GET") {
   $history_view = new HistoryView();
 
   /**
