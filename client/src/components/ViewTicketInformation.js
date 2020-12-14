@@ -14,7 +14,7 @@ function ViewTicketInformation(props) {
     clientPackage,
     network,
     portability
-  } = props.ticketInformation[0];
+  } = props.ticketInformation;
   return (
     <section className="view-ticket-information">
       <Heading title={name} />
@@ -26,15 +26,15 @@ function ViewTicketInformation(props) {
             {address}
           </p>
           <p>
-            <strong>Landline Number:</strong>
+            <strong>Landline Number: </strong>
             {landline}
           </p>
           <p>
-            <strong>Contact Number:</strong>
+            <strong>Contact Number: </strong>
             {contactNumber}
           </p>
           <p>
-            <strong>Requested Date:</strong>
+            <strong>Requested Date: </strong>
             {requestedDate}
           </p>
         </div>
@@ -42,11 +42,11 @@ function ViewTicketInformation(props) {
         {/* View ticket information right side start */}
         <div className="view-ticket-information-right col-lg-6 no-padding">
           <p>
-            <strong>Status:</strong>
+            <strong>Status: </strong>
             {status}
           </p>
           <p>
-            <strong>Network:</strong>
+            <strong>Network: </strong>
             {network}
           </p>
           <p>
@@ -54,7 +54,7 @@ function ViewTicketInformation(props) {
             {clientPackage}
           </p>
           <p>
-            <strong>Portability:</strong>
+            <strong>Portability: </strong>
             {portability}
           </p>
         </div>

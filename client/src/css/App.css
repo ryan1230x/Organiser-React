@@ -139,3 +139,17 @@ header form input[type="text"]::placeholder {
 }
 
 /* view ticket end */
+
+/* History start */
+.view-ticket-history {
+    margin-top: 3em;
+}
+
+.view-ticket-history .view-ticket-history-item {
+    padding: 1em;
+    background-color: #e0e0e0;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+}
+
+/* History end */

@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect} from "react";
 
+// Import redux and actions from reducer
+import {connect} from "react-redux";
+import {getTickets} from "../actions/ticketActions";
+
+// Import components
 import TicketTable from "../components/TicketTable";
 
-function Home() {
-  const [tickets, setTicket] = useState([]);
+function Home({getTickets, tickets}) {
 
   useEffect(() => {
-    fetch("http://localhost/2020-organiser/api/ticket/")
-      .then((res) => res.json())
-      .then((data) => setTicket(data.data));
-  }, []);
+    getTickets();
+  }, [getTickets]);
+
   return (
     <main className="container">
       <TicketTable tickets={tickets} />
@@ -17,4 +20,8 @@ function Home() {
   );
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+  tickets: state.tickets
+})
+
+export default connect(mapStateToProps , {getTickets})(Home);

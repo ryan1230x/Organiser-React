@@ -18,11 +18,13 @@ function TicketTableHead() {
     "Action"
   ];
 
+  const width = 100 / TicketTableHeaders.length;
+
   return (
     <thead>
       <tr>
         {TicketTableHeaders.map((item, index) => (
-          <th key={index}>{item}</th>
+          <th style={{width: width + "%"}} key={index}>{item}</th>
         ))}
       </tr>
     </thead>
@@ -34,13 +36,14 @@ function TicketTableHead() {
  * of the Ticket table
  */
 function TicketTableBody(props) {
+  const {tickets} = props.tickets
   return (
     <tbody>
-      {props.tickets.map((ticket, index) => (
+      {tickets.map((ticket, index) => (
         <tr key={index}>
           <td>{ticket.name}</td>
           <td>{ticket.address}</td>
-          <td>{ticket.package}</td>
+          <td>{ticket.clientPackage}</td>
           <td>{ticket.network}</td>
           <td>{ticket.status}</td>
           <td className="d-flex">
@@ -62,12 +65,12 @@ function TicketTableBody(props) {
  * The Whole TicketTable
  */
 function TicketTable(props) {
-  const { tickets } = props;
+  const { tickets} = props;  
   return (
     <section>
       <Heading
         title="Pending Installations"
-        subtitle={`Currently ${tickets.length} Open`}
+        subtitle={`Currently ${tickets.tickets.length} Open`}
       />
       <table className="ticket-table striped">
         <TicketTableHead />

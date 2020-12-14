@@ -3,10 +3,10 @@ import React from "react";
 function ViewTicketHistoryItem(props) {
   const { author, addedAt, action } = props.history;
   return (
-    <article className="view-ticket-history-item d-flex align-item-center justify-content-between">
-      <div className="history-item-time">
+    <article className="view-ticket-history-item d-flex justify-content-between">
+      <div className="history-item-time d-flex align-items-center justify-content-between">
         <ion-icon name="time"></ion-icon>
-        <p>{addedAt}</p>
+        <p style={{marginLeft: "0.5em"}}>{addedAt}</p>
       </div>
       <div className="history-item-activity">
         <p>
@@ -18,13 +18,13 @@ function ViewTicketHistoryItem(props) {
 }
 
 function ViewTicketHistoryList(props) {
+  console.log(props)
   return (
     <section className="view-ticket-history-list">
-      <h2>Ticket Histroy</h2>
       <div className="view-ticket-history-container">
         {/* History items go here */}
         {props.historys.map((history, index) => (
-          <ViewTicketHistoryItem key={index} histroy={history} />
+          <ViewTicketHistoryItem key={index} history={history} />
         ))}
       </div>
     </section>
@@ -32,10 +32,14 @@ function ViewTicketHistoryList(props) {
 }
 
 function ViewTicketHistory(props) {
-  const { histroys } = props;
+  const { historys } = props;
   return (
-    <section>
-      <ViewTicketHistoryList historys={histroys} />
+    <section className="view-ticket-history">
+      <div className="row">
+        <div className="col-12 col-lg-9 no-padding">
+          <ViewTicketHistoryList historys={historys} />
+        </div>
+      </div>
     </section>
   );
 }
