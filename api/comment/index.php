@@ -41,8 +41,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $comment = $data["comment"];
     $author = $data["author"];
     $ticket_id = $data["ticketId"];
+    $added_at = $data["addedAt"];
 
-    $data_array = array($comment, $author, $ticket_id);
+    $data_array = array($comment, $author, $ticket_id, $added_at);
 
     foreach($data_array as $value) {
         if(empty($value)) {
@@ -54,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $comment_view = new CommentView();
-    $set_user = $comment_view->add_comment($comment, $author, $ticket_id);
+    $set_user = $comment_view->add_comment($comment, $author, $ticket_id, $added_at);
     if(!$set_user) {
         echo json_encode(array(
             "success" => false,
@@ -69,7 +70,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         "data" => array(
             "author" => $author,
             "comment" => $comment,
-            "ticketId" => $ticket_id
+            "ticketId" => $ticket_id,
+            "addedAt" => $added_at
         )
     ));
     exit;

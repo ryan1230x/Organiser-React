@@ -23,7 +23,7 @@ class CommentView extends CommentModel {
                 "id" => $id,
                 "author" => $author,
                 "comment" => $comment,
-                "added_at" => $added_at,
+                "addedAt" => $added_at,
                 "ticketId" => $ticket_id,
             );
             array_push($comments_array, $comment_item);
@@ -45,7 +45,8 @@ class CommentView extends CommentModel {
 
         if($num_of_rows <= 0) {
             echo json_encode(array(
-                "message" => "None found"
+                "message" => "None found",
+                "data" => array()
             ));
             exit;
         }
@@ -58,7 +59,7 @@ class CommentView extends CommentModel {
                 "author" => $author,
                 "comment" => $comment,
                 "addedAt" => $added_at,
-                "ticketId" => $reference,
+                "ticketId" => $ticket_id,
             );
             array_push($comments_array, $comment_item);
         }
@@ -74,9 +75,12 @@ class CommentView extends CommentModel {
         Add comment
     */
     public function add_comment(
-        string $comment, string $author, string $ticket_id
+        string $comment, 
+        string $author, 
+        string $ticket_id,
+        string $added_at
     ) {
-        $result = $this->post_comment($comment, $author, $ticket_id);
+        $result = $this->post_comment($comment, $author, $ticket_id, $added_at);
         if(!$result) return false;
         else return true;
     }

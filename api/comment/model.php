@@ -28,18 +28,23 @@ class CommentModel extends Database {
         Add a comment/ insert a comment
     */
     protected function post_comment(
-        string $comment, string $author, string $ticket_id
+        string $comment, 
+        string $author, 
+        string $ticket_id,
+        string $added_at
     ) {
         $query = "INSERT INTO {$this->db_table} 
         SET
             comment = :comment,
             author = :author,
-            ticket_id = :ticket_id";
+            ticket_id = :ticket_id,
+            added_at = :added_at";
         $conn = $this->connect();
         $stmt = $conn->prepare($query);
         $stmt->bindValue(":comment", $comment);
         $stmt->bindValue(":author", $author);
         $stmt->bindValue(":ticket_id", $ticket_id);
+        $stmt->bindValue(":added_at", $added_at);
         $stmt->execute();
         return $stmt;
     }

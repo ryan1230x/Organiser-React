@@ -5,7 +5,6 @@ import ViewTicketCommentsList from "./ViewTicketCommentList";
 
 
 function ViewTicketComments({handleAddComment, comments, ticketId}) {
-  console.log(comments);
   const [newComment, setNewComment] = useState("");
   
   const onSubmit = (e) => {
@@ -13,9 +12,11 @@ function ViewTicketComments({handleAddComment, comments, ticketId}) {
     const newCommentObject = {
       author: "Ryan",
       comment: newComment,
-      ticketId
+      ticketId,
+      addedAt: new Date().toDateString()
     };
-    handleAddComment(JSON.stringify(newCommentObject));
+    handleAddComment(JSON.stringify(newCommentObject), ticketId);
+    setNewComment("");
   }
 
   return (
