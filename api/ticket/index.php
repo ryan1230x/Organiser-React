@@ -20,7 +20,7 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
     $error_handler = new ErrorHandler();
 
     /**
-     * route        /api/ticket/?ticket_id=?
+     * route        /api/ticket/?ticket_id=:id
      * description  Get a single ticket with the ticket-id
      * method       GET
      */
@@ -143,7 +143,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 /*
-    route       /api/ticket/?ticket_id=?
+    route       /api/ticket/?ticket_id=:id
     description update a ticket
     method      PUT
  */

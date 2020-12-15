@@ -2,7 +2,6 @@
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-include "../config/Database.php";
 include "../comment/view.php";
 
 // Global variables
@@ -18,7 +17,7 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
     $comment_view = new CommentView();
     
     /**
-     * route        /api/comments/?ticket_id=?
+     * route        /api/comments/?ticket_id=:id
      * description  get all comments from a single client reference
      * method       GET
      */
@@ -77,7 +76,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 /**
- * route        /api/comments/?reference=?
+ * route        /api/comments/?ticket_id=:id
  * description  update a comment
  * method       PUT
  */

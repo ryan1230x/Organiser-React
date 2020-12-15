@@ -16,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
   $history_view = new HistoryView();
 
   /**
-   * route        /api/history/?ticket_id=?
+   * route        /api/history/?ticket_id=:id
    * description  get all history form a single ticket
    * method       GET
    */
