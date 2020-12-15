@@ -2,6 +2,7 @@ import * as constant from "../actions/constants";
 
 const initialState = {
     tickets:[],
+    ticketInformation:{},
     loading:true
 };
 
@@ -11,6 +12,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 tickets: action.payload,
+                loading: false
+            }
+        case constant.GET_TICKET_INFORMATION:
+            return {
+                ...state,
+                ticketInformation: action.payload,
                 loading: false
             }
         case constant.ADD_TICKET:

@@ -10,8 +10,16 @@ import ViewTicketHistory from "../components/ViewTicketHistory";
 // import react and action functions
 import {connect} from "react-redux"
 import {getComments, addComment} from "../actions/commentActions";
+import {getTicketInformation} from "../actions/ticketActions";
 
-function TicketView({addComment, getComments, comments, loading}) {
+function TicketView({
+  addComment, 
+  getComments, 
+  comments, 
+  loadingComments,
+  getTicketInformation,
+  ticketInformation
+}) {
   // Get the ticket id from the URL
   // URL-> /ticket/:id
   const { id } = useParams();
@@ -19,7 +27,8 @@ function TicketView({addComment, getComments, comments, loading}) {
   // GET comments
   useEffect(() => {
     getComments(id)
-  }, [getComments]);
+    getTicketInformation(id);
+  }, [getComments, getTicketInformation]);
 
   // GET history
   const [historys, setHistory] = useState([]);
@@ -29,18 +38,10 @@ function TicketView({addComment, getComments, comments, loading}) {
       .then((data) => setHistory(data.data));
   }, [id]);
 
-  // GET ticket information
-  const [ticketInformation, setTicketInformation] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost/2020-organiser/api/ticket/?ticket_id=${id}`)
-      .then((res) => res.json())
-      .then((data) => setTicketInformation(data.data));
-  }, [id]);
-
   return (
     <main className="container">
       <ViewTicketInformation ticketInformation={ticketInformation} />
-      {loading === null ? "Loading..." : (<ViewTicketComments comments={comments} ticketId={id} handleAddComment={addComment} />)}
+      {loadingComments === null ? "Loading..." : (<ViewTicketComments comments={comments} ticketId={id} handleAddComment={addComment} />)}
       <ViewTicketCloseComment />
       <ViewTicketHistory historys={historys} />
     </main>
@@ -49,7 +50,8 @@ function TicketView({addComment, getComments, comments, loading}) {
 
 const mapStateToProps = (state) => ({
   comments: state.comments.comments,
-  loading: state.comments.loading
+  loadingComments: state.comments.loading,
+  ticketInformation: state.tickets.ticketInformation
 });
 
-export default connect(mapStateToProps, {getComments, addComment})(TicketView);
+export default connect(mapStateToProps, {getComments, addComment, getTicketInformation})(TicketView);

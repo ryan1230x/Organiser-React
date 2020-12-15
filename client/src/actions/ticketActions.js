@@ -27,3 +27,16 @@ export const addTicket = (ticketData) => dispatch => {
         }))
         .catch(error => console.error(error));
 }
+/**
+ * 
+ * @param {string} ticketId 
+ */
+export const getTicketInformation = (ticketId) => dispatch => {
+    axios
+        .get(`${BASE_URL}?ticket_id=${ticketId}`)
+        .then(res => dispatch({
+            type: constant.GET_TICKET_INFORMATION,
+            payload: res.data.data
+        }))
+        .catch(error => console.error(error));
+}
