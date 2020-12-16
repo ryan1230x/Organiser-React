@@ -1,4 +1,4 @@
-import * as constant from "./constant";
+import * as constant from "./constants";
 import axios from "axios";
 
 const BASE_URL = "http://localhost/2020-organiser/api/history/";

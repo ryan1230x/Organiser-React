@@ -47,8 +47,10 @@ class HistoryView extends HistoryModel {
 
     if($num_of_row <= 0) {
       echo json_encode(array(
-        "message" => "None found"
+        "message" => "None found",
+        "data" => array()
       ));
+      exit;
     }
 
     $history_array = array();

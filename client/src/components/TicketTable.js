@@ -74,7 +74,7 @@ function TicketTable({ tickets, isLoadingTickets }) {
       />
       <table className="ticket-table striped">
         <TicketTableHead />
-        {!isLoadingTickets ? (
+        {isLoadingTickets ? (
           "Loading..."
         ) : (
           <TicketTableBody tickets={tickets} />

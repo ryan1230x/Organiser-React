@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { getComments, addComment } from "../actions/commentActions";
 import {
   getTicketInformation,
-  putTicketStatusToClose
+  putTicketStatusToClosed
 } from "../actions/ticketActions";
 import { getHistory } from "../actions/historyActions";
 
@@ -23,7 +23,7 @@ function TicketView({
   loadingComments,
   getTicketInformation,
   ticketInformation,
-  putTicketStatusToClose,
+  putTicketStatusToClosed,
   getHistory,
   histories,
   loadingHistories
@@ -41,7 +41,7 @@ function TicketView({
 
   return (
     <main className="container">
-      {!loadingComments && !loadingHistories ? (
+      {loadingComments && loadingHistories ? (
         "Loading..."
       ) : (
         <>
@@ -53,7 +53,7 @@ function TicketView({
           />
           <ViewTicketCloseComment
             handleAddComment={addComment}
-            handleputTicketStatusToClose={putTicketStatusToClose}
+            handleputTicketStatusToClosed={putTicketStatusToClosed}
             ticketId={id}
           />
           <ViewTicketHistory histories={histories} />
@@ -75,6 +75,6 @@ export default connect(mapStateToProps, {
   getComments,
   addComment,
   getTicketInformation,
-  putTicketStatusToClose,
+  putTicketStatusToClosed,
   getHistory
 })(TicketView);
