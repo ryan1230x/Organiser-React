@@ -24,7 +24,9 @@ function TicketTableHead() {
     <thead>
       <tr>
         {TicketTableHeaders.map((item, index) => (
-          <th style={{width: width + "%"}} key={index}>{item}</th>
+          <th style={{ width: width + "%" }} key={index}>
+            {item}
+          </th>
         ))}
       </tr>
     </thead>
@@ -35,8 +37,7 @@ function TicketTableHead() {
  * This functional component handles the body
  * of the Ticket table
  */
-function TicketTableBody(props) {
-  const {tickets} = props.tickets
+function TicketTableBody({ tickets }) {
   return (
     <tbody>
       {tickets.map((ticket, index) => (
@@ -64,17 +65,20 @@ function TicketTableBody(props) {
 /**
  * The Whole TicketTable
  */
-function TicketTable(props) {
-  const { tickets} = props;  
+function TicketTable({ tickets, isLoadingTickets }) {
   return (
     <section>
       <Heading
         title="Pending Installations"
-        subtitle={`Currently ${tickets.tickets.length} Open`}
+        subtitle={`Currently ${tickets.length} Open`}
       />
       <table className="ticket-table striped">
         <TicketTableHead />
-        <TicketTableBody tickets={tickets} />
+        {!isLoadingTickets ? (
+          "Loading..."
+        ) : (
+          <TicketTableBody tickets={tickets} />
+        )}
       </table>
     </section>
   );
