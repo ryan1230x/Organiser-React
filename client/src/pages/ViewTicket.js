@@ -14,6 +14,7 @@ import {
   getTicketInformation,
   putTicketStatusToClose
 } from "../actions/ticketActions";
+import { getHistory } from "../actions/historyActions";
 
 function TicketView({
   addComment,
@@ -22,7 +23,9 @@ function TicketView({
   loadingComments,
   getTicketInformation,
   ticketInformation,
-  putTicketStatusToClose
+  putTicketStatusToClose,
+  getHistory,
+  histories
 }) {
   // Get the ticket id from the URL
   // URL-> /ticket/:id
@@ -32,15 +35,8 @@ function TicketView({
   useEffect(() => {
     getComments(id);
     getTicketInformation(id);
-  }, [getComments, getTicketInformation, id]);
-
-  // GET history
-  const [historys, setHistory] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost/2020-organiser/api/history/?ticket_id=${id}`)
-      .then((res) => res.json())
-      .then((data) => setHistory(data.data));
-  }, [id]);
+    getHistory(id);
+  }, [getComments, getTicketInformation, getHistory, id]);
 
   return (
     <main className="container">
@@ -59,7 +55,7 @@ function TicketView({
         handleputTicketStatusToClose={putTicketStatusToClose}
         ticketId={id}
       />
-      <ViewTicketHistory historys={historys} />
+      <ViewTicketHistory histories={histories} />
     </main>
   );
 }
@@ -67,12 +63,14 @@ function TicketView({
 const mapStateToProps = (state) => ({
   comments: state.comments.comments,
   loadingComments: state.comments.loading,
-  ticketInformation: state.tickets.ticketInformation
+  ticketInformation: state.tickets.ticketInformation,
+  histories: state.histories.histories
 });
 
 export default connect(mapStateToProps, {
   getComments,
   addComment,
   getTicketInformation,
-  putTicketStatusToClose
+  putTicketStatusToClose,
+  getHistory
 })(TicketView);

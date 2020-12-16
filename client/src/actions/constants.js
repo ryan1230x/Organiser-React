@@ -5,3 +5,5 @@ export const GET_TICKET_INFORMATION = "GET_TICKET_INFORMATION";
 export const GET_COMMENTS = "GET_COMMENTS";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const CLOSE_TICKET = "CLOSE_TICKET";
+
+export const GET_HISTORY = "GET_HISTORY";
