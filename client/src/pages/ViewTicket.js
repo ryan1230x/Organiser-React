@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 // import components
@@ -25,7 +25,8 @@ function TicketView({
   ticketInformation,
   putTicketStatusToClose,
   getHistory,
-  histories
+  histories,
+  loadingHistories
 }) {
   // Get the ticket id from the URL
   // URL-> /ticket/:id
@@ -40,22 +41,24 @@ function TicketView({
 
   return (
     <main className="container">
-      <ViewTicketInformation ticketInformation={ticketInformation} />
-      {loadingComments === null ? (
+      {!loadingComments && !loadingHistories ? (
         "Loading..."
       ) : (
-        <ViewTicketComments
-          comments={comments}
-          ticketId={id}
-          handleAddComment={addComment}
-        />
+        <>
+          <ViewTicketInformation ticketInformation={ticketInformation} />
+          <ViewTicketComments
+            comments={comments}
+            ticketId={id}
+            handleAddComment={addComment}
+          />
+          <ViewTicketCloseComment
+            handleAddComment={addComment}
+            handleputTicketStatusToClose={putTicketStatusToClose}
+            ticketId={id}
+          />
+          <ViewTicketHistory histories={histories} />
+        </>
       )}
-      <ViewTicketCloseComment
-        handleAddComment={addComment}
-        handleputTicketStatusToClose={putTicketStatusToClose}
-        ticketId={id}
-      />
-      <ViewTicketHistory histories={histories} />
     </main>
   );
 }
@@ -64,7 +67,8 @@ const mapStateToProps = (state) => ({
   comments: state.comments.comments,
   loadingComments: state.comments.loading,
   ticketInformation: state.tickets.ticketInformation,
-  histories: state.histories.histories
+  histories: state.histories.histories,
+  loadingHistories: state.histories.loading
 });
 
 export default connect(mapStateToProps, {
