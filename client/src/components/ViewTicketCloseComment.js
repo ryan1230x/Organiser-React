@@ -1,17 +1,33 @@
 import React, { useState } from "react";
 
-function ViewTicketCloseComment() {
+function ViewTicketCloseComment({
+  handleAddComment,
+  handleputTicketStatusToClose,
+  ticketId
+}) {
   const [comment, setComment] = useState("");
 
   const onSubmit = (e) => {
     e.preventDefault();
-    alert(comment);
+    const newCommentObject = {
+      author: "Ryan",
+      comment,
+      ticketId,
+      addedAt: new Date().toDateString()
+    };
+    const newStatus = {
+      status: "closed"
+    };
+    handleAddComment(JSON.stringify(newCommentObject), ticketId);
+    handleputTicketStatusToClose(JSON.stringify(newStatus), ticketId);
+    setComment("");
+    window.location.pathname = "/";
   };
 
   return (
     <section className="view-ticket-close-comment row">
       <div className="col-12 col-lg-9 no-padding">
-        <h2 style={{marginBottom:"1em"}}>Closing Comment</h2>
+        <h2 style={{ marginBottom: "1em" }}>Closing Comment</h2>
         <form onSubmit={onSubmit}>
           <div className="form-group">
             <textarea
@@ -24,14 +40,14 @@ function ViewTicketCloseComment() {
             ></textarea>
           </div>
           <div className="d-flex">
-            <input 
-              type="submit" 
-              className="btn btn-success ml-auto" 
+            <input
+              type="submit"
+              className="btn btn-success ml-auto"
               value="Close Ticket"
             />
           </div>
         </form>
-        </div>
+      </div>
     </section>
   );
 }

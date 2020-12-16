@@ -8,17 +8,21 @@ import ViewTicketCloseComment from "../components/ViewTicketCloseComment";
 import ViewTicketHistory from "../components/ViewTicketHistory";
 
 // import react and action functions
-import {connect} from "react-redux"
-import {getComments, addComment} from "../actions/commentActions";
-import {getTicketInformation} from "../actions/ticketActions";
+import { connect } from "react-redux";
+import { getComments, addComment } from "../actions/commentActions";
+import {
+  getTicketInformation,
+  putTicketStatusToClose
+} from "../actions/ticketActions";
 
 function TicketView({
-  addComment, 
-  getComments, 
-  comments, 
+  addComment,
+  getComments,
+  comments,
   loadingComments,
   getTicketInformation,
-  ticketInformation
+  ticketInformation,
+  putTicketStatusToClose
 }) {
   // Get the ticket id from the URL
   // URL-> /ticket/:id
@@ -26,9 +30,9 @@ function TicketView({
 
   // GET comments
   useEffect(() => {
-    getComments(id)
+    getComments(id);
     getTicketInformation(id);
-  }, [getComments, getTicketInformation]);
+  }, [getComments, getTicketInformation, id]);
 
   // GET history
   const [historys, setHistory] = useState([]);
@@ -41,8 +45,20 @@ function TicketView({
   return (
     <main className="container">
       <ViewTicketInformation ticketInformation={ticketInformation} />
-      {loadingComments === null ? "Loading..." : (<ViewTicketComments comments={comments} ticketId={id} handleAddComment={addComment} />)}
-      <ViewTicketCloseComment />
+      {loadingComments === null ? (
+        "Loading..."
+      ) : (
+        <ViewTicketComments
+          comments={comments}
+          ticketId={id}
+          handleAddComment={addComment}
+        />
+      )}
+      <ViewTicketCloseComment
+        handleAddComment={addComment}
+        handleputTicketStatusToClose={putTicketStatusToClose}
+        ticketId={id}
+      />
       <ViewTicketHistory historys={historys} />
     </main>
   );
@@ -54,4 +70,9 @@ const mapStateToProps = (state) => ({
   ticketInformation: state.tickets.ticketInformation
 });
 
-export default connect(mapStateToProps, {getComments, addComment, getTicketInformation})(TicketView);
+export default connect(mapStateToProps, {
+  getComments,
+  addComment,
+  getTicketInformation,
+  putTicketStatusToClose
+})(TicketView);
