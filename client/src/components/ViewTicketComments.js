@@ -4,18 +4,42 @@ import React, {useState} from "react";
 import ViewTicketCommentsList from "./ViewTicketCommentList";
 
 
-function ViewTicketComments({handleAddComment, comments, ticketId}) {
+function ViewTicketComments({
+  handleAddComment, 
+  handleAddHistory,
+  comments, 
+  ticketId, 
+}) {
   const [newComment, setNewComment] = useState("");
-  
-  const onSubmit = (e) => {
-    e.preventDefault();
+
+  const postNewComment = () => {
     const newCommentObject = {
       author: "Ryan",
       comment: newComment,
       ticketId,
-      addedAt: new Date().toDateString()
+      addedAt: new Date().toLocaleString()
     };
     handleAddComment(JSON.stringify(newCommentObject), ticketId);
+  }
+
+  const postNewHistory = () => {
+    const newHistoryObject = {
+      author:"Ryan",
+      action: "added a comment",
+      ticketId,
+      addedAt: new Date().toLocaleString()
+    }
+    handleAddHistory(JSON.stringify(newHistoryObject));
+    console.log(newHistoryObject);
+
+  }
+  
+  const onSubmit = (e) => {
+    e.preventDefault();
+    
+    postNewComment()
+    postNewHistory()
+  
     setNewComment("");
   }
 

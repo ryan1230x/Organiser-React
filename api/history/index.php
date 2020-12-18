@@ -40,14 +40,16 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 
   $author = $data["author"];
   $action = $data["action"];
-  $ticket_id = $data["ticket_id"];
+  $ticket_id = $data["ticketId"];
+  $added_at = $data["addedAt"];
   $data_array = array(
     $author,
     $action,
-    $ticket_id
+    $ticket_id,
+    $added_at
   );
 
-  $set_history = $history_view->add_history($author, $action, $ticket_id);
+  $set_history = $history_view->add_history($author, $action, $ticket_id, $added_at);
   if(!$set_history) {
     echo json_encode(array(
       "success" => false,
@@ -58,7 +60,13 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 
   echo json_encode(array(
     "success" => true,
-    "message" => "Created successfully"
+    "message" => "Created successfully",
+    "data" => array(
+      "author" => $author,
+      "action" => $action,
+      "addedAt" => $added_at,
+      "ticketId" => $ticket_id
+    )
   ));
   exit;  
 }

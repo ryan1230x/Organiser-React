@@ -14,7 +14,7 @@ import {
   getTicketInformation,
   putTicketStatusToClosed
 } from "../actions/ticketActions";
-import { getHistory } from "../actions/historyActions";
+import { getHistory, addHistory } from "../actions/historyActions";
 
 function TicketView({
   addComment,
@@ -25,6 +25,7 @@ function TicketView({
   ticketInformation,
   putTicketStatusToClosed,
   getHistory,
+  addHistory,
   histories,
   loadingHistories
 }) {
@@ -50,6 +51,7 @@ function TicketView({
             comments={comments}
             ticketId={id}
             handleAddComment={addComment}
+            handleAddHistory={addHistory}
           />
           <ViewTicketCloseComment
             handleAddComment={addComment}
@@ -76,5 +78,6 @@ export default connect(mapStateToProps, {
   addComment,
   getTicketInformation,
   putTicketStatusToClosed,
-  getHistory
+  getHistory,
+  addHistory
 })(TicketView);

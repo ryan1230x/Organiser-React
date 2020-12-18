@@ -13,6 +13,12 @@ export default function (state = initialState, action) {
         histories: action.payload,
         loading: false
       };
+    case constant.ADD_HISTORY:
+      return {
+        ...state,
+        histories:[action.payload, ...state.histories],
+        loading: false
+      }
     default:
       return state;
   }

@@ -1,14 +1,5 @@
 <?php
-/**
- * Database Schema
- * ---------------
- * id int unsigned not null primary key auto_increment
- * author varchar(200) not null
- * action text not null
- * added_at timestamp default current_timestamp()
- * ticket_id text not null
- */
-include_once "./model.php";
+include_once "../history/model.php";
 class HistoryView extends HistoryModel {
 
   public function show_history() {
@@ -76,9 +67,10 @@ class HistoryView extends HistoryModel {
   public function add_history(
     string $author,
     string $action,
-    string $ticket_id
+    string $ticket_id,
+    string $added_at
   ) {
-    $results = $this->post_history($author, $action, $ticket_id);
+    $results = $this->post_history($author, $action, $ticket_id, $added_at);
 
     if(!$results) return false;
     else return true;

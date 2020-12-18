@@ -19,3 +19,18 @@ export const getHistory = (ticketId) => (dispatch) => {
     )
     .catch((error) => console.error(error));
 };
+
+export const addHistory = (history) => dispatch => {
+  const config = {
+    header: {
+      "Content-Type":"application/json"
+    }
+  };
+  axios
+    .post(BASE_URL, history, config)
+    .then(res => dispatch({
+      type: constant.ADD_HISTORY,
+      payload: res.data.data
+    }))
+    .catch(error => console.error(error));
+};

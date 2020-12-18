@@ -1,13 +1,4 @@
 <?php
-/**
- * Database Schema
- * ---------------
- * id int unsigned not null primary key auto_increment
- * author varchar(200) not null
- * action text not null
- * added_at timestamp default current_timestamp()
- * ticket_id text not null
- */
 include_once "../config/Database.php";
 class HistoryModel extends Database {
 
@@ -28,18 +19,21 @@ class HistoryModel extends Database {
   protected function post_history(
     string $author, 
     string $action, 
-    string $ticket_id
+    string $ticket_id,
+    string $added_at
   ) {
     $query = "INSERT INTO history
       SET 
         author = :author, 
         action = :action,
-        ticket_id = :ticket_id";
+        ticket_id = :ticket_id,
+        added_at = :added_at";
     $conn = $this->connect();
     $stmt = $conn->prepare($query);
-    $stmt->bindValue("author", $author);
-    $stmt->bindValue("action", $action);
-    $stmt->bindValue("ticket_id", $ticket_id);
+    $stmt->bindValue(":author", $author);
+    $stmt->bindValue(":action", $action);
+    $stmt->bindValue(":ticket_id", $ticket_id);
+    $stmt->bindValue(":added_at", $added_at);
     $stmt->execute();
     return $stmt;
   }
