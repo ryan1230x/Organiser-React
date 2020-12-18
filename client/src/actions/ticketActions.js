@@ -3,6 +3,10 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost/2020-organiser/api/ticket/";
 
+/**
+ * @description Get all created tickets
+ * @method GET
+ */
 export const getTickets = () => (dispatch) => {
   axios
     .get(BASE_URL)
@@ -15,6 +19,11 @@ export const getTickets = () => (dispatch) => {
     .catch((error) => console.error(error));
 };
 
+/**
+ * @description Created a new ticket
+ * @param {Object} Ticket data in JSON format
+ * @method POST
+ */
 export const addTicket = (ticketData) => (dispatch) => {
   const config = {
     header: {
@@ -31,9 +40,11 @@ export const addTicket = (ticketData) => (dispatch) => {
     )
     .catch((error) => console.error(error));
 };
+
 /**
- *
+ * @description Get all the ticket information for a ticket
  * @param {string} ticketId
+ * @method GET
  */
 export const getTicketInformation = (ticketId) => (dispatch) => {
   axios
@@ -47,6 +58,12 @@ export const getTicketInformation = (ticketId) => (dispatch) => {
     .catch((error) => console.error(error));
 };
 
+/**
+ * @description Update the ticket status to closed
+ * @param {Object} New ticket status in JSON format
+ * @param {String} Ticket id
+ * @method PUT
+ */
 export const putTicketStatusToClosed = (newStatus, ticketId) => (dispatch) => {
   const config = {
     header: {
