@@ -4,12 +4,12 @@ import React from "react";
 import ViewTicketCommentItem from "./ViewTicketCommentItem";
 
 
-function ViewTicketCommentsList({comments}) {
+function ViewTicketCommentsList({comments}) {  
     return (
       <section className="view-ticket-comment-list">
         <div className="comment-list-title d-flex align-items-center">
           {
-            comments === undefined ? "" :  
+            comments.length === 0 ? "" :  
             (<h2 style={{margin:"1em 0"}}>
               Comments
             </h2>)

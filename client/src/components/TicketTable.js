@@ -70,7 +70,11 @@ function TicketTable({ tickets, isLoadingTickets }) {
     <section>
       <Heading
         title="Pending Installations"
-        subtitle={`Currently ${tickets.length} Open`}
+        subtitle={
+          tickets.length < 0 ? 
+            "Congratulations! No tickets" : 
+            `Currently ${tickets.length} tickets open`
+        }
       />
       <table className="ticket-table striped">
         <TicketTableHead />
