@@ -3,7 +3,7 @@ import "./css/App.css";
 
 // Import dependencies
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // Import Components
 import Header from "./components/Header";
@@ -12,20 +12,21 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import CreateTicket from "./pages/CreateTicket";
 import ViewTicket from "./pages/ViewTicket";
+import Search from "./pages/Search"
 
 // Import redux
 import {Provider} from "react-redux";
 import store from "./store";
 
+
 function App() {
+
   return (
     <Provider store={store}>
       <Router>
-        {/* Here are all the components that belong
-            on all pages
-        */}
-        <Header />
 
+        <Header />
+        
         <Switch>
           <Route path="/" exact>
             <Home />
@@ -34,6 +35,7 @@ function App() {
             <CreateTicket />
           </Route>
           <Route path="/ticket/:id" children={<ViewTicket />} />
+          <Route path="/search/:param" children={<Search />} />
         </Switch>
       </Router>
     </Provider>
