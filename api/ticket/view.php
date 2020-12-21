@@ -83,6 +83,47 @@ class TicketView extends TicketModel  {
         ));
     }
 
+    public function show_search_tickets(string $param) {
+        $results = $this->search_tickets($param);
+        $num_of_rows = $results->rowCount();
+
+        if($num_of_rows <= 0) {
+            echo json_encode(array(
+                "message" => "None found",
+                "data" => array()
+            ));
+            exit;
+        }
+
+        $search_array = array();
+        while($row = $results->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $search_item = array(
+                "id" => $id,
+                "reference" => $reference,
+                "name" => $name,
+                "address" => $address,
+                "landline" => $landline,
+                "contactNumber" => $contact_number,
+                "network" => $network,
+                "service" => $service,
+                "portability" => $portability,
+                "clientPackage" => $package,
+                "status" => $status,
+                "requestedDate" => $requested_date,
+                "createdBy" => $created_by,
+                "createdAt" => $created_at,
+                "ticketId" => $ticket_id,
+            );
+            array_push($search_array, $search_item);
+        }
+        echo json_encode(array(
+            "count" => $num_of_rows,
+            "success" => true,
+            "data" => $search_array
+        ));
+    }
+
     public function add_ticket(
         string $name,
         string $landline,

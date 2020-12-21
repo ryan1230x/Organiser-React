@@ -6,7 +6,7 @@ include_once "../validation/index.php";
 
 // Global variables
 $ticket_id = $_GET["ticket_id"];
-
+$query_request = $_GET["q"]; 
 /**
  * route        /api/ticket/
  * description  Get all tickets
@@ -36,6 +36,22 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
             exit;
         }
         $ticket_view->show_single_ticket($ticket_id);
+        exit;
+    }
+
+    if(isset($query_request)) {
+
+        $is_sanitized = $error_handler->sanitize_string(array($query_request));
+        $is_validated = $error_handler->validate_string(array($query_request));
+
+        if(!$is_sanitized && !$is_validated) {
+            echo json_encode(array(
+                "message" => "Could not sanitize and validate"
+            ));
+            exit;
+        }
+
+        $ticket_view->show_search_tickets($query_request);
         exit;
     }
 

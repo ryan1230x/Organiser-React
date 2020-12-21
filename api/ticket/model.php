@@ -33,6 +33,21 @@ class TicketModel extends Database {
         return $stmt;
     }
 
+    /* 
+        Get all tickets that match the query search
+    */ 
+    protected function search_tickets(string $param) {
+        $query = "SELECT * FROM client_address
+        JOIN client_info USING(ticket_id)
+        JOIN client_service USING(ticket_id)
+        JOIN tickets USING(ticket_id)
+        JOIN status USING(ticket_id)
+        WHERE address LIKE '%$param%'
+        ORDER BY tickets.id DESC";
+        $stmt = $this->connect()->query($query);
+        return $stmt;
+    }
+
     /* -------------Helper functions for creating a ticket ---------------*/
     private function set_post_address(
         string $reference, 
