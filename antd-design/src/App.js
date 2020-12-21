@@ -8,6 +8,8 @@ import {
   Switch,
   Link
 } from "react-router-dom";
+import {Provider} from "react-redux"
+import store from "./store";
 
 // Import Pages
 import Home from "./pages/Home";
@@ -43,6 +45,7 @@ function App() {
     setCollapsed(!collapsed);
   }
   return (
+    <Provider store={store}>
     <Router>
       <Layout style={{minHeight:"100vh"}}>
         <Sider collapsible collapsed={collapsed} onCollapse={handleCollapse}>
@@ -50,7 +53,7 @@ function App() {
             src="" 
             alt="Logo"
           />
-          <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+          <Menu theme="dark" defaultSelectedKeys={["0"]} mode="inline">
             {menuItems.map((item, index) => (
               <Menu.Item key={index} icon={item.icon}>
                 <Link to={item.to}>{item.value}</Link>
@@ -75,6 +78,7 @@ function App() {
         </Layout> 
       </Layout>
     </Router>
+    </Provider>
   );
 }
 
