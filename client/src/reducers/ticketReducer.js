@@ -20,6 +20,12 @@ export default function (state = initialState, action) {
         ticketInformation: action.payload,
         loading: false
       };
+    case constant.SEARCH_FOR_TICKET:
+      return {
+        ...state,
+        tickets: action.payload,
+        loading: false
+      }
     case constant.CLOSE_TICKET:
       return {
         ...state,

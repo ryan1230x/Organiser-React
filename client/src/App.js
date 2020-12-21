@@ -35,7 +35,7 @@ function App() {
             <CreateTicket />
           </Route>
           <Route path="/ticket/:id" children={<ViewTicket />} />
-          <Route path="/search/:param" children={<Search />} />
+          <Route path="/search" children={<Search />} />
         </Switch>
       </Router>
     </Provider>

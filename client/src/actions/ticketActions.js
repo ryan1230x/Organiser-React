@@ -80,3 +80,15 @@ export const putTicketStatusToClosed = (newStatus, ticketId) => (dispatch) => {
     )
     .catch((error) => console.error(error));
 };
+
+export const searchForTicket = (UrlParam) => dispatch => {
+  axios
+    .get(`${BASE_URL}?q=${UrlParam}`)
+    .then((res) =>
+      dispatch({
+        type: constant.SEARCH_FOR_TICKET,
+        payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error))
+}

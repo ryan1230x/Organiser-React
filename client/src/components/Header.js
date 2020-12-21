@@ -5,8 +5,9 @@ function Header() {
   const [param, setParam] = useState("");
 
   const onSubmit = (e) => {
-    e.preventDefault();
-    window.location.pathname = `/search/${param}`;
+    const inputNameAttr = e.target.lastChild.name;
+    const queryParams = new URLSearchParams(window.location.search);
+    const queryParamter = queryParams.get(inputNameAttr);
   }
   
   return (
@@ -44,6 +45,7 @@ function Header() {
             method="get" 
             className="d-flex align-items-center ml-auto" 
             onSubmit={onSubmit}
+            action="/search"
           >
             <div className="d-flex" style={{ position: "relative", left: 30 }}>
               <ion-icon 
