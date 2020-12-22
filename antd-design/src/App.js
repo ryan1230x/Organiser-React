@@ -13,7 +13,8 @@ import store from "./store";
 
 // Import Pages
 import Home from "./pages/Home";
-import CreateTicket from './pages/CreateTicket';
+import CreateTicket from "./pages/CreateTicket";
+import ViewTicket from "./pages/ViewTicket";
 
 // Import Icons
 import {HomeOutlined, EditOutlined} from "@ant-design/icons";
@@ -71,6 +72,7 @@ function App() {
                 <Route path="/create">
                   <CreateTicket />
                 </Route>
+                <Route path="/ticket/:id" children={<ViewTicket />} />
               </Switch>
             </main>
           </Content>
