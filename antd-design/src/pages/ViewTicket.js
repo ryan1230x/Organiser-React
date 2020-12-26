@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 // import redux and actions
 import { connect } from "react-redux";
@@ -9,6 +9,9 @@ import {
   putTicketStatusToClosed
 } from "../actions/ticketActions";
 import { getHistory, addHistory } from "../actions/historyActions";
+
+// Import Icons
+import { HomeOutlined, EditOutlined } from '@ant-design/icons';
 
 // Import Components
 import {
@@ -20,10 +23,14 @@ import {
   Col,
   Input,
   Form,
-  Button
+  Button,
+  Typography,
+  Breadcrumb
 } from "antd";
 
-const { Textarea } = Input;
+const { TextArea } = Input;
+const { Title, Paragraph, Text } = Typography;
+
 
 function ViewTicket({
   addComment,
@@ -38,11 +45,12 @@ function ViewTicket({
   histories,
   loadingHistories
 }) {
-  const [newComment, setNewComment] = useState("");
-
   // Get the ticket id from the URL
   // URL-> /ticket/:id
   const { id } = useParams();
+
+  const [newComment, setNewComment] = useState("");
+  const [closingComment, setClosingComment] = useState("");
 
   useEffect(() => {
     getTicketInformation(id);
@@ -76,12 +84,44 @@ function ViewTicket({
   };
 
   // Add new Comment and history on form Submit
-  const addCommentOnSubmit = (e) => {
-    e.preventDefault();
+  const addCommentOnSubmit = () => {
+    console.log("click");
     postNewComment();
     postNewHistory();
     setNewComment("");
   };
+
+  /**
+   * Closing comment
+   */
+  // Helper function
+  const postClosingCommentHistory = () => {
+    const closingCommentHistoryObject = {
+      author:"Ryan",
+      action: "closed the ticket",
+      ticketId: id,
+      addedAt: new Date().toLocaleString()
+    };
+    addHistory(JSON.stringify(closingCommentHistoryObject));
+  }
+
+  // Helper function
+  const postClosingComment = () => {
+    const closingCommentObject = {
+      author: "Ryan",
+      comment: closingComment,
+      ticketId: id,
+      addedAt: new Date().toLocaleString()
+    };
+    addComment(JSON.stringify(closingCommentObject));
+  }
+
+  // Add closing comment and history on form submit
+  const addClosingComment = () => {
+    postClosingCommentHistory()
+    postClosingComment()
+    setClosingComment("");
+  }
 
   // deconstruct ticket information
   const {
@@ -100,65 +140,113 @@ function ViewTicket({
     <>
       <Row>
         <Col span={15}>
+          {/* Breadcrumb */}
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <Link to="/">
+                <HomeOutlined />
+                <span style={{marginLeft: 8}}>Home</span>
+              </Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <EditOutlined />
+              <span style={{marginLeft: 8}}>{name}</span>
+            </Breadcrumb.Item>
+          </Breadcrumb>
           {/* Page Header */}
-          <PageHeader title={name} onBack={() => window.history.back()} />
+          <PageHeader 
+            title={<Title level={1}>{name}</Title>}            
+            style={{marginBottom: 32}}
+          />
           {/* Descriptions*/}
-          <Descriptions>
-            <Descriptions.Item label="Name">{name}</Descriptions.Item>
-            <Descriptions.Item label="Address">{address}</Descriptions.Item>
-            <Descriptions.Item label="Landline">{landline}</Descriptions.Item>
-            <Descriptions.Item label="Contact Number">
+          <Descriptions style={{marginBottom: 32}}>
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Name">{name}</Descriptions.Item>
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Address">{address}</Descriptions.Item>
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Landline">{landline}</Descriptions.Item>
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Contact Number">
               {contactNumber}
             </Descriptions.Item>
-            <Descriptions.Item label="Requested Date">
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Requested Date">
               {requestedDate}
             </Descriptions.Item>
-            <Descriptions.Item label="Status">{status}</Descriptions.Item>
-            <Descriptions.Item label="Network">{network}</Descriptions.Item>
-            <Descriptions.Item label="Client Package">
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Status">{status}</Descriptions.Item>
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Network">{network}</Descriptions.Item>
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Client Package">
               {clientPackage}
             </Descriptions.Item>
-            <Descriptions.Item label="Portability">
+            <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Portability">
               {portability}
             </Descriptions.Item>
-          </Descriptions>
-          {/* Add Comment textarea and submit button */}
-          <Col span={15}>
-            <Form onSubmit={addCommentOnSubmit}>
-              <Form.Item label="Add Comment">
-                <Textarea
-                  rows={4}
-                  placeholder="Type here to add a comment..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Add Comment
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
+          </Descriptions>          
+        </Col>
+        {/* Add Comment textarea and submit button */}
+        <Col span={15}>
+          <Form layout="vertical" onFinish={addCommentOnSubmit} style={{marginBottom: 32}}>
+            <Form.Item>
+              <TextArea
+                rows={4}
+                placeholder="Type here to add a comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button htmlType="submit" style={{float: "right"}}>
+                Add Comment
+              </Button>
+            </Form.Item>
+          </Form>
           {/* Comments */}
+          {comments.length <= 0 ? null : (<Title level={3}>Comments</Title>)}
           {comments.map((comment, index) => (
             <Comment
+              style={{background: "white", padding: 16, marginBottom: 16, borderRadius: 7}}
               key={index}
-              author={comment.author}
-              datetime={comment.addedAt}
-              content={<p>{comment.comment}</p>}
+              author={<Text type="secondary">{comment.author}</Text>}
+              datetime={<Text type="secondary">{comment.addedAt}</Text>}
+              content={<Paragraph copyable>{comment.comment}</Paragraph>}
             />
           ))}
         </Col>
-        <Col span={9}>
+        <Col span={9}>          
           {/* Timeline / History */}
-          <Timeline>
+          <section style={{            
+            marginLeft: 16,
+            paddingLeft:16,
+            paddingTop: histories.length < 0 ? 32 : 0, 
+            borderRadius: 7             
+          }}>          
+          <Timeline reverse>
             {histories.map((history, index) => (
-              <Timeline.Item>
-                {history.author} {history.action} at {history.addedAt}
+              <Timeline.Item key={index}>
+                <Paragraph>
+                  {history.author} {history.action} at {history.addedAt}
+                </Paragraph>
               </Timeline.Item>
             ))}
           </Timeline>
+          </section>          
+        </Col>
+      </Row>
+      {/* Closing comment */}
+      <Row>
+        <Col span={15} style={{margin: "32px 0px"}}>
+          <Title level={3}>Closing Comment</Title>
+          <Form layout="vertical" onFinish={addClosingComment} style={{marginBottom: 32}}>
+            <Form.Item>
+              <TextArea
+                rows={4}
+                placeholder="Add a closing comment here"
+                value={closingComment}
+                onChange={(e) => setClosingComment(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button htmlType="submit" type="primary" style={{float: "right"}}>
+                Add Closing Comment
+              </Button>
+            </Form.Item>
+          </Form>
         </Col>
       </Row>
     </>

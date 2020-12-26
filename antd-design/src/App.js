@@ -76,7 +76,7 @@ function App() {
               </Switch>
             </main>
           </Content>
-          <Footer>Made By Ryan Harper &copy; 2020</Footer>
+          <Footer style={{textAlign: "center"}}>Made By Ryan Harper &copy; 2020</Footer>
         </Layout> 
       </Layout>
     </Router>
