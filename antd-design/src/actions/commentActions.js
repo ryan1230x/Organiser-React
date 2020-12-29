@@ -5,7 +5,7 @@ const BASE_URL = "http://localhost/2020-organiser/api/comment/";
 
 /**
  * @description Get all the comments for a single ticket
- * @param {string} Ticket id
+ * @param {string} ticketId ticket id
  * @method GET
  */
 export const getComments = (ticketId) => (dispatch) => {
@@ -22,8 +22,8 @@ export const getComments = (ticketId) => (dispatch) => {
 
 /**
  * @description Add a comment to a ticket
- * @param {Object} Comment in JSON format
- * @param {string} Ticket id
+ * @param {Object} comment commment object
+ * @param {string} ticketId ticket id
  * @method POST
  */
 export const addComment = (comment, ticketId) => (dispatch) => {
