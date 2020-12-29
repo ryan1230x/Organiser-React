@@ -22,7 +22,6 @@ import ViewClosingComment from "../components/ViewTicket/ViewClosingComment";
 import { PageHeader, Row, Col, Typography } from "antd";
 const { Title } = Typography;
 
-
 function ViewTicket({
   addComment,
   getComments,
@@ -46,55 +45,45 @@ function ViewTicket({
     getHistory(id);
   }, [getTicketInformation, getComments, getHistory, id]);
 
-  
   const { name } = ticketInformation;
 
   return (
     <>
-      { loadingComments && loadingHistories ? (
+      {loadingComments && loadingHistories ? (
         "Loading..."
       ) : (
-      <>
-        <Row>
-          <Col span={15}>
-            <ViewBreadCrumbs 
-              ticketInformation={ticketInformation}
-            />
-            <PageHeader 
-              title={<Title level={1}>{name}</Title>}            
-              style={{marginBottom: 32}}
-            />          
-            <ViewDescriptions 
-              ticketInformation={ticketInformation}
-            />    
-          </Col>
-          <Col span={15}>
-            <ViewAddComment 
-              handleAddHistory={addHistory}
-              handleAddComment={addComment} 
-              ticketId={id}
-            />
-            <ViewComments comments={comments} />
-          </Col>
-          <Col span={9}>          
-            <ViewTimeline 
-              histories={histories} 
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col 
-            span={15} 
-            style={{margin: "32px 0px"}}
-          >
-            <ViewClosingComment
-              handleAddComment={addComment}
-              handleAddHistory={addHistory}
-              ticketId={id}
-            />
-          </Col>
-        </Row>
-      </>
+        <>
+          <Row>
+            <Col span={15}>
+              <ViewBreadCrumbs ticketInformation={ticketInformation} />
+              <PageHeader
+                title={<Title level={1}>{name}</Title>}
+                style={{ marginBottom: 32 }}
+              />
+              <ViewDescriptions ticketInformation={ticketInformation} />
+            </Col>
+            <Col span={15}>
+              <ViewAddComment
+                handleAddHistory={addHistory}
+                handleAddComment={addComment}
+                ticketId={id}
+              />
+              <ViewComments comments={comments} />
+            </Col>
+            <Col span={9}>
+              <ViewTimeline histories={histories} />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={15} style={{ margin: "32px 0px" }}>
+              <ViewClosingComment
+                handleAddComment={addComment}
+                handleAddHistory={addHistory}
+                ticketId={id}
+              />
+            </Col>
+          </Row>
+        </>
       )}
     </>
   );
@@ -105,7 +94,7 @@ const mapStateToProps = (state) => ({
   ticketInformation: state.tickets.ticketInformation,
   histories: state.histories.histories,
   loadingComments: state.comments.loading,
-  loadingHistories: state.histories.loading,
+  loadingHistories: state.histories.loading
 });
 
 export default connect(mapStateToProps, {
