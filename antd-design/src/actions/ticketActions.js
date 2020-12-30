@@ -21,7 +21,7 @@ export const getTickets = () => (dispatch) => {
 
 /**
  * @description Created a new ticket
- * @param {Object} Ticket data in JSON format
+ * @param {Object} ticketData ticket data object
  * @method POST
  */
 export const addTicket = (ticketData) => (dispatch) => {
@@ -43,7 +43,7 @@ export const addTicket = (ticketData) => (dispatch) => {
 
 /**
  * @description Get all the ticket information for a ticket
- * @param {string} ticketId
+ * @param {string} ticketId ticketId unique hash
  * @method GET
  */
 export const getTicketInformation = (ticketId) => (dispatch) => {
@@ -60,8 +60,8 @@ export const getTicketInformation = (ticketId) => (dispatch) => {
 
 /**
  * @description Update the ticket status to closed
- * @param {Object} New ticket status in JSON format
- * @param {String} Ticket id
+ * @param {Object} newStatus ticket status in JSON format
+ * @param {String} ticketId ticket id
  * @method PUT
  */
 export const putTicketStatusToClosed = (newStatus, ticketId) => (dispatch) => {
@@ -81,7 +81,11 @@ export const putTicketStatusToClosed = (newStatus, ticketId) => (dispatch) => {
     .catch((error) => console.error(error));
 };
 
-export const searchForTicket = (UrlParam) => dispatch => {
+/**
+ * @description search the database for tickets that match the query
+ * @param {String} UrlParam the ticketId from the URL
+ */
+export const searchForTicket = (UrlParam) => (dispatch) => {
   axios
     .get(`${BASE_URL}?q=${UrlParam}`)
     .then((res) =>
@@ -90,5 +94,5 @@ export const searchForTicket = (UrlParam) => dispatch => {
         payload: res.data.data
       })
     )
-    .catch((error) => console.error(error))
-}
+    .catch((error) => console.error(error));
+};

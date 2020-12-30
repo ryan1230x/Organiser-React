@@ -25,7 +25,7 @@ export default function (state = initialState, action) {
         ...state,
         tickets: action.payload,
         loading: false
-      }
+      };
     case constant.CLOSE_TICKET:
       return {
         ...state,

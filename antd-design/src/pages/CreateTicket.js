@@ -1,14 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 
 // Import redux and actions
 import { connect } from "react-redux";
 import { addTicket } from "../actions/ticketActions";
 
 // Import Components
-import { Form, Input, Button, DatePicker, Select } from "antd";
+import { Form, Input, Button, DatePicker, Select, notification } from "antd";
 const { Option } = Select;
 
-class CreateTicket extends React.Component {
+class CreateTicket extends Component {
+  /**
+   * component constructor and state
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -23,12 +26,31 @@ class CreateTicket extends React.Component {
       landline: "",
       contactNumber: ""
     };
-    // Bind Event Listeners
+
+    /**
+     * Bind Event Listeners to this keyword `this`
+     */
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.postTicket = this.postTicket.bind(this);
   }
 
+  /**
+   * @param {string} type success, info, error or warning
+   * @param {string} the message title
+   * @param {string} the description of the notification
+   */
+  openNotificationWithIcon(type, message, description) {
+    notification[type]({
+      message,
+      description
+    });
+  }
+
+  /**
+   * handle onChange event and store in state
+   */
   handleOnChange(e) {
     const name = e.target.name;
     const value = e.target.value;
@@ -37,6 +59,9 @@ class CreateTicket extends React.Component {
     });
   }
 
+  /**
+   * clear and reset all form inputs
+   */
   handleReset() {
     this.setState({
       reference: "",
@@ -52,31 +77,81 @@ class CreateTicket extends React.Component {
     });
   }
 
+  /**
+   * @description Helper function, prepare the ticket data and convert into JSON format
+   */
+  postTicket() {
+    const {
+      reference,
+      name,
+      requestedDate,
+      address,
+      network,
+      service,
+      clientPackage,
+      portability,
+      landline,
+      contactNumber
+    } = this.state;
+
+    const newTicketObject = {
+      reference,
+      name,
+      requestedDate,
+      address,
+      network,
+      service,
+      clientPackage,
+      landline,
+      portability,
+      contactNumber,
+      createdBy: "Ryan",
+      status: "Pending" // Default: set to pending
+    };
+
+    if (addTicket(JSON.stringify(newTicketObject))) {
+      this.openNotificationWithIcon(
+        "success",
+        "Ticket Created",
+        "The ticket was created successfully"
+      );
+    }
+  }
+
+  /**
+   * submit form data
+   */
   handleSubmit(e) {
     e.preventDefault();
-
-    const newTicket = {
-      reference: this.state.reference,
-      name: this.state.name,
-      requestedDate: this.state.requestedDate,
-      address: this.state.address,
-      network: this.state.network,
-      service: this.state.service,
-      clientPackage: this.state.clientPackage,
-      portability: this.state.portability,
-      landline: this.state.landline,
-      contactNumber: this.state.contactNumber,
-      status: "Pending",
-      createdBy: "Ryan"
-    };
-    addTicket(JSON.stringify(newTicket));
-    // this.handleReset();
-    console.log(JSON.stringify(newTicket));
+    this.postTicket();
+    console.log("form submitted with data");
   }
+
   render() {
+    /**
+     * Deconstructor all data from state
+     */
+    const {
+      reference,
+      name,
+      requestedDate,
+      address,
+      network,
+      service,
+      clientPackage,
+      portability,
+      landline,
+      contactNumber
+    } = this.state;
+
+    /**
+     * Deconstruct functions
+     */
+    const { handleSubmit, onChange } = this;
+
     return (
       <>
-        <Form layout="inline">
+        <Form autocomplete="off" onFinish={handleSubmit} layout="inline">
           {/* Client Reference */}
           <Form.Item
             label="Client Reference"
@@ -90,7 +165,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Input type="number" />
+            <Input onChange={onChange} value={reference} type="number" />
           </Form.Item>
           {/* Name */}
           <Form.Item
@@ -103,7 +178,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Input type="text" />
+            <Input onChange={onChange} value={name} type="text" />
           </Form.Item>
           {/* Requested Date */}
           <Form.Item
@@ -117,7 +192,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <DatePicker />
+            <DatePicker onChange={onChange} value={requestedDate} />
           </Form.Item>
           {/* Address */}
           <Form.Item
@@ -130,7 +205,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Input type="text" />
+            <Input onChange={onChange} value={address} type="text" />
           </Form.Item>
           {/* Network */}
           <Form.Item
@@ -143,7 +218,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Select>
+            <Select onChange={onChange} value={network}>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
@@ -160,7 +235,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Select>
+            <Select onChange={onChange} value={service}>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
@@ -177,7 +252,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Select>
+            <Select onChange={onChange} value={clientPackage}>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
@@ -194,7 +269,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Select>
+            <Select onChange={onChange} value={portability}>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
               <Option value="option1">Option1</Option>
@@ -212,7 +287,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Input type="number" />
+            <Input onChange={onChange} value={landline} type="number" />
           </Form.Item>
           {/* Contact number */}
           <Form.Item
@@ -226,7 +301,7 @@ class CreateTicket extends React.Component {
               }
             ]}
           >
-            <Input type="number" />
+            <Input onChange={onChange} value={contactNumber} type="number" />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -239,8 +314,4 @@ class CreateTicket extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  ticket: state.tickets
-});
-
-export default connect(mapStateToProps, { addTicket })(CreateTicket);
+export default connect(null, { addTicket })(CreateTicket);

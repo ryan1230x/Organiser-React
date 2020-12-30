@@ -5,7 +5,7 @@ const BASE_URL = "http://localhost/2020-organiser/api/history/";
 
 /**
  * @description Get all history for a ticket
- * @param {String} Ticket id
+ * @param {String} ticketId ticket id
  * @method GET
  */
 export const getHistory = (ticketId) => (dispatch) => {
@@ -20,17 +20,24 @@ export const getHistory = (ticketId) => (dispatch) => {
     .catch((error) => console.error(error));
 };
 
-export const addHistory = (history) => dispatch => {
+/**
+ * @description add a history entry
+ * @param {String} history history object
+ * @method POST
+ */
+export const addHistory = (history) => (dispatch) => {
   const config = {
     header: {
-      "Content-Type":"application/json"
+      "Content-Type": "application/json"
     }
   };
   axios
     .post(BASE_URL, history, config)
-    .then(res => dispatch({
-      type: constant.ADD_HISTORY,
-      payload: res.data.data
-    }))
-    .catch(error => console.error(error));
+    .then((res) =>
+      dispatch({
+        type: constant.ADD_HISTORY,
+        payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
 };

@@ -90,7 +90,6 @@ function ViewTicket({
     getTags(id);
   }, [getTicketInformation, getComments, getHistory, getTags, id]);
 
-  
   const { name } = ticketInformation;
 
   return (
