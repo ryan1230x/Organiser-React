@@ -16,15 +16,17 @@ class TagModel extends Database {
 	/**
 	 * Add a tag to a ticket
 	 */
-	protected function post_tag(string $ticket_id, string $tag) {
+	protected function post_tag(string $ticket_id, string $tag, string $color) {
 		$query = "INSERT INTO tags 
 		SET 
 			tag = :tag, 
-			ticket_id = :ticket_id";
+			ticket_id = :ticket_id,
+			color = :color";
 		$conn = parent::connect();
 		$stmt = $conn->prepare($query);
 		$stmt->bindValue(":tag", $tag);
 		$stmt->bindValue(":ticket_id", $ticket_id);
+		$stmt->bindValue(":color", $color);
 		$stmt->execute();
 		return $stmt;
 	}

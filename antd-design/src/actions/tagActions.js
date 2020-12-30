@@ -21,6 +21,29 @@ export const getTags = (ticketId) => dispatch => {
 }
 
 /**
+ * @description add a new tag to a ticket
+ * @param {object} tag Tag information
+ * @method POST
+ */
+export const addTag = (tag) => dispatch => {
+	const config = {
+		header: {
+			"Content-Type":"application/json"
+		}
+	};
+
+	axios
+		.post(BASE_URL, tag, config)
+		.then((res) =>
+			dispatch({
+				type: constant.ADD_TAG,
+				payload: res.data.data
+			})
+		)
+		.catch((error) => console.error(error));
+};
+
+/**
  * @description Delete a tag
  * @param {string} ticket id
  * @param {number} tag id
@@ -34,10 +57,10 @@ export const deleteTag = (ticketId, reference) => dispatch => {
 	};
 
 	axios
-		.post(`${BASE_URL}?ticket_id=${ticketId}`, reference, config)
+		.delete(`${BASE_URL}?ticket_id=${ticketId}`, reference, config)
 		.then((res) =>
 				dispatch({
-					type: constant.DELETE_TAG
+					type: constant.DELETE_TAG,
 					payload: res.data.data
 				})
 			)

@@ -14,7 +14,8 @@ class TagView extends TagModel {
 		 */
 		if ($num_of_rows <= 0) {
 			echo json_encode(array(
-				"message" => "None found"
+				"message" => "None found",
+				"data" => array()
 			));
 			exit;
 		}
@@ -28,7 +29,8 @@ class TagView extends TagModel {
 			$tag_item = array(
 				"id" => $id,
 				"tag" => $tag,
-				"ticketId" => $ticket_id
+				"ticketId" => $ticket_id,
+				"color" => $color
 			);
 			array_push($tags_array, $tag_item);
 		}
@@ -47,8 +49,8 @@ class TagView extends TagModel {
 	/**
 	 * Create a tag
 	 */
-	public function add_tag(string $ticket_id, string $tag) {
-		$results = parent::post_tag($ticket_id, $tag);
+	public function add_tag(string $ticket_id, string $tag, string $color) {
+		$results = parent::post_tag($ticket_id, $tag, $color);
 		if (!$results) return false;
 		else return true;
 	}

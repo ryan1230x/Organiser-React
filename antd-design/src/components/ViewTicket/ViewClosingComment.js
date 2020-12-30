@@ -1,5 +1,8 @@
 import React, { useState } from "react"
 
+// Import icons
+import { CheckOutlined } from "@ant-design/icons"
+
 // Import Components
 import { Form, Input, Typography, Button } from "antd";
 const { TextArea } = Input
@@ -53,7 +56,12 @@ function ViewClosingComment({handleAddComment, handleAddHistory, ticketId}) {
         />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" type="primary" style={{float: "right"}}>
+          <Button 
+            htmlType="submit" 
+            type="primary" 
+            style={{float: "right"}}
+            icon={<CheckOutlined />}
+          >
             Add Closing Comment
           </Button>
       </Form.Item>

@@ -12,4 +12,5 @@ export const GET_HISTORY = "GET_HISTORY";
 export const ADD_HISTORY = "ADD_HISTORY";
 
 export const GET_TAGS = "GET_TAGS";
+export const ADD_TAG = "ADD_TAG";
 export const DELETE_TAG = "DELETE_TAG";

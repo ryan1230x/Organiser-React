@@ -13,6 +13,12 @@ export default function(state = intitalState, action) {
 				tags: action.payload,
 				loading: false,
 			};
+		case constant.ADD_TAG:
+			return {
+				...state,
+				tags: [action.payload, ...state.tags],
+				loading: false
+			}
 		case constant.DELETE_TAG:
 			return {
 				...state,
@@ -20,6 +26,6 @@ export default function(state = intitalState, action) {
 				loading: false
 			};
 		default:
-			...state
+			return state
 	}
 }

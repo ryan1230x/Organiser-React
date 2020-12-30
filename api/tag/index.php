@@ -61,7 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 	$ticket_id = $data["ticketId"];
 	$tag = $data["tag"];
-	$data_array = array($ticket_id, $tag);
+	$color = $data["color"];
+	$data_array = array($ticket_id, $tag, $color);
 
 	/**
 	 * Check if any fields are empty
@@ -77,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 	/**
 	 * Create the tag
 	 */
-	$set_tag = $tag_view->add_tag($ticket_id, $tag);
+	$set_tag = $tag_view->add_tag($ticket_id, $tag, $color);
 	if (!$set_tag) {
 		echo json_encode(array(
             "success" => false,
@@ -94,7 +95,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "message" => "Created successfully",
         "data" => array(
         	"tag" => $tag,
-        	"ticketId" => $ticket_id 
+			"ticketId" => $ticket_id,
+			"color" => $color
         )
     ));
     exit;  

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// import icons
+import { EditOutlined } from "@ant-design/icons";
+
 // Import Components
 import { Form, Input, Button } from "antd";
 const { TextArea } = Input;
@@ -51,7 +54,11 @@ function ViewAddComment({ticketId, handleAddComment, handleAddHistory}) {
         />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" style={{float: "right"}}>
+          <Button 
+            htmlType="submit" 
+            style={{float: "right"}}
+            icon={<EditOutlined />}
+          >
             Add Comment
           </Button>
         </Form.Item>

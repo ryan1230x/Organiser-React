@@ -62,7 +62,7 @@ const tableColumns = [
 ]
 
 function Home({
-    tickets, 
+    tickets,
     getTickets,
     loadingTickets
 }) {
