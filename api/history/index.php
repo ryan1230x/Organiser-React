@@ -13,7 +13,12 @@ $ticket_id = $_GET["ticket_id"];
  * method       GET
  */
 if($_SERVER["REQUEST_METHOD"] === "GET") {
+  
+  /**
+   * instanciate classes
+   */
   $history_view = new HistoryView();
+  $error_handler = new ErrorHander();
 
   /**
    * route        /api/history/?ticket_id=:id
@@ -21,11 +26,31 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
    * method       GET
    */
   if(isset($ticket_id)) {
+
+    /**
+     * Sanitize or validate ticket-id
+     */
+    $is_sanitized = $error_handler->sanitize_string(array($ticket_id));
+    $is_validated = $error_handler->validate_string(array($ticket_id));
+    if (!$is_sanitized && !$is_validated) {
+      echo json_encode(array(
+        "message" => "could not validate and sanitize"
+      ));
+      exit;
+    }
+
+    /**
+     * Get all history for a single ticket
+     */
     $history_view->show_single_history($ticket_id);
     exit;
   }
 
+  /**
+   * Get all history
+   */
   $history_view->show_history();
+  exit;
 }
 
 /**
@@ -34,10 +59,17 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
  * method       POST
  */
 if($_SERVER["REQUEST_METHOD"] === "POST") {
-  $history_view = new HistoryView();
-  
-  $data = json_decode(file_get_contents("php://input"), true);
 
+  /**
+   * instanciate classes
+   */
+  $history_view = new HistoryView();
+  $error_handler = new ErrorHander();
+  
+  /**
+   * Get JSON data
+   */
+  $data = json_decode(file_get_contents("php://input"), true);
   $author = $data["author"];
   $action = $data["action"];
   $ticket_id = $data["ticketId"];
@@ -49,6 +81,42 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $added_at
   );
 
+  /**
+   * check if any field is empty
+   */
+  $is_empty = $error_handler->validate_empty_values($data_array);
+  if ($is_empty) {
+    echo json_encode(array(
+      "message" => "please fill all the fields"
+    ));
+    exit;
+  }
+
+  /**
+   * sanitize data
+   */
+  $is_sanitized = $error_handler->sanitize_string($data_array);
+  if (!$is_sanitized) {
+    echo json_encode(array(
+      "message" => "could not sanitize input"
+    ));
+    exit;
+  }
+
+  /**
+   * validate data
+   */
+  $is_validated = $error_handler->validate_string($data_array);
+  if (!$is_validated) {
+    echo json_encode(array(
+      "message" => "could not validate input"
+    ));
+    exit;
+  }
+
+  /**
+   * create history entry
+   */
   $set_history = $history_view->add_history($author, $action, $ticket_id, $added_at);
   if(!$set_history) {
     echo json_encode(array(
@@ -58,6 +126,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
   }
 
+  /**
+   * Display successfull message
+   */
   echo json_encode(array(
     "success" => true,
     "message" => "Created successfully",

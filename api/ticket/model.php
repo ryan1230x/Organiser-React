@@ -2,9 +2,9 @@
 include_once "../config/Database.php";
 class TicketModel extends Database {
 
-    /*
-        get all tickets
-    */
+    /**
+     * get all tickets
+     */
     protected function get_tickets() {
         $query = "SELECT * FROM client_address
         JOIN client_info USING(ticket_id)
@@ -17,9 +17,9 @@ class TicketModel extends Database {
         return $stmt;
     }
 
-    /*
-        Get a ticket with a unique ticket-id
-    */
+    /**
+     * Get a ticket with a unique ticket-id
+     */
     protected function get_single_ticket(string $ticket_id) {
         $query = "SELECT * FROM client_address
         JOIN client_info USING(ticket_id)
@@ -33,9 +33,9 @@ class TicketModel extends Database {
         return $stmt;
     }
 
-    /* 
-        Get all tickets that match the query search
-    */ 
+    /**
+     * Get all tickets that match the query search
+     */
     protected function search_tickets(string $param) {
         $query = "SELECT * FROM client_address
         JOIN client_info USING(ticket_id)
@@ -123,9 +123,9 @@ class TicketModel extends Database {
     }
     /* ----------End of helper functions---------------- */
 
-    /* 
-        create a ticket
-    */
+    /**
+     * create a ticket
+     */
     protected function post_ticket(
         string $name,
         string $landline,

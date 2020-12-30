@@ -2,13 +2,13 @@
 include_once "../comment/model.php";
 class CommentView extends CommentModel {
     
-    /*
-        Get all comments
-    */
+    /**
+     * Get all comments
+     */
     public function show_comments() {
         $results = $this->get_comments();
         $num_of_rows = $results->rowCount();
-
+        
         if($num_of_rows <= 0) {
             echo json_encode(array(
                 "message" => "None found"
@@ -36,9 +36,9 @@ class CommentView extends CommentModel {
         ));
     }
 
-    /*
-        Get all comments for a unique reference
-    */
+    /**
+     * Get all comments for a unique reference
+     */
     public function show_single_comment(string $reference) {
         $result = $this->get_single_comment($reference);
         $num_of_rows = $result->rowCount();
@@ -71,9 +71,9 @@ class CommentView extends CommentModel {
         ));
     }
 
-    /* 
-        Add comment
-    */
+    /**
+     * Add comment
+     */
     public function add_comment(
         string $comment, 
         string $author, 
@@ -85,9 +85,9 @@ class CommentView extends CommentModel {
         else return true;
     }
 
-    /*
-        Update comment
-    */
+    /**
+     * Update comment
+     */
     public function edit_comment(string $comment, string $reference) {
         $result = $this->update_comment($comment, $reference);
         if(!$result) return false;

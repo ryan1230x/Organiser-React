@@ -26,6 +26,9 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
      */
     if(isset($ticket_id)) {
 
+        /**
+         * sanitize and validate the tiket-id
+         */
         $is_sanitized = $error_handler->sanitize_string(array($ticket_id));
         $is_validated = $error_handler->validate_string(array($ticket_id));
 
@@ -35,15 +38,24 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
             ));
             exit;
         }
+
+        /**
+         * get all a single ticket
+         */
         $ticket_view->show_single_ticket($ticket_id);
         exit;
     }
 
+    /**
+     * Search the database for query matches
+     */
     if(isset($query_request)) {
 
+        /**
+         * sanitize and validated the query-request
+         */
         $is_sanitized = $error_handler->sanitize_string(array($query_request));
         $is_validated = $error_handler->validate_string(array($query_request));
-
         if(!$is_sanitized && !$is_validated) {
             echo json_encode(array(
                 "message" => "Could not sanitize and validate"
@@ -51,10 +63,16 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
             exit;
         }
 
+        /**
+         * Display all the entries that match
+         */
         $ticket_view->show_search_tickets($query_request);
         exit;
     }
 
+    /**
+     * Get all tickets
+     */
     $ticket_view->show_tickets();
     exit;
 }
@@ -66,14 +84,16 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
  */
 if($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    /**
+     * Instanciate classes
+     */
     $ticket_view = new TicketView();
     $error_handler = new ErrorHandler();
 
-    /*
-        Get all the JSON data
-    */
+    /**
+     * Get JSON data
+     */
     $data = json_decode(file_get_contents("php://input"), true);
-
     $reference = $data["reference"]; 
     $address = $data["address"]; 
     $name = $data["name"];
@@ -87,6 +107,19 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $status = $data["status"];
     $created_by = $data["createdBy"];
     $ticket_id = sha1(date("U") . $reference);
+    $data_array_int = array($reference, $landline, $contact_number);
+    $data_array_strings = array(
+        $name,      
+        $address,
+        $network,
+        $portability,
+        $package,
+        $service,
+        $requested_date,
+        $created_by,
+        $ticket_id,
+        $status
+    );
     $data_array = array(
         $name,
         $landline,
@@ -103,8 +136,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         $status
     );
 
-    /*
-        Check if any of the fields are empty
+   /**
+    * Check if any of the fields are empty
     */
     $is_emtpy = $error_handler->validate_empty_values($data_array);
     if($is_emtpy) {
@@ -113,7 +146,48 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         ));
         exit;
     }
+
+    /**
+     * sanitize data
+     */
+    $is_sanitized = $error_handler->sanitize_string($data_array_strings);
+    if (!$is_sanitized) {
+        echo json_encode(array(
+            "message"=> "could not sanitize input type string"
+        ));
+        exit;
+    }
+
+    $is_sanitized = $error_handler->sanitize_int($data_array_int);
+    if (!$is_sanitized) {
+        echo json_encode(array(
+            "message" => "could not sanitize input type int"
+        ));
+        exit;
+    }
+
+    /**
+     * validate data
+     */
+    $is_validated = $error_handler->validate_string($data_array_strings);
+    if (!$is_validated) {
+        echo json_encode(array(
+            "message" => "could not validate input type string"
+        ));
+        exit;
+    }
+
+    $is_validated = $error_handler->validate_int($data_array_int);
+    if (!$is_validated) {
+        echo json_encode(array(
+            "message" => "could not validate input tyep int"
+        ));
+        exit;
+    }
     
+    /**
+     * Create ticket
+     */
     $set_ticket = $ticket_view->add_ticket(
         $name,
         $landline,
@@ -136,6 +210,10 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         ));
         exit;
     }
+
+    /**
+     * Display successfull message
+     */
     echo json_encode(array(
         "success" => true,
         "message" => "Created successfully",
@@ -165,11 +243,16 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
  */
 if($_SERVER["REQUEST_METHOD"] === "PUT") {
 
+    /**
+     * instanciate classes
+     */
     $ticket_view = new TicketView();
     $error_handler = new ErrorHandler();
 
+    /**
+     * get JSON data
+     */
     $data = json_decode(file_get_contents("php://input"), true);
-
     $reference = $data["reference"]; 
     $address = $data["address"]; 
     $name = $data["name"];
@@ -182,6 +265,19 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
     $service = $data["service"];
     $status = $data["status"];
     $created_by = $data["created_by"];
+    $data_array_int = array($reference, $landline, $contact_number);
+    $data_array_strings = array(
+        $name,      
+        $address,
+        $network,
+        $portability,
+        $package,
+        $service,
+        $requested_date,
+        $created_by,
+        $ticket_id,
+        $status
+    );
     $data_array = array(
         $name,
         $landline,
@@ -198,6 +294,47 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
         $status
     );
 
+    /**
+     * sanitize data
+     */
+    $is_sanitized = $error_handler->sanitize_string($data_array_strings);
+    if (!$is_sanitized) {
+        echo json_encode(array(
+            "message"=> "could not sanitize input type string"
+        ));
+        exit;
+    }
+
+    $is_sanitized = $error_handler->sanitize_int($data_array_int);
+    if (!$is_sanitized) {
+        echo json_encode(array(
+            "message" => "could not sanitize input type int"
+        ));
+        exit;
+    }
+
+    /**
+     * validate data
+     */
+    $is_validated = $error_handler->validate_string($data_array_strings);
+    if (!$is_validated) {
+        echo json_encode(array(
+            "message" => "could not validate input type string"
+        ));
+        exit;
+    }
+
+    $is_validated = $error_handler->validate_int($data_array_int);
+    if (!$is_validated) {
+        echo json_encode(array(
+            "message" => "could not validate input tyep int"
+        ));
+        exit;
+    }
+
+    /**
+     * update ticket
+     */
     $update_ticket = $ticket_view->update_ticket(
         $address,
         $name,
@@ -219,10 +356,27 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
         exit;
     }
 
+    /**
+     * display successfull message
+     */
     echo json_encode(array(
         "success" => true,
         "message" => "Updated successfully"
+        "data" => array(
+            "reference" => $reference,
+            "name" => $name,
+            "address" => $address,
+            "landline" => $landline,
+            "contactNumber" => $contact_number,
+            "network" => $network,
+            "service" => $service,
+            "portability" => $portability,
+            "clientPackage" => $package,
+            "status" => $status,
+            "requestedDate" => $requested_date,
+            "createdBy" => $created_by,
+            "ticketId" => $ticket_id,
+        )
     ));
     exit; 
-    
 }
