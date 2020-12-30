@@ -2,12 +2,18 @@
 include_once "../config/Database.php";
 class HistoryModel extends Database {
 
+  /**
+   * Get all history
+   */
   protected function get_history() {
     $query = "SELECT * FROM history";
     $stmt = $this->connect()->query($query);
     return $stmt;
   }
 
+  /**
+   * Get history for a single ticket
+   */
   protected function get_single_history(string $ticket_id) {
     $query = "SELECT * FROM history WHERE ticket_id = ?";
     $conn = $this->connect();
@@ -16,6 +22,9 @@ class HistoryModel extends Database {
     return $stmt;
   }
 
+  /**
+   * Created history entry
+   */
   protected function post_history(
     string $author, 
     string $action, 

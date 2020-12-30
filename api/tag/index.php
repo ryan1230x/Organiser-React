@@ -13,6 +13,9 @@ $ticket_id = $_GET["ticket_id"];
  */
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
+	/**
+	 * Instanciate classes
+	 */
 	$tag_view = new TagView();
 	$error_handler = new ErrorHandler();
 	
@@ -32,13 +35,16 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 		/**
 		 * if not sanitized not valid display error message
 		 */
-        if(!$is_sanitized && !$is_validated) {
-            echo json_encode(array(
-                "message" => "Could not sanitize and validate"
-            ));
-            exit;
+    if(!$is_sanitized && !$is_validated) {
+			echo json_encode(array(
+				"message" => "Could not sanitize and validate"
+      ));
+      exit;
 		}
 		
+		/**
+		 * Get all the tags for a single ticket
+		 */
 		$tag_view->show_single_tag($ticket_id);
 		exit;
 	}
@@ -51,6 +57,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
  */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+	/**
+	 * Instanciate classes
+	 */
 	$tag_view = new TagView();
 	$error_handler = new ErrorHandler();
 
@@ -70,10 +79,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 	$is_empty = $error_handler->validate_empty_values(array($data_array));
 	if ($is_empty) {
 		echo json_encode(array(
-            "message" => "Please fill all the fields"
-        ));
-        exit;
+			"message" => "Please fill all the fields"
+		));
+		exit;
 	}
+
+	/**
+	 * Sanitize data
+	 */
+	$is_sanitized = $error_handler->sanitize_string($data_array);
+	if (!$is_sanitized) {
+		echo json_encode(array(
+			"message" => "the input could not be sanitized"
+		));
+		exit;
+	}
+
+	/**
+	 * validate data
+	 */
+	$is_validated = $error_handler->validate_string($data_array));
+  if (!$is_validated) {
+    echo json_encode(array(
+    	"message" => "The input could not be validated"
+    ));
+    exit;
+  }
 
 	/**
 	 * Create the tag
@@ -81,16 +112,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 	$set_tag = $tag_view->add_tag($ticket_id, $tag, $color);
 	if (!$set_tag) {
 		echo json_encode(array(
-            "success" => false,
-            "message" => "Could not create tag"
-        ));
-        exit;
+    	"success" => false,
+      "message" => "Could not create tag"
+		));
+    exit;
 	}
 
 	/**
 	 * Display successfull message
 	 */
 	echo json_encode(array(
+<<<<<<< HEAD
         "success" => true,
         "message" => "Created successfully",
         "data" => array(
@@ -100,6 +132,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
     ));
     exit;  
+=======
+		"success" => true,
+		"message" => "Created successfully",
+		"data" => array(
+			"tag" => $tag,
+      "ticketId" => $ticket_id 
+    )
+  ));
+  exit;  
+>>>>>>> eef515008f9c8ab142ee4cab858c3d3b3e6dd240
 }
 
 /**
@@ -109,6 +151,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
  */
 if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
 
+	/**
+	 * Instanciate classes
+	 */
 	$tag_view = new TagView();
 	$error_handler = new ErrorHandler();
 
@@ -126,10 +171,48 @@ if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
 	$is_empty = $error_handler->validate_empty_values(array($data_array));
 	if ($is_empty) {
 		echo json_encode(array(
-            "success" => false,
-            "message" => "Could not create tag"
-        ));
-        exit;		
+    	"success" => false,
+      "message" => "Could not create tag"
+    ));
+    exit;		
+	}
+
+	/**
+	 * sanitize data
+	 */
+	$is_sanitized = $error_handler->sanitize_string(array($ticket_id));
+	if (!$is_sanitized) {
+		echo json_encode(array(
+			"message" => "the input type string could not be sanitized"
+		));
+		exit;
+	}
+
+	$is_sanitized = $error_handler->sanitize_int(array($id));
+	if (!$is_sanitized) {
+		echo json_encode(array(
+			"message" => "the input type int could not be sanitized"
+		));
+		exit;
+	}
+
+	/**
+	 * validate data
+	 */
+	$is_validated = $error_handler->validate_string(array($ticket_id));
+	if (!$is_validated) {
+		echo json_encode(array(
+			"message" => "the input type string could not be validated"
+		));
+		exit;
+	}
+
+	$is_validated = $error_handler->validate_int(array($id));
+	if (!$is_validated) {
+		echo json_encode(array(
+			"message" => "the input type int could not be validated"
+		));
+		exit;
 	}
 
 	/**
@@ -138,22 +221,22 @@ if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
 	$set_tag = $tag_view->remove_tag($ticket_id, $id);
 	if (!$set_tag) {
 		echo json_encode(array(
-            "success" => false,
-            "message" => "Could not delete tag"
-        ));
-        exit;
+			"success" => false,
+			"message" => "Could not delete tag"
+		));
+		exit;
 	}
 
 	/**
 	 * Display successfull message
 	 */
 	echo json_encode(array(
-        "success" => true,
-        "message" => "Deleted successfully",
-        "data" => array(
+		"success" => true,
+    "message" => "Deleted successfully",
+    "data" => array(
 			"id" => $id,        	
-        	"ticketId" => $ticket_id 
-        )
-    ));
-    exit;  	
+      "ticketId" => $ticket_id 
+    )
+  ));
+  exit;  	
 }
