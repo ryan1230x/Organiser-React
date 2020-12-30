@@ -361,7 +361,7 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
      */
     echo json_encode(array(
         "success" => true,
-        "message" => "Updated successfully"
+        "message" => "Updated successfully",
         "data" => array(
             "reference" => $reference,
             "name" => $name,

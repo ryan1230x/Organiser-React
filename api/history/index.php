@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
    * instanciate classes
    */
   $history_view = new HistoryView();
-  $error_handler = new ErrorHander();
+  $error_handler = new ErrorHandler();
 
   /**
    * route        /api/history/?ticket_id=:id
@@ -64,7 +64,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
    * instanciate classes
    */
   $history_view = new HistoryView();
-  $error_handler = new ErrorHander();
+  $error_handler = new ErrorHandler();
   
   /**
    * Get JSON data

@@ -103,7 +103,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     /**
      * Validate data
      */
-    $is_validated = $error_handler->validate_string($data_array));
+    $is_validated = $error_handler->validate_string($data_array);
     if (!$is_validated) {
         echo json_encode(array(
             "message" => "The input could not be validated"
@@ -185,7 +185,7 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
     /**
      * Validate data
      */
-    $is_validated = $error_handler->validate_string($data_array));
+    $is_validated = $error_handler->validate_string($data_array);
     if (!$is_validated) {
         echo json_encode(array(
             "message" => "The input could not be validated"

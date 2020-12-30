@@ -35,11 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 		/**
 		 * if not sanitized not valid display error message
 		 */
-    if(!$is_sanitized && !$is_validated) {
-			echo json_encode(array(
-				"message" => "Could not sanitize and validate"
-      ));
-      exit;
+        if(!$is_sanitized && !$is_validated) {
+		    echo json_encode(array(
+			    "message" => "Could not sanitize and validate"
+            ));
+            exit;
 		}
 		
 		/**
@@ -98,31 +98,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 	/**
 	 * validate data
 	 */
-	$is_validated = $error_handler->validate_string($data_array));
-  if (!$is_validated) {
-    echo json_encode(array(
-    	"message" => "The input could not be validated"
-    ));
-    exit;
-  }
+	$is_validated = $error_handler->validate_string($data_array);
+  	if (!$is_validated) {
+        echo json_encode(array(
+    	    "message" => "The input could not be validated"
+        ));
+        exit;
+    }
 
 	/**
 	 * Create the tag
 	 */
 	$set_tag = $tag_view->add_tag($ticket_id, $tag, $color);
 	if (!$set_tag) {
-		echo json_encode(array(
-    	"success" => false,
-      "message" => "Could not create tag"
-		));
-    exit;
+	    echo json_encode(array(
+            "success" => false,
+            "message" => "Could not create tag"
+	    ));
+        exit;
 	}
 
 	/**
 	 * Display successfull message
 	 */
 	echo json_encode(array(
-<<<<<<< HEAD
         "success" => true,
         "message" => "Created successfully",
         "data" => array(
@@ -132,16 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
     ));
     exit;  
-=======
-		"success" => true,
-		"message" => "Created successfully",
-		"data" => array(
-			"tag" => $tag,
-      "ticketId" => $ticket_id 
-    )
-  ));
-  exit;  
->>>>>>> eef515008f9c8ab142ee4cab858c3d3b3e6dd240
 }
 
 /**
@@ -170,11 +159,11 @@ if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
 	 */
 	$is_empty = $error_handler->validate_empty_values(array($data_array));
 	if ($is_empty) {
-		echo json_encode(array(
-    	"success" => false,
-      "message" => "Could not create tag"
-    ));
-    exit;		
+	    echo json_encode(array(
+            "success" => false,
+            "message" => "Could not create tag"
+        ));
+        exit;		
 	}
 
 	/**
@@ -231,12 +220,12 @@ if ($_SERVER["REQUEST_METHOD"] === "DELETE") {
 	 * Display successfull message
 	 */
 	echo json_encode(array(
-		"success" => true,
-    "message" => "Deleted successfully",
-    "data" => array(
-			"id" => $id,        	
-      "ticketId" => $ticket_id 
-    )
-  ));
-  exit;  	
+	    "success" => true,
+        "message" => "Deleted successfully",
+        "data" => array(
+			"id" => $id,
+			"ticketId" => $ticket_id
+		)
+	));
+	exit;  	
 }
