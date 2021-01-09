@@ -7,7 +7,12 @@ import { EditOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 const { TextArea } = Input;
 
-function ViewAddComment({ticketId, handleAddComment, handleAddHistory}) {
+function ViewAddComment({
+  ticketId, 
+  handleAddComment, 
+  handleAddHistory,
+}) {
+  
   const [newComment, setNewComment] = useState("");
   
   /**
@@ -37,16 +42,29 @@ function ViewAddComment({ticketId, handleAddComment, handleAddHistory}) {
 
   // Add new Comment and history on form Submit
   const addCommentOnSubmit = () => {
-    console.log("click");
     postNewComment();
     postNewHistory();
     setNewComment("");
   };
   
   return (
-    <Form layout="vertical" onFinish={addCommentOnSubmit} style={{marginBottom: 32}}>
-      <Form.Item>
-        <TextArea
+    <Form 
+      layout="vertical" 
+      onFinish={addCommentOnSubmit} 
+      style={{marginBottom: 32}}
+    >
+      <Form.Item
+        name="new-comment"
+        label="Add Comment"
+        rules={[
+          {            
+            required: true,
+            message: "Can not be empty!"
+          }
+        ]}
+      >
+        <TextArea          
+          allowClear
           rows={4}
           placeholder="Type here to add a comment..."
           value={newComment}
@@ -54,7 +72,7 @@ function ViewAddComment({ticketId, handleAddComment, handleAddHistory}) {
         />
         </Form.Item>
         <Form.Item>
-          <Button 
+          <Button
             htmlType="submit" 
             style={{float: "right"}}
             icon={<EditOutlined />}

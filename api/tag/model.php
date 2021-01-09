@@ -2,6 +2,12 @@
 include_once "../config/Database.php";
 class TagModel extends Database {
 
+	protected function get_tags() {
+		$query = "SELECT * FROM tags";
+		$stmt = parent::connect()->query($query);
+		return $stmt;
+	}
+
 	/**
 	 * Get all tags from a single ticket
 	 */
@@ -16,12 +22,16 @@ class TagModel extends Database {
 	/**
 	 * Add a tag to a ticket
 	 */
-	protected function post_tag(string $ticket_id, string $tag, string $color) {
-		$query = "INSERT INTO tags 
-		SET 
-			tag = :tag, 
-			ticket_id = :ticket_id,
-			color = :color";
+  protected function post_tag(
+		string $ticket_id,
+		string $tag,
+		string $color
+	) {
+		$query = "INSERT INTO tags
+		SET
+			tag = :tag,
+			color = :color,
+			ticket_id = :ticket_id";
 		$conn = parent::connect();
 		$stmt = $conn->prepare($query);
 		$stmt->bindValue(":tag", $tag);

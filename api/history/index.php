@@ -104,17 +104,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
   }
 
   /**
-   * validate data
-   */
-  $is_validated = $error_handler->validate_string($data_array);
-  if (!$is_validated) {
-    echo json_encode(array(
-      "message" => "could not validate input"
-    ));
-    exit;
-  }
-
-  /**
    * create history entry
    */
   $set_history = $history_view->add_history($author, $action, $ticket_id, $added_at);

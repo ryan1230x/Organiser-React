@@ -1,11 +1,8 @@
 <?php
-header("Access-Allow-Control-Origin:*");
+header("Access-Control-Allow-Origin:*");
 header("Content-Type:application/json");
-include_once "../view.php";
 include_once "../../validation/index.php";
-
-// Global variables
-$ticket_id = $_GET["ticket_id"];
+include_once "../view.php";
 
 /**
  * route        /api/ticket/status/?ticket_id=?
@@ -19,8 +16,10 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
 
     $data = json_decode(file_get_contents("php://input"), true);
     $status = $data["status"]; 
+    $ticket_id = $data["ticketId"];
+    $data_array = array($status, $ticket_id);
 
-    $is_empty = $error_handler->validate_empty_values(array($status));
+    $is_empty = $error_handler->validate_empty_values($data_array);
     if($is_empty) {
         echo json_encode(array(
             "message" => "Please fill all the fields"
@@ -38,7 +37,12 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
 
     echo json_encode(array(
         "success" => true,
-        "message" => "Update successfully"
+        "message" => "Update successfully",
+        "data" => array(
+            "status" => $status,
+            "ticketId" => $ticket_id
+        )
     ));
     exit;
+
 }

@@ -3,7 +3,7 @@ include_once "../history/model.php";
 class HistoryView extends HistoryModel {
 
   public function show_history() {
-    $results = $this->get_history();
+    $results = parent::get_history();
     $num_of_row = $results->rowCount();
 
     if($num_of_row <= 0) {
@@ -33,7 +33,7 @@ class HistoryView extends HistoryModel {
   }
 
   public function show_single_history(string $ticket_id) {
-    $results = $this->get_single_history($ticket_id);
+    $results = parent::get_single_history($ticket_id);
     $num_of_row = $results->rowCount();
 
     if($num_of_row <= 0) {
@@ -70,7 +70,7 @@ class HistoryView extends HistoryModel {
     string $ticket_id,
     string $added_at
   ) {
-    $results = $this->post_history($author, $action, $ticket_id, $added_at);
+    $results = parent::post_history($author, $action, $ticket_id, $added_at);
 
     if(!$results) return false;
     else return true;

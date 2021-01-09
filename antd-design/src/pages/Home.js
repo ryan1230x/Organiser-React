@@ -1,12 +1,29 @@
-import React, { useEffect } from "react";
-
-// Import Components
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { PageHeader, Table, Tag, Button } from "antd";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getTickets } from "../actions/ticketActions";
+import { getTicketInformation, getTickets } from "../actions/ticketActions";
+import { getComments } from "../actions/commentActions";
+import { addTag, getTags } from "../actions/tagActions.js";
+
+// Import icons
+import { 
+  TagsOutlined, 
+  ExportOutlined 
+} from "@ant-design/icons";
+
+// Import Components
+import { 
+  PageHeader, 
+  Table, 
+  Tag, 
+  Button,
+  Tooltip,
+  Space,
+} from "antd";
+import SneakPeakDrawer from "../components/Home/SneakPeakDrawer";
+import TagDrawer from "../components/Home/TagDrawer";
 
 /**
  * Table Columns
@@ -38,9 +55,15 @@ const tableColumns = [
     key: "status",
     title: "Status",
     dataIndex: "status",
-    render: (status) => (
+    render: (status) => (<strong>{status}</strong>)
+  },
+  {
+    key: "tags",
+    title: "Tags",
+    dataIndex: "tags",
+    render: (tags) => (
       <>
-        {status.map((item, index) => {
+        {tags.map((item, index) => {
           let color = item.length > 5 ? "geekblue" : "green";
           if (item === "closed") {
             color = "red";
@@ -63,30 +86,89 @@ const tableColumns = [
 
 function Home({
     tickets,
+    comments,
+    ticketInformation,
+    addTag,
+    getTags,
+    tags,
     getTickets,
-    loadingTickets
+    getComments,
+    getTicketInformation,
+    loadingTickets,
 }) {
-    
-    useEffect(() => {
-        getTickets()
-    }, [getTickets])
+
+  const [isVisible, setVisible] = useState(false);
+  const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
+  const [id, setId] = useState("");
+  
+  useEffect(() => {
+    getTickets();
+  }, [getTickets])
+
+  /**
+   * Drawer functions
+   */
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const showTagDrawer = () => {
+    setTagDrawerVisible(true);
+  };
+
+  const onCloseTagDrawer = () => {
+    setTagDrawerVisible(false);
+  };
 
   /**
    * Table data
    */
   const data = tickets.map((ticket, index) => {
-    const { ticketId, name, address, status, network, clientPackage } = ticket;
+    const { 
+      ticketId, 
+      name, 
+      address, 
+      status, 
+      network, 
+      clientPackage,
+      tags
+    } = ticket;
+    
     return {
       key: index,
       name,
       address,
       package: clientPackage,
       network,
-      status: [status],
+      tags: [status],
+      status: status,
       action: (
-        <Button>
-          <Link to={`/ticket/${ticketId}`}>See More</Link>
-        </Button>
+        <>
+        <Space wrap size={10}>          
+          <Button type="primary">
+            <Link to={`/ticket/${ticketId}`}>Open Ticket</Link>
+          </Button>
+          <Tooltip title="Add Tag">  
+            <Button shape="circle" icon={<TagsOutlined />} onClick={() => {
+              setId(ticketId);
+              getTags(ticketId);
+              showTagDrawer();
+            }} />
+          </Tooltip>
+          <Tooltip title="Sneak Peak">
+            <Button shape="circle" icon={<ExportOutlined />} onClick={() => {
+              setId(ticketId);              
+              showDrawer();
+              getTicketInformation(ticketId);
+              getComments(ticketId);
+            }} />
+          </Tooltip>
+        </Space>
+        </>
       )
     };
   });
@@ -102,6 +184,22 @@ function Home({
             subTitle={`${tickets.length} Pending Installations`}
           />
           <Table columns={tableColumns} dataSource={data} />
+          <SneakPeakDrawer 
+            closable={false} 
+            onClose={onClose} 
+            visible={isVisible}            
+            ticketId={id}
+            ticketInformation={ticketInformation}
+            comments={comments}
+          />
+          <TagDrawer
+            handleAddTag={addTag}
+            tags={tags}
+            closable={false}
+            onClose={onCloseTagDrawer}
+            visible={isTagDrawerVisible}
+            ticketId={id}
+          />
         </>
       )}
     </>
@@ -109,8 +207,17 @@ function Home({
 }
 
 const mapStateToProps = (state) => ({
+  comments: state.comments.comments,
   tickets: state.tickets.tickets,
-  loadingTickets: state.tickets.loading
+  ticketInformation: state.tickets.ticketInformation,
+  loadingTickets: state.tickets.loading,
+  tags: state.tags.tags
 });
 
-export default connect(mapStateToProps, { getTickets })(Home);
+export default connect(mapStateToProps, { 
+  getTickets, 
+  getTicketInformation,
+  getComments,
+  addTag,
+  getTags
+})(Home);
