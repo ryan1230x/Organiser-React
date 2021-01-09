@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // import redux and actions
@@ -9,6 +9,7 @@ import {
   putTicketStatusToClosed
 } from "../actions/ticketActions";
 import { getHistory, addHistory } from "../actions/historyActions";
+import { getTags, addTag } from "../actions/tagActions";
 
 // Import Components
 import ViewBreadCrumbs from "../components/ViewTicket/ViewBreadCrumbs";
@@ -17,24 +18,41 @@ import ViewAddComment from "../components/ViewTicket/ViewAddComment";
 import ViewComments from "../components/ViewTicket/ViewComments";
 import ViewTimeline from "../components/ViewTicket/ViewTimeline";
 import ViewClosingComment from "../components/ViewTicket/ViewClosingComment";
+import TagDrawer from "../components/Home/TagDrawer.js";
+
+import { TagsOutlined } from "@ant-design/icons";
 
 // Import Components
-import { PageHeader, Row, Col, Typography } from "antd";
+import {
+  PageHeader,
+  Row,
+  Col,
+  Typography,
+  Button,  
+  Tag
+} from "antd";
 const { Title } = Typography;
 
 function ViewTicket({
   addComment,
+  addHistory,  
   getComments,
-  comments,
-  loadingComments,
-  getTicketInformation,
-  ticketInformation,
-  putTicketStatusToClosed,
+  addTag,
   getHistory,
-  addHistory,
+  getTicketInformation,
+  getTags,
+  comments,
   histories,
-  loadingHistories
+  tags,
+  ticketInformation,
+  loadingComments,
+  loadingHistories,
+  loadingTags,
+  putTicketStatusToClosed,
 }) {
+
+  const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
+
   // Get the ticket id from the URL
   // URL-> /ticket/:id
   const { id } = useParams();
@@ -43,47 +61,90 @@ function ViewTicket({
     getTicketInformation(id);
     getComments(id);
     getHistory(id);
-  }, [getTicketInformation, getComments, getHistory, id]);
+    getTags(id);
+  }, [getTicketInformation, getComments, getHistory, getTags, id]);
 
-  const { name } = ticketInformation;
+  const onTagClose = () => {
+    setTagDrawerVisible(false);
+  };
+
+  const showTagDrawer = () => {
+    setTagDrawerVisible(true);
+  };
+
+  const { name, address } = ticketInformation;
 
   return (
     <>
-      {loadingComments && loadingHistories ? (
+      { loadingComments && loadingHistories && loadingTags ? (
         "Loading..."
       ) : (
-        <>
-          <Row>
-            <Col span={15}>
-              <ViewBreadCrumbs ticketInformation={ticketInformation} />
-              <PageHeader
-                title={<Title level={1}>{name}</Title>}
-                style={{ marginBottom: 32 }}
-              />
-              <ViewDescriptions ticketInformation={ticketInformation} />
-            </Col>
-            <Col span={15}>
-              <ViewAddComment
-                handleAddHistory={addHistory}
-                handleAddComment={addComment}
-                ticketId={id}
-              />
-              <ViewComments comments={comments} />
-            </Col>
-            <Col span={9}>
-              <ViewTimeline histories={histories} />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={15} style={{ margin: "32px 0px" }}>
-              <ViewClosingComment
-                handleAddComment={addComment}
-                handleAddHistory={addHistory}
-                ticketId={id}
-              />
-            </Col>
-          </Row>
-        </>
+      <>
+        <Row>
+          <Col span={15}>
+            <ViewBreadCrumbs
+              ticketInformation={ticketInformation}
+            />
+            <PageHeader
+              onBack={() => window.history.back()}
+              title={name}
+              subTitle={address}
+              style={{marginBottom: 32}}
+              extra={[
+                <Button
+                  type="primary"
+                  key="1"
+                  icon={<TagsOutlined />}                  
+                  onClick={showTagDrawer}
+                >
+                  Add Ticket Tag
+                </Button>
+              ]}
+              tags={
+                tags.map((tag, index) => (
+                  <Tag key={index} color={tag.color}>{tag.tag}</Tag>
+                ))
+              }
+            />
+            <ViewDescriptions
+              ticketInformation={ticketInformation}
+            />
+          </Col>
+          <Col span={15}>
+            <ViewAddComment
+              handleAddHistory={addHistory}
+              handleAddComment={addComment}
+              ticketId={id}
+            />
+            <ViewComments comments={comments} />
+          </Col>
+          <Col span={9}>
+            <ViewTimeline
+              histories={histories}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            span={15}
+            style={{margin: "32px 0px"}}
+          >
+            <ViewClosingComment
+              handleAddComment={addComment}
+              handleAddHistory={addHistory}
+              ticketId={id}
+            />
+          </Col>
+        </Row>
+        <TagDrawer
+          handleAddTag={addTag}
+          tags={tags}
+          closable={false}
+          onClose={onTagClose}
+          visible={isTagDrawerVisible}
+          ticketId={id}
+        />
+      </>
       )}
     </>
   );
@@ -93,15 +154,19 @@ const mapStateToProps = (state) => ({
   comments: state.comments.comments,
   ticketInformation: state.tickets.ticketInformation,
   histories: state.histories.histories,
+  tags: state.tags.tags,
   loadingComments: state.comments.loading,
-  loadingHistories: state.histories.loading
+  loadingHistories: state.histories.loading,
+  loadingTags: state.tags.loading
 });
 
 export default connect(mapStateToProps, {
-  getComments,
-  addComment,
-  getTicketInformation,
+  addComment,  
+  addHistory,
+  addTag,
   putTicketStatusToClosed,
+  getComments,
   getHistory,
-  addHistory
+  getTicketInformation,
+  getTags
 })(ViewTicket);

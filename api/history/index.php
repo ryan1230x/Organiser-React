@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
    * instanciate classes
    */
   $history_view = new HistoryView();
-  $error_handler = new ErrorHander();
+  $error_handler = new ErrorHandler();
 
   /**
    * route        /api/history/?ticket_id=:id
@@ -64,7 +64,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
    * instanciate classes
    */
   $history_view = new HistoryView();
-  $error_handler = new ErrorHander();
+  $error_handler = new ErrorHandler();
   
   /**
    * Get JSON data
@@ -99,17 +99,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
   if (!$is_sanitized) {
     echo json_encode(array(
       "message" => "could not sanitize input"
-    ));
-    exit;
-  }
-
-  /**
-   * validate data
-   */
-  $is_validated = $error_handler->validate_string($data_array);
-  if (!$is_validated) {
-    echo json_encode(array(
-      "message" => "could not validate input"
     ));
     exit;
   }

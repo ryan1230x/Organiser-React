@@ -15,25 +15,29 @@ function ViewDescriptions({ticketInformation}) {
     network,
     portability
   } = ticketInformation;
+
+  const descriptions = [
+    {label: "Name", value: name},
+    {label: "Address", value: address},
+    {label: "Landline", value: landline},
+    {label: "Contact Number", value: contactNumber},
+    {label: "Requested Date", value: requestedDate},
+    {label: "Status", value: status},
+    {label: "Network", value: network},
+    {label: "Client Package", value: clientPackage},
+    {label: "Portability", value: portability},
+  ]
   return(
     <Descriptions style={{marginBottom: 32}}>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Name">{name}</Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Address">{address}</Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Landline">{landline}</Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Contact Number">
-        {contactNumber}
-      </Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Requested Date">
-        {requestedDate}
-      </Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Status">{status}</Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Network">{network}</Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Client Package">
-        {clientPackage}
-      </Descriptions.Item>
-      <Descriptions.Item labelStyle={{fontWeight: "bold"}} label="Portability">
-        {portability}
-      </Descriptions.Item>
+      {descriptions.map((description, index) => (
+        <Descriptions.Item 
+          key={index}
+          labelStyle={{fontWeight: "bold"}} 
+          label={description.label}
+        >
+          {description.value}
+        </Descriptions.Item>
+      ))}
     </Descriptions>
   )
 }

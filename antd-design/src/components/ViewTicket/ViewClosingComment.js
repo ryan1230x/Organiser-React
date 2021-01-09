@@ -1,11 +1,24 @@
 import React, { useState } from "react"
 
+// Import icons
+import { CheckOutlined } from "@ant-design/icons"
+
 // Import Components
-import { Form, Input, Typography, Button } from "antd";
+import { 
+  Form, 
+  Input, 
+  Typography, 
+  Button 
+} from "antd";
 const { TextArea } = Input
 const { Title } = Typography  
 
-function ViewClosingComment({handleAddComment, handleAddHistory, ticketId}) {
+function ViewClosingComment({
+  handleAddComment, 
+  handleAddHistory, 
+  ticketId
+}) {
+
   const [closingComment, setClosingComment] = useState("");
 
   /**
@@ -20,7 +33,7 @@ function ViewClosingComment({handleAddComment, handleAddHistory, ticketId}) {
       addedAt: new Date().toLocaleString()
     };
     handleAddHistory(JSON.stringify(closingCommentHistoryObject));
-  }
+  };
 
   // Helper function
   const postClosingComment = () => {
@@ -31,7 +44,7 @@ function ViewClosingComment({handleAddComment, handleAddHistory, ticketId}) {
       addedAt: new Date().toLocaleString()
     };
     handleAddComment(JSON.stringify(closingCommentObject), ticketId);
-  }
+  };
 
   // Add closing comment and history on form submit
   const addClosingComment = () => {
@@ -43,7 +56,11 @@ function ViewClosingComment({handleAddComment, handleAddHistory, ticketId}) {
   return (
     <>
     <Title level={3}>Closing Comment</Title>
-    <Form layout="vertical" onFinish={addClosingComment} style={{marginBottom: 32}}>
+    <Form 
+      layout="vertical" 
+      onFinish={addClosingComment} 
+      style={{marginBottom: 32}}
+    >
       <Form.Item>
         <TextArea
           rows={4}
@@ -51,11 +68,16 @@ function ViewClosingComment({handleAddComment, handleAddHistory, ticketId}) {
           value={closingComment}
           onChange={(e) => setClosingComment(e.target.value)}
         />
-        </Form.Item>
-        <Form.Item>
-          <Button htmlType="submit" type="primary" style={{float: "right"}}>
-            Add Closing Comment
-          </Button>
+      </Form.Item>
+      <Form.Item>
+        <Button 
+          htmlType="submit" 
+          type="primary" 
+          style={{float: "right"}}
+          icon={<CheckOutlined />}
+        >
+          Add Closing Comment
+        </Button>
       </Form.Item>
     </Form>
     </>

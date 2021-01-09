@@ -1,7 +1,7 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
-include_once "../ticket/view.php";
+include_once "./view.php";
 include_once "../validation/index.php";
 
 // Global variables
@@ -25,19 +25,6 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
      * method       GET
      */
     if(isset($ticket_id)) {
-
-        /**
-         * sanitize and validate the tiket-id
-         */
-        $is_sanitized = $error_handler->sanitize_string(array($ticket_id));
-        $is_validated = $error_handler->validate_string(array($ticket_id));
-
-        if(!$is_sanitized && !$is_validated) {
-            echo json_encode(array(
-                "message" => "Could not sanitize and validate"
-            ));
-            exit;
-        }
 
         /**
          * get all a single ticket
@@ -361,7 +348,7 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
      */
     echo json_encode(array(
         "success" => true,
-        "message" => "Updated successfully"
+        "message" => "Updated successfully",
         "data" => array(
             "reference" => $reference,
             "name" => $name,

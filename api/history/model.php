@@ -7,7 +7,7 @@ class HistoryModel extends Database {
    */
   protected function get_history() {
     $query = "SELECT * FROM history";
-    $stmt = $this->connect()->query($query);
+    $stmt = parent::connect()->query($query);
     return $stmt;
   }
 
@@ -16,7 +16,7 @@ class HistoryModel extends Database {
    */
   protected function get_single_history(string $ticket_id) {
     $query = "SELECT * FROM history WHERE ticket_id = ?";
-    $conn = $this->connect();
+    $conn = parent::connect();
     $stmt = $conn->prepare($query);
     $stmt->execute([$ticket_id]);
     return $stmt;
@@ -37,7 +37,7 @@ class HistoryModel extends Database {
         action = :action,
         ticket_id = :ticket_id,
         added_at = :added_at";
-    $conn = $this->connect();
+    $conn = parent::connect();
     $stmt = $conn->prepare($query);
     $stmt->bindValue(":author", $author);
     $stmt->bindValue(":action", $action);
