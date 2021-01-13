@@ -10,13 +10,13 @@ const BASE_URL = "http://localhost/2020-organiser/api/tag/";
 export const getAllTags = () => dispatch => {
   axios
     .get(BASE_URL)
-	.then((res) =>
-	  dispatch({
-	    type: constant.GET_ALL_TAGS,
-		payload: res.data.data
-	  })
-	)
-	.catch((error) => console.error(error));
+    .then((res) =>
+      dispatch({
+        type: constant.GET_ALL_TAGS,
+      payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
 };
 
 /**
@@ -27,14 +27,14 @@ export const getAllTags = () => dispatch => {
 export const getTags = (ticketId) => dispatch => {
   axios
     .get(`${BASE_URL}?ticket_id=${ticketId}`)
-	.then((res) =>
-	  dispatch({
-	    type: constant.GET_TAGS,
-		payload: res.data.data
-	  })
-	)
+    .then((res) =>
+      dispatch({
+        type: constant.GET_TAGS,
+      payload: res.data.data
+      })
+    )
     .catch((error) => console.error(error));
-}
+};
 
 /**
  * @description add a new tag to a ticket
@@ -44,26 +44,26 @@ export const getTags = (ticketId) => dispatch => {
 export const addTag = (tag) => dispatch => {
   const config = {
     header: {
-	  "Content-Type":"application/json"
-	}
+      "Content-Type":"application/json"
+    }
   };
 
   axios
     .post(BASE_URL, tag, config)
-	.then((res) =>
-	  dispatch({
-	    type: constant.ADD_TAG,
-		payload: res.data.data
-	  })
-	)
-	.catch((error) => console.error(error));
+    .then((res) =>
+      dispatch({
+        type: constant.ADD_TAG,
+      payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
 };
 
 /**
  * @description Delete a tag
  * @method DELETE
  */
-export const deleteTag = () => dispatch => {
+export const deleteTag = (id) => dispatch => {
   const config = {
     header: {
       "Content-Type": "application/json"
@@ -71,12 +71,12 @@ export const deleteTag = () => dispatch => {
   };
 
   axios
-    .delete(BASE_URL, config)
-		.then((res) =>
-	  	dispatch({
-	    	type: constant.DELETE_TAG,
-				payload: res.data.data
-	  	})
-		)
-		.catch((error) => console.error(error));
+    .delete(`${BASE_URL}?id=${id}`, config)
+    .then((res) =>
+      dispatch({
+        type: constant.DELETE_TAG,
+        payload: id
+      })
+    )
+    .catch((error) => console.error(error));
 }

@@ -4,7 +4,7 @@ import React from "react";
 import { Typography, Comment, Avatar, Tooltip } from "antd";
 const { Title, Paragraph, Text } = Typography;
 
-function ViewComments({comments}) {
+function ViewComments({ comments }) {
   return (
     <>
     {comments.length <= 0  ? 
@@ -14,9 +14,11 @@ function ViewComments({comments}) {
       <Comment
         avatar={
           <Avatar
-            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            src=""
             alt="user profile picture"
-          />
+          >
+            RH
+          </Avatar>
         }
         style={{border: "1px solid #ccc",background: "white", padding: 16, marginBottom: 16, borderRadius: 7}}
         key={index}

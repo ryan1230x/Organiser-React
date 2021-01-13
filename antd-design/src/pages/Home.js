@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getTicketInformation, getTickets } from "../actions/ticketActions";
 import { getComments } from "../actions/commentActions";
-import { addTag, getTags } from "../actions/tagActions.js";
+import { addTag, getTags, getAllTags, deleteTag } from "../actions/tagActions.js";
 
 // Import icons
 import { 
@@ -90,6 +90,8 @@ function Home({
     ticketInformation,
     addTag,
     getTags,
+    deleteTag,
+    getAllTags,
     tags,
     getTickets,
     getComments,
@@ -103,6 +105,7 @@ function Home({
   
   useEffect(() => {
     getTickets();
+    getAllTags();
   }, [getTickets])
 
   /**
@@ -163,6 +166,7 @@ function Home({
             <Button shape="circle" icon={<ExportOutlined />} onClick={() => {
               setId(ticketId);              
               showDrawer();
+              getTags(ticketId);
               getTicketInformation(ticketId);
               getComments(ticketId);
             }} />
@@ -194,6 +198,7 @@ function Home({
           />
           <TagDrawer
             handleAddTag={addTag}
+            handleDeleteTag={deleteTag}
             tags={tags}
             closable={false}
             onClose={onCloseTagDrawer}
@@ -219,5 +224,7 @@ export default connect(mapStateToProps, {
   getTicketInformation,
   getComments,
   addTag,
-  getTags
+  getTags,
+  deleteTag,
+  getAllTags
 })(Home);

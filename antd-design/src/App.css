@@ -16,3 +16,35 @@ main {
   background: white !important;
   color: black !important;
 }
+
+.login-panel {
+  z-index: 999;
+  position: relative;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-wrapper-background {
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.login-panel-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.login-panel-logo {
+  z-index: 999;
+  margin-bottom: 6rem;
+}

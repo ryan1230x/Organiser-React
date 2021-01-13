@@ -6,6 +6,7 @@ import commentReducer from "./commentReducer";
 import historyReducer from "./historyReducer";
 import tagReducer from "./tagReducer";
 import pageReducer from "./pageReducer";
+import userReducer from "./userReducer";
 
 export default combineReducers({
   // Reducers go here...
@@ -13,5 +14,6 @@ export default combineReducers({
   comments: commentReducer,
   histories: historyReducer,
   tags: tagReducer,
-  pages: pageReducer
+  pages: pageReducer,
+  users: userReducer
 });

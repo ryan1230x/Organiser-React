@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// import redux hook
+import { useStore } from "react-redux";
+
 // import icons
 import { EditOutlined } from "@ant-design/icons";
 
@@ -14,6 +17,11 @@ function ViewAddComment({
 }) {
   
   const [newComment, setNewComment] = useState("");
+
+  /**
+  * Get user information from the store
+  */
+  const { displayName } = useStore().getState().users.users; 
   
   /**
    * Add new Comment on Submit
@@ -21,7 +29,7 @@ function ViewAddComment({
   // Helper funtion
   const postNewComment = () => {
     const newCommentObject = {
-      author: "Ryan",
+      author: displayName,
       comment: newComment,
       ticketId,
       addedAt: new Date().toLocaleString()
@@ -32,7 +40,7 @@ function ViewAddComment({
   // Helper function
   const postNewHistory = () => {
     const newHistoryObject = {
-      author: "Ryan",
+      author: displayName,
       action: "added a comment",
       ticketId,
       addedAt: new Date().toLocaleString()

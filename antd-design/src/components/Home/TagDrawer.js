@@ -22,6 +22,7 @@ function TagDrawer({
   onClose,
   visible,
   handleAddTag,
+  handleDeleteTag,
   tags,
 }) {
 
@@ -87,6 +88,7 @@ function TagDrawer({
         </Form>
         <h3>Tags</h3>
         <section style={{ background: "#f5f5f5", padding: 15, borderRadius: 3 }}>
+          {/* If there are any tags display the delete icon */}
           {tags.length > 0 && (
             <div style={{ float: "right" }}>
               <Tooltip title="Delete a Tag">
@@ -97,15 +99,31 @@ function TagDrawer({
         {tags.length === 0 ? (
           "There are currently no tags"
         ) : 
-          tags.map((tag, index) => {            
+          tags.map((tag, index) => {
+          {/* If the tag delete icon has been pressed toggle between these two conditions  */}           
             if (!tagBadgeIcon) {
               return (
-                <Tag key={index} color={tag.color}>{tag.tag}</Tag>
+                <Tag 
+                  key={index} 
+                  color={tag.color}
+                >
+                  {tag.tag}
+                </Tag>
               )
             } else {
               return (
-                <Badge style={{ color: '#f5222d', right: 6, cursor: "pointer" }} count={<MinusCircleOutlined />}>
-                  <Tag key={index} color={tag.color}>{tag.tag}</Tag>
+                <Badge 
+                  key={index} 
+                  style={{ color: '#f5222d', right: 6, cursor: "pointer" }} 
+                  count={<MinusCircleOutlined />}
+                  onClick={() => handleDeleteTag(tag.tag_id)}
+                >
+                  <Tag 
+                    key={index}
+                    color={tag.color}
+                  >
+                    {tag.tag}
+                  </Tag>
                 </Badge>
               )
             }

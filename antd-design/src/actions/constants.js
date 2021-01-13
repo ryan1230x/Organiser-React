@@ -18,3 +18,6 @@ export const DELETE_TAG = "DELETE_TAG";
 
 export const SET_LIGHT_THEME = "SET_LIGHT_THEME";
 export const SET_DARK_THEME = "SET_DARK_THEME";
+
+export const USER_LOGGED_IN = "USER_LOGGED_IN";
+export const USER_LOGGED_OUT = "USER_LOGGED_OUT";

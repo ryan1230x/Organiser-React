@@ -1,26 +1,30 @@
+import React, { useState, useEffect } from "react";
 import './App.css';
 import 'antd/dist/antd.css';
 
-import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link
 } from "react-router-dom";
-import { Provider } from "react-redux"
-import store from "./store";
+import { connect } from "react-redux"
+import { login, logout } from "./actions/userActions";
+
+import { auth } from "./firebase";
 
 // Import Pages
 import Home from "./pages/Home";
 import CreateTicket from "./pages/CreateTicket";
 import ViewTicket from "./pages/ViewTicket";
+import Login from "./pages/Login";
 
 // Import Icons
 import { 
     HomeOutlined,
     EditOutlined,
-    BorderOutlined
+    BorderOutlined,
+    ImportOutlined
 } from "@ant-design/icons";
 
 // Import Components
@@ -42,8 +46,29 @@ const menuItems = [
   }
 ]
 
+function App({ login, logout, users, loadingUser }) {
 
-function App() {
+  /*
+    https://www.youtube.com/watch?v=HF65cySUYao&ab_channel=CleverProgrammer
+    time: 1:54:03
+  */
+  useEffect(() => {
+    auth.onAuthStateChanged(authUser => {
+      if (authUser) {
+        // user logged in
+        console.log(authUser)
+        login({
+          uuid: authUser.uid,
+          photo: authUser.photoURL,
+          email: authUser.email,
+          displayName: authUser.displayName
+        });
+      } else {
+        // user logged out
+        logout();
+      }
+    })
+  }, [])
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -51,7 +76,13 @@ function App() {
     setCollapsed(!collapsed);
   }
   return (
-    <Provider store={store}>
+    users === null ? (
+      loadingUser ? (
+        "redirecting to home page..."
+      ) : (
+        <Login />
+      )
+    ) : (
     <Router>
       <Layout style={{minHeight:"100vh"}}>
         <Sider 
@@ -85,6 +116,12 @@ function App() {
                 <Link to={item.to}>{item.value}</Link>
               </Menu.Item>
             ))}
+            <Menu.Item 
+              key="Layout"
+              icon={<ImportOutlined />}
+            >
+              <Link onClick={() => auth.signOut()}>Logout</Link>
+            </Menu.Item>
             {/*<Menu.Item 
               onClick={() => setTheme(!isLightTheme)} 
               icon={<BorderOutlined />}
@@ -117,8 +154,13 @@ function App() {
         </Layout> 
       </Layout>
     </Router>
-    </Provider>
+    )
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  users: state.users.users,
+  loadingUser: state.users.loading
+})
+
+export default connect(mapStateToProps, { login, logout })(App);

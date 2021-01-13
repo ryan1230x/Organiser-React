@@ -9,7 +9,7 @@ import {
   putTicketStatusToClosed
 } from "../actions/ticketActions";
 import { getHistory, addHistory } from "../actions/historyActions";
-import { getTags, addTag } from "../actions/tagActions";
+import { getTags, addTag, deleteTag } from "../actions/tagActions";
 
 // Import Components
 import ViewBreadCrumbs from "../components/ViewTicket/ViewBreadCrumbs";
@@ -20,7 +20,7 @@ import ViewTimeline from "../components/ViewTicket/ViewTimeline";
 import ViewClosingComment from "../components/ViewTicket/ViewClosingComment";
 import TagDrawer from "../components/Home/TagDrawer.js";
 
-import { TagsOutlined } from "@ant-design/icons";
+import { TagsOutlined, EyeOutlined } from "@ant-design/icons";
 
 // Import Components
 import {
@@ -49,6 +49,8 @@ function ViewTicket({
   loadingHistories,
   loadingTags,
   putTicketStatusToClosed,
+  deleteTag,
+  users
 }) {
 
   const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
@@ -92,17 +94,21 @@ function ViewTicket({
               style={{marginBottom: 32}}
               extra={[
                 <Button
-                  type="primary"
                   key="1"
                   icon={<TagsOutlined />}                  
                   onClick={showTagDrawer}
                 >
                   Add Ticket Tag
-                </Button>
+                </Button>                
               ]}
               tags={
                 tags.map((tag, index) => (
-                  <Tag key={index} color={tag.color}>{tag.tag}</Tag>
+                  <Tag 
+                    key={index} 
+                    color={tag.color}
+                  >
+                    {tag.tag}
+                  </Tag>
                 ))
               }
             />
@@ -116,7 +122,10 @@ function ViewTicket({
               handleAddComment={addComment}
               ticketId={id}
             />
-            <ViewComments comments={comments} />
+            <ViewComments 
+              comments={comments}
+              usersInfo={users}
+            />
           </Col>
           <Col span={9}>
             <ViewTimeline
@@ -138,6 +147,7 @@ function ViewTicket({
         </Row>
         <TagDrawer
           handleAddTag={addTag}
+          handleDeleteTag={deleteTag}
           tags={tags}
           closable={false}
           onClose={onTagClose}
@@ -157,7 +167,8 @@ const mapStateToProps = (state) => ({
   tags: state.tags.tags,
   loadingComments: state.comments.loading,
   loadingHistories: state.histories.loading,
-  loadingTags: state.tags.loading
+  loadingTags: state.tags.loading,
+  users: state.users.users
 });
 
 export default connect(mapStateToProps, {
@@ -168,5 +179,6 @@ export default connect(mapStateToProps, {
   getComments,
   getHistory,
   getTicketInformation,
-  getTags
+  getTags,
+  deleteTag
 })(ViewTicket);
