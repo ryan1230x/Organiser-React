@@ -7,7 +7,7 @@ import { useStore } from "react-redux";
 import { EditOutlined } from "@ant-design/icons";
 
 // Import Components
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, notification} from "antd";
 const { TextArea } = Input;
 
 function ViewAddComment({
@@ -15,18 +15,41 @@ function ViewAddComment({
   handleAddComment, 
   handleAddHistory,
 }) {
-  
+
+  /**
+   * Component state
+   */
   const [newComment, setNewComment] = useState("");
+  const [form] = Form.useForm();
+
+  /**
+   * Set Notification
+   * @param {string} type of the notification success, info, error or warning
+   * @param {string} message of the notification
+   * @param {string | void} description of the notification
+   */
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message,
+      description
+    });
+  }  
 
   /**
   * Get user information from the store
   */
   const { displayName } = useStore().getState().users.users; 
-  
+
   /**
-   * Add new Comment on Submit
+   * Reset form
    */
-  // Helper funtion
+  const resetForm = () => {
+    form.resetFields();
+  };
+
+  /**
+   * Add new Comment
+   */
   const postNewComment = () => {
     const newCommentObject = {
       author: displayName,
@@ -37,7 +60,9 @@ function ViewAddComment({
     handleAddComment(JSON.stringify(newCommentObject), ticketId);
   };
 
-  // Helper function
+  /**
+   * Add new History 
+   */
   const postNewHistory = () => {
     const newHistoryObject = {
       author: displayName,
@@ -48,15 +73,19 @@ function ViewAddComment({
     handleAddHistory(JSON.stringify(newHistoryObject));
   };
 
-  // Add new Comment and history on form Submit
-  const addCommentOnSubmit = () => {
+  /**
+   * Add new Comment and history on form Submit
+   */
+  const addCommentOnSubmit = () => {   
     postNewComment();
     postNewHistory();
-    setNewComment("");
+    resetForm();
+    openNotificationWithIcon( "success", "Comment Added Succesfully", null);
   };
   
   return (
-    <Form 
+    <Form
+      form={form}
       layout="vertical" 
       onFinish={addCommentOnSubmit} 
       style={{marginBottom: 32}}

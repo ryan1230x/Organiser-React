@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
+
+// import stylesheets
 import './App.css';
 import 'antd/dist/antd.css';
 
+// import logo
+import logo from "./dtLogo.png";
+
+// import components for routing
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link
 } from "react-router-dom";
+
+// import redux and actions
 import { connect } from "react-redux"
 import { login, logout } from "./actions/userActions";
 
@@ -22,17 +30,17 @@ import Login from "./pages/Login";
 // Import Icons
 import { 
     HomeOutlined,
-    EditOutlined,
-    BorderOutlined,
+    EditOutlined,    
     ImportOutlined
 } from "@ant-design/icons";
 
 // Import Components
 import { Layout, Menu } from "antd";
+import LoginLoader from "./components/Loader/LoginLoader";
 const { Sider, Content, Footer } = Layout;
 
 
-// Menu Items
+// Menu Items, navigation links for Sider
 const menuItems = [
   {   
     to: "/",
@@ -46,17 +54,24 @@ const menuItems = [
   }
 ]
 
-function App({ login, logout, users, loadingUser }) {
+function App({ 
+  login, 
+  logout, 
+  users, 
+  loadingUser
+}) {
 
-  /*
-    https://www.youtube.com/watch?v=HF65cySUYao&ab_channel=CleverProgrammer
-    time: 1:54:03
+  /**
+  * Once the App is rendered check if the user is 
+  * authenticated with Firebase
   */
   useEffect(() => {
     auth.onAuthStateChanged(authUser => {
       if (authUser) {
-        // user logged in
-        console.log(authUser)
+        /**        
+        * User logged in add the information through
+        * the login action function
+        */
         login({
           uuid: authUser.uid,
           photo: authUser.photoURL,
@@ -64,24 +79,33 @@ function App({ login, logout, users, loadingUser }) {
           displayName: authUser.displayName
         });
       } else {
-        // user logged out
+        /**
+        * User logged out
+        * use the logout action function
+        */
         logout();
       }
     })
   }, [])
 
+  /**
+  * Component state
+  */
   const [collapsed, setCollapsed] = useState(false);
 
+  /**
+  * Helper function that toggles the sider collapse state
+  */
   const handleCollapse = () => {
     setCollapsed(!collapsed);
   }
-  return (
+
+  return (  
+    
+    // If the user is not null display the page Home page
     users === null ? (
-      loadingUser ? (
-        "redirecting to home page..."
-      ) : (
-        <Login />
-      )
+      // If the user data is loading display the loginloader
+      loadingUser ? (<LoginLoader />) : (<Login />)
     ) : (
     <Router>
       <Layout style={{minHeight:"100vh"}}>
@@ -99,7 +123,7 @@ function App({ login, logout, users, loadingUser }) {
           <img
             className="side-logo"
             width={collapsed ? 80 : 200}
-            src="https://direct-telecom.es/wp-content/uploads/2014/08/dt.png" 
+            src={logo} 
             alt="Logo"
           />
           <Menu 
@@ -121,13 +145,7 @@ function App({ login, logout, users, loadingUser }) {
               icon={<ImportOutlined />}
             >
               <Link onClick={() => auth.signOut()}>Logout</Link>
-            </Menu.Item>
-            {/*<Menu.Item 
-              onClick={() => setTheme(!isLightTheme)} 
-              icon={<BorderOutlined />}
-            >
-              {isLightTheme ? "Dark Theme" : "Light Theme" }
-            </Menu.Item>*/}
+            </Menu.Item>            
           </Menu>
         </Sider>
         <Layout>
@@ -150,7 +168,13 @@ function App({ login, logout, users, loadingUser }) {
               </Switch>
             </main>
           </Content>
-          <Footer style={{textAlign: "center"}}>Made By Ryan Harper &copy; 2020</Footer>
+          <Footer 
+            style={{
+              textAlign: "center", 
+              background: "white"
+            }}>
+              Made By Ryan Harper &copy; 2020
+            </Footer>
         </Layout> 
       </Layout>
     </Router>

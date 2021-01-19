@@ -38,6 +38,12 @@ export default function (state = initialState, action) {
         tickets: [action.payload, ...state.tickets],
         loading: false
       };
+    case constant.REOPEN_TICKET:
+      return {
+        ...state,
+        ticketInformation: action.payload,
+        loading: false
+      }
     default:
       return state;
   }

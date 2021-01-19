@@ -1,47 +1,90 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+
+//
+import { Link } from "react-router-dom";
 
 // Import redux and actions
 import { connect } from "react-redux";
 import { addTicket } from "../actions/ticketActions";
 
+// Import icons
+import { HomeOutlined, EditOutlined } from "@ant-design/icons";
+
 // Import Components
-import { Form, Input, Button, DatePicker, Select, notification } from "antd";
+import { 
+  Form, 
+  Input, 
+  Button, 
+  DatePicker, 
+  Select, 
+  notification, 
+  PageHeader, 
+  InputNumber,
+  Breadcrumb
+} from "antd";
 const { Option } = Select;
 
-class CreateTicket extends Component {
+function CreateTicket({ users, addTicket }) {
+  
   /**
-   * component constructor and state
+   * Component State 
    */
-  constructor(props) {
-    super(props);
-    this.state = {
-      reference: "",
-      name: "",
-      requestedDate: "",
-      address: "",
-      network: "",
-      service: "",
-      clientPackage: "",
-      portability: "",
-      landline: "",
-      contactNumber: ""
-    };
+  const [reference, setReference]         = useState(null);
+  const [name, setname]                   = useState("");
+  const [requestedDate, setrequestedDate] = useState("");
+  const [address, setaddress]             = useState("");
+  const [network, setnetwork]             = useState("");
+  const [service, setservice]             = useState("");
+  const [clientPackage, setclientPackage] = useState("");
+  const [portability, setportability]     = useState("");
+  const [contactNumber, setcontactNumber] = useState(null);
+  const [landline, setlandline]           = useState(null);
 
-    /**
-     * Bind Event Listeners to this keyword `this`
-     */
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-    this.postTicket = this.postTicket.bind(this);
-  }
+  const [form] = Form.useForm();
 
   /**
-   * @param {string} type success, info, error or warning
-   * @param {string} the message title
-   * @param {string} the description of the notification
+   * Descontruct the users information 
    */
-  openNotificationWithIcon(type, message, description) {
+  const { displayName } = users;
+
+  /**
+   * Network options
+   */
+  const networkOptions = [
+    {option: "Layer4",},
+    {option: "MásMóvil Direct"},
+    {option: "MásMóvil NEBA"}
+  ];
+
+  /**
+   * service options
+   */
+  const serviceOptions = [];
+
+  /**
+   * Package options 
+   */
+  const packageOptions = [];
+
+  /**
+   * Portability options
+   */
+  const portabilityOptions = [
+    {option: "Yes"},
+    {option: "No"}
+  ];
+
+  /**
+   * Requested Date, date format
+   */
+  const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY"];
+
+  /**
+   * @param {string} type of the notification success, info, error or warning
+   * @param {string} message of the notification
+   * @param {string | void} description of the notification
+   */
+  const openNotificationWithIcon = (type, message, description) => {
     notification[type]({
       message,
       description
@@ -49,269 +92,276 @@ class CreateTicket extends Component {
   }
 
   /**
-   * handle onChange event and store in state
+   * Create a new ticket
    */
-  handleOnChange(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    this.setState({
-      [name]: value
-    });
-  }
-
-  /**
-   * clear and reset all form inputs
-   */
-  handleReset() {
-    this.setState({
-      reference: "",
-      name: "",
-      requestedDate: "",
-      address: "",
-      network: "",
-      service: "",
-      clientPackage: "",
-      portability: "",
-      landline: "",
-      contactNumber: ""
-    });
-  }
-
-  /**
-   * @description Helper function, prepare the ticket data and convert into JSON format
-   */
-  postTicket() {
-    const {
+  const setNewTicket = () => {
+    const newTicket = {
       reference,
-      name,
-      requestedDate,
       address,
-      network,
-      service,
-      clientPackage,
-      portability,
-      landline,
-      contactNumber
-    } = this.state;
-
-    const newTicketObject = {
-      reference,
       name,
-      requestedDate,
-      address,
-      network,
-      service,
-      clientPackage,
       landline,
-      portability,
       contactNumber,
-      createdBy: "Ryan",
-      status: "Pending" // Default: set to pending
+      network,
+      portability,
+      clientPackage,
+      requestedDate,
+      service,
+      status: "Open",
+      createdBy: displayName,
     };
-
-    if (addTicket(JSON.stringify(newTicketObject))) {
-      this.openNotificationWithIcon(
-        "success",
-        "Ticket Created",
-        "The ticket was created successfully"
-      );
-    }
-  }
+    addTicket(JSON.stringify(newTicket));    
+  };
+  
+  /**
+   * Reset fields
+   */
+  const resetFields = () => {
+    form.resetFields();
+  };
 
   /**
-   * submit form data
+   * On form submit
    */
-  handleSubmit(e) {
-    e.preventDefault();
-    this.postTicket();
-    console.log("form submitted with data");
-  }
-
-  render() {
-    /**
-     * Deconstructor all data from state
-     */
-    const {
-      reference,
-      name,
-      requestedDate,
-      address,
-      network,
-      service,
-      clientPackage,
-      portability,
-      landline,
-      contactNumber
-    } = this.state;
-
-    /**
-     * Deconstruct functions
-     */
-    const { handleSubmit, onChange } = this;
-
-    return (
-      <>
-        <Form autocomplete="off" onFinish={handleSubmit} layout="inline">
-          {/* Client Reference */}
-          <Form.Item
-            label="Client Reference"
-            name="reference"
-            rules={[
-              {
-                type: "number",
-                required: true,
-                message: "Required",
-                min: 0
-              }
-            ]}
-          >
-            <Input onChange={onChange} value={reference} type="number" />
-          </Form.Item>
-          {/* Name */}
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Input onChange={onChange} value={name} type="text" />
-          </Form.Item>
-          {/* Requested Date */}
-          <Form.Item
-            label="Requested Date"
-            name="requestedDate"
-            rules={[
-              {
-                required: true,
-                message: "Required",
-                type: Object
-              }
-            ]}
-          >
-            <DatePicker onChange={onChange} value={requestedDate} />
-          </Form.Item>
-          {/* Address */}
-          <Form.Item
-            label="Address"
-            name="address"
-            rules={[
-              {
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Input onChange={onChange} value={address} type="text" />
-          </Form.Item>
-          {/* Network */}
-          <Form.Item
-            label="Network"
-            name="network"
-            rules={[
-              {
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Select onChange={onChange} value={network}>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-            </Select>
-          </Form.Item>
-          {/* Service */}
-          <Form.Item
-            label="Service"
-            name="service"
-            rules={[
-              {
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Select onChange={onChange} value={service}>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-            </Select>
-          </Form.Item>
-          {/* Package */}
-          <Form.Item
-            label="Package"
-            name="clientPackage"
-            rules={[
-              {
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Select onChange={onChange} value={clientPackage}>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-            </Select>
-          </Form.Item>
-          {/* Portability */}
-          <Form.Item
-            label="Portability"
-            name="portability"
-            rules={[
-              {
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Select onChange={onChange} value={portability}>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-              <Option value="option1">Option1</Option>
-            </Select>
-          </Form.Item>
-          {/* Landline number */}
-          <Form.Item
-            label="Landline Number"
-            name="landline"
-            rules={[
-              {
-                type: "number",
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Input onChange={onChange} value={landline} type="number" />
-          </Form.Item>
-          {/* Contact number */}
-          <Form.Item
-            label="Contact Number"
-            name="contactNumber"
-            rules={[
-              {
-                type: "number",
-                required: true,
-                message: "Required"
-              }
-            ]}
-          >
-            <Input onChange={onChange} value={contactNumber} type="number" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </>
+  const onSubmit = () => {
+    setNewTicket();
+    resetFields();
+    openNotificationWithIcon(
+      "success",
+      "Ticket Created Successfully",
+      null
     );
-  }
+  };
+
+  return (
+    <>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link to="/">
+            <HomeOutlined />
+            <span style={{marginLeft: 8}}>Home</span>
+          </Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <EditOutlined />
+            <span style={{marginLeft: 8}}>Create Ticket</span>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <PageHeader
+        title="Create A Ticket"
+        subTitle="Fill in the form to create a new ticket"
+      />
+      <Form 
+        form={form} 
+        layout="vertical" 
+        onFinish={onSubmit}
+      >
+        {/* Client Reference */}
+        <Form.Item          
+          label="Client Reference"
+          name="reference"
+          rules={[
+            {
+              required: true,
+              message: "Please fill in this field",
+              type: "number"
+            }
+          ]}        
+        >
+          <InputNumber
+            min={0}             
+            onChange={(number) => setReference(number)} 
+            value={reference}
+          />
+        </Form.Item>
+        {/* Name */}
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <Input 
+            onChange={(e) => setname(e.target.value)} 
+            value={name} 
+            type="text"
+          />
+        </Form.Item>
+        {/* Requested Date */}
+        <Form.Item
+          label="Requested Date"
+          name="requestedDate"
+          rules={[
+            {
+              required: true,
+              message: "Required",
+              type: "object"
+            }
+          ]}
+        >
+          <DatePicker 
+            onChange={(_, dateString) => setrequestedDate(dateString)} 
+            value={requestedDate}
+            format={dateFormatList}            
+          />
+        </Form.Item>
+        {/* Address */}
+        <Form.Item
+          label="Address"
+          name="address"
+          rules={[
+            {
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <Input 
+            onChange={(e) => setaddress(e.target.value)} 
+            value={address} 
+            type="text"
+          />
+        </Form.Item>
+        {/* Network */}
+        <Form.Item
+          label="Network"
+          name="network"
+          rules={[
+            {
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <Select 
+            onChange={(value) => setnetwork(value)} 
+            value={network}
+          >
+            {networkOptions.map((option, index) => (
+              <Option 
+                value={option.option} 
+                key={index}
+              >
+                {option.option}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        {/* Service */}
+        <Form.Item
+          label="Service"
+          name="service"
+          rules={[
+            {
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <Select 
+            onChange={(value) => setservice(value)} 
+            value={service}
+          >
+            <Option value="option1">Option1</Option>
+            <Option value="option1">Option1</Option>
+            <Option value="option1">Option1</Option>
+          </Select>
+        </Form.Item>
+        {/* Package */}
+        <Form.Item
+          label="Package"
+          name="clientPackage"
+          rules={[
+            {
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <Select 
+            onChange={(value) => setclientPackage(value)} 
+            value={clientPackage}
+          >
+            <Option value="option1">Option1</Option>
+            <Option value="option1">Option1</Option>
+            <Option value="option1">Option1</Option>
+          </Select>
+        </Form.Item>
+        {/* Portability */}
+        <Form.Item
+          label="Portability"
+          name="portability"
+          rules={[
+            {
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <Select 
+            onChange={(value) => setportability(value)} 
+            value={portability}
+          >
+            {portabilityOptions.map((option, index) => (
+              <Option 
+                value={option.option} 
+                key={index}
+              >
+                {option.option}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        {/* Landline number */}
+        <Form.Item
+          label="Landline Number"
+          name="landline"
+          rules={[
+            {
+              type: "number",
+              required: true,
+              message: "Required"
+            }
+          ]}
+        >
+          <InputNumber 
+            onChange={(number) => setlandline(number)} 
+            value={landline} 
+          />
+        </Form.Item>
+        {/* Contact number */}
+        <Form.Item
+          label="Contact Number"
+          name="contactNumber"
+          rules={[
+            {
+              type: "number",
+              required: true,
+              message: "Required",
+              min:0
+            }
+          ]}
+        >
+          <InputNumber 
+            onChange={(number) => setcontactNumber(number)} 
+            value={contactNumber}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
+  )
 }
 
-export default connect(null, { addTicket })(CreateTicket);
+const mapStateToProps = (state) => ({
+  users: state.users.users
+});
+
+export default connect(mapStateToProps, { addTicket })(CreateTicket);

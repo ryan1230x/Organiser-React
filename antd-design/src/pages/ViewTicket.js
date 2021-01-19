@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
+
+// import components for routing
 import { useParams } from "react-router-dom";
 
 // import redux and actions
 import { connect } from "react-redux";
 import { getComments, addComment } from "../actions/commentActions";
-import {
-  getTicketInformation,
-  putTicketStatusToClosed
-} from "../actions/ticketActions";
+import { getTicketInformation, putTicketStatusToClosed, putTicketStatusToOpen } from "../actions/ticketActions";
 import { getHistory, addHistory } from "../actions/historyActions";
 import { getTags, addTag, deleteTag } from "../actions/tagActions";
 
@@ -20,18 +19,17 @@ import ViewTimeline from "../components/ViewTicket/ViewTimeline";
 import ViewClosingComment from "../components/ViewTicket/ViewClosingComment";
 import TagDrawer from "../components/Home/TagDrawer.js";
 
-import { TagsOutlined, EyeOutlined } from "@ant-design/icons";
+import { TagsOutlined } from "@ant-design/icons";
 
 // Import Components
 import {
   PageHeader,
   Row,
   Col,
-  Typography,
   Button,  
-  Tag
+  Tag,
+  notification
 } from "antd";
-const { Title } = Typography;
 
 function ViewTicket({
   addComment,
@@ -43,22 +41,31 @@ function ViewTicket({
   getTags,
   comments,
   histories,
-  tags,
+  ticketTags,
   ticketInformation,
   loadingComments,
   loadingHistories,
   loadingTags,
   putTicketStatusToClosed,
+  putTicketStatusToOpen,
   deleteTag,
   users
 }) {
 
+  /**
+  * Component state
+  */
   const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
 
-  // Get the ticket id from the URL
-  // URL-> /ticket/:id
+  /**
+  * Get the ticket id from the URL
+  * URL-> /ticket/:id
+  */   
   const { id } = useParams();
 
+  /**
+  * Once the Home page is rendered run the functions
+  */
   useEffect(() => {
     getTicketInformation(id);
     getComments(id);
@@ -66,6 +73,27 @@ function ViewTicket({
     getTags(id);
   }, [getTicketInformation, getComments, getHistory, getTags, id]);
 
+  /**
+  * Deconstruct ticket information
+  */
+  const { 
+    reference,
+    address, 
+    name, 
+    landline, 
+    contactNumber,
+    network,
+    portability,
+    clientPackage,
+    requestedDate,
+    service,
+    status,
+    createdBy
+  } = ticketInformation;
+
+  /**
+   * helper functions to open and close drawer
+   */
   const onTagClose = () => {
     setTagDrawerVisible(false);
   };
@@ -74,35 +102,86 @@ function ViewTicket({
     setTagDrawerVisible(true);
   };
 
-  const { name, address } = ticketInformation;
+  /**
+   * Set Notification
+   * @param {string} type of the notification success, info, error or warning
+   * @param {string} message of the notification
+   * @param {string | void} description of the notification
+   */
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message,
+      description
+    });
+  }
+
+  /**
+   * Reopen closed ticket
+   */
+  const onClickReopenTicket = () => {
+    const updatedTicketInformation = {
+      reference,
+      address,
+      name,
+      landline,
+      contactNumber,
+      network,
+      portability,
+      clientPackage,
+      requestedDate,
+      service,
+      status: "Open",
+      createdBy
+    };
+    putTicketStatusToOpen(JSON.stringify(updatedTicketInformation), id);
+    openNotificationWithIcon("info", "Ticket Reopened", null);
+  };
+
+  /**
+   * PageHeader extra actions
+   */
+  const pageheaderExtra = [
+    status === "Closed" ? (
+      <Button
+        key="1"
+        type="primary"
+        onClick={() => onClickReopenTicket()}
+      >
+        Reopen Ticket
+      </Button>
+    ) : (
+      <Button
+        key="2"
+        icon={<TagsOutlined />}                  
+        onClick={showTagDrawer}
+      >
+        Add Ticket Tag
+      </Button>
+    )
+  ];
 
   return (
     <>
+      {/*
+        if the comments, histories or tags are loading display
+        loading message otherwise display the ticket information
+      */}
       { loadingComments && loadingHistories && loadingTags ? (
         "Loading..."
       ) : (
       <>
         <Row>
-          <Col span={15}>
+          <Col span={17}>
             <ViewBreadCrumbs
               ticketInformation={ticketInformation}
             />
             <PageHeader
               onBack={() => window.history.back()}
-              title={name}
-              subTitle={address}
+              title={`${reference} ${name}`}              
               style={{marginBottom: 32}}
-              extra={[
-                <Button
-                  key="1"
-                  icon={<TagsOutlined />}                  
-                  onClick={showTagDrawer}
-                >
-                  Add Ticket Tag
-                </Button>                
-              ]}
+              extra={pageheaderExtra}
               tags={
-                tags.map((tag, index) => (
+                ticketTags.map((tag, index) => (
                   <Tag 
                     key={index} 
                     color={tag.color}
@@ -112,11 +191,12 @@ function ViewTicket({
                 ))
               }
             />
+            {}
             <ViewDescriptions
               ticketInformation={ticketInformation}
             />
           </Col>
-          <Col span={15}>
+          <Col span={17}>
             <ViewAddComment
               handleAddHistory={addHistory}
               handleAddComment={addComment}
@@ -127,28 +207,31 @@ function ViewTicket({
               usersInfo={users}
             />
           </Col>
-          <Col span={9}>
+          <Col span={5}>
             <ViewTimeline
               histories={histories}
             />
           </Col>
         </Row>
-        <Row>
+        <Row>          
           <Col
-            span={15}
+            span={17}
             style={{margin: "32px 0px"}}
-          >
-            <ViewClosingComment
-              handleAddComment={addComment}
-              handleAddHistory={addHistory}
-              ticketId={id}
-            />
+          >            
+            {status === "Open" && (              
+              <ViewClosingComment
+                handlePutTicketStatusToClosed={putTicketStatusToClosed}
+                ticketInformation={ticketInformation}
+                handleAddComment={addComment}
+                handleAddHistory={addHistory}
+                ticketId={id}
+              />)}            
           </Col>
         </Row>
         <TagDrawer
           handleAddTag={addTag}
           handleDeleteTag={deleteTag}
-          tags={tags}
+          tags={ticketTags}
           closable={false}
           onClose={onTagClose}
           visible={isTagDrawerVisible}
@@ -164,7 +247,7 @@ const mapStateToProps = (state) => ({
   comments: state.comments.comments,
   ticketInformation: state.tickets.ticketInformation,
   histories: state.histories.histories,
-  tags: state.tags.tags,
+  ticketTags: state.tags.ticketTags,
   loadingComments: state.comments.loading,
   loadingHistories: state.histories.loading,
   loadingTags: state.tags.loading,
@@ -176,6 +259,7 @@ export default connect(mapStateToProps, {
   addHistory,
   addTag,
   putTicketStatusToClosed,
+  putTicketStatusToOpen,
   getComments,
   getHistory,
   getTicketInformation,

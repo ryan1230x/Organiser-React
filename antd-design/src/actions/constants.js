@@ -7,6 +7,7 @@ export const SEARCH_FOR_TICKET = "SEARCH_FOR_TICKET";
 export const GET_COMMENTS = "GET_COMMENTS";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const CLOSE_TICKET = "CLOSE_TICKET";
+export const REOPEN_TICKET = "REOPEN_TICKET";
 
 export const GET_HISTORY = "GET_HISTORY";
 export const ADD_HISTORY = "ADD_HISTORY";

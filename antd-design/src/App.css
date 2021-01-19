@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;700&display=swap');
+
+:root {
+  --font-family: "Work Sans", sans-serif;
+  --font-size: 16px;
+}
+
+html,
+body {
+  font-size: var(--font-size) !important;
+  font-family: var(--font-family) !important;
+}
+
 main {
   background: #fff;
 }
@@ -47,4 +60,46 @@ main {
 .login-panel-logo {
   z-index: 999;
   margin-bottom: 6rem;
+}
+
+.ticket-empty-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.ant-typography-copy {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.ant-typography-edit {
+  position: absolute;
+  top: 0;
+  right: 2em;
+}
+
+.ant-comment-content-author-name,
+.ant-comment-content-author-time {
+  color: black !important;
+  font-weight: 700;
+  font-size: 14px !important;
+}
+
+.ant-comment-content-detail {
+  font-size: var(--font-size);
+}
+
+.ant-comment:not(:last-child) {
+  border: 1px solid #ccc;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.ant-comment {
+  padding: 1rem;
+  margin-bottom: 1rem;
 }

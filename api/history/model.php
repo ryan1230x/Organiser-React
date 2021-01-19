@@ -15,7 +15,7 @@ class HistoryModel extends Database {
    * Get history for a single ticket
    */
   protected function get_single_history(string $ticket_id) {
-    $query = "SELECT * FROM history WHERE ticket_id = ?";
+    $query = "SELECT * FROM history WHERE ticket_id = ? ORDER BY id DESC";
     $conn = parent::connect();
     $stmt = $conn->prepare($query);
     $stmt->execute([$ticket_id]);

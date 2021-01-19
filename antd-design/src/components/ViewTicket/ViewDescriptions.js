@@ -3,7 +3,12 @@ import React from "react";
 // Import Components
 import { Descriptions } from "antd";
 
-function ViewDescriptions({ticketInformation}) {
+function ViewDescriptions({ ticketInformation }) {
+  
+  /**
+   * Deconstruct all information from ticketInformation
+   * that is being pass through via props
+   */
   const {
     name,
     address,
@@ -16,6 +21,9 @@ function ViewDescriptions({ticketInformation}) {
     portability
   } = ticketInformation;
 
+  /**
+   * Descriptions information
+   */
   const descriptions = [
     {label: "Name", value: name},
     {label: "Address", value: address},
@@ -26,11 +34,12 @@ function ViewDescriptions({ticketInformation}) {
     {label: "Network", value: network},
     {label: "Client Package", value: clientPackage},
     {label: "Portability", value: portability},
-  ]
+  ];
+
   return(
-    <Descriptions style={{marginBottom: 32}}>
+    <Descriptions layout="vertical" style={{marginBottom: 32}}>
       {descriptions.map((description, index) => (
-        <Descriptions.Item 
+        <Descriptions.Item
           key={index}
           labelStyle={{fontWeight: "bold"}} 
           label={description.label}
@@ -39,7 +48,7 @@ function ViewDescriptions({ticketInformation}) {
         </Descriptions.Item>
       ))}
     </Descriptions>
-  )
-}
+  );
+};
 
 export default ViewDescriptions;

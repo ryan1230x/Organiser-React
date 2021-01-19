@@ -3,7 +3,7 @@ include_once "./model.php";
 class TicketView extends TicketModel  {
 
   public function show_tickets() {
-    $results = $this->get_tickets();
+    $results = parent::get_tickets();
     $num_of_rows = $results->rowCount();
 
     if($num_of_rows <= 0) {
@@ -44,7 +44,7 @@ class TicketView extends TicketModel  {
   }
 
   public function show_single_ticket(string $ticket_id) {
-    $results = $this->get_single_ticket($ticket_id);
+    $results = parent::get_single_ticket($ticket_id);
     $num_of_rows = $results->rowCount();
 
     if($num_of_rows <= 0) {

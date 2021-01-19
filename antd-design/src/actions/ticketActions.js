@@ -21,7 +21,7 @@ export const getTickets = () => (dispatch) => {
 
 /**
  * @description Created a new ticket
- * @param {Object} ticketData ticket data object
+ * @param {object} ticketData ticket data object
  * @method POST
  */
 export const addTicket = (ticketData) => (dispatch) => {
@@ -82,6 +82,31 @@ export const putTicketStatusToClosed = (newStatus, ticketId) => (dispatch) => {
 };
 
 /**
+ * @description Reopen ticket, change the status from closed to open
+ * @param {object} newStatus ticket status in JSON format
+ * @param {string} ticketId ticket id
+ * @method PUT
+ */
+export const putTicketStatusToOpen = (newStatus, ticketId) => dispatch => {
+  const config = {
+    header: {
+      "Content-Type":"application/json"
+    }
+  };
+
+  axios
+    .put(`${BASE_URL}?ticket_id=${ticketId}`, newStatus, config)
+    .then((res) =>
+      dispatch({
+        type: constant.REOPEN_TICKET,
+        payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error))
+};
+
+
+/**
  * @description search the database for tickets that match the query
  * @param {String} UrlParam the ticketId from the URL
  */
@@ -96,3 +121,4 @@ export const searchForTicket = (UrlParam) => (dispatch) => {
     )
     .catch((error) => console.error(error));
 };
+

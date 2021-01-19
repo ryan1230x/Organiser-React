@@ -60,6 +60,7 @@ class CommentView extends CommentModel {
         "comment" => $comment,
         "addedAt" => $added_at,
         "ticketId" => $ticket_id,
+        "authorImg" => $author_img
       );
       array_push($comments_array, $comment_item);
     }

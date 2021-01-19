@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getTicketInformation } from "../../actions/ticketActions";
+import { getTicketInformation, putTicketStatusToOpen } from "../../actions/ticketActions";
 import { addComment, getComments } from "../../actions/commentActions";
 import { addHistory } from "../../actions/historyActions";
 import { getTags, deleteTag, addTag } from "../../actions/tagActions";
@@ -21,7 +21,8 @@ import {
   Row, 
   Col,
   Button,
-  Tag
+  Tag,
+  notification
 } from "antd";
 
 function SneakPeakDrawer({
@@ -33,14 +34,40 @@ function SneakPeakDrawer({
   getTags,
   deleteTag,
   addTag,
-  tags,
   ticketInformation,
   comments,
-  loadingComments
+  loadingComments,
+  ticketTags,
+  putTicketStatusToOpen
 }) {
 
+  /**
+  * Component state
+  */
   const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
 
+  /**
+  * Deconstruct name form ticket information that is being
+  * pass through props
+  */
+  const {
+    reference,
+    address,
+    name,
+    landline,
+    contactNumber,
+    network,
+    portability,
+    clientPackage,
+    requestedDate,
+    service,
+    status,
+    createdBy
+  } = ticketInformation;  
+
+  /**
+  * Helper functions to open and close the tag drawer
+  */
   const onTagDrawerClose = () => {
     setTagDrawerVisible(false);
   };
@@ -50,7 +77,40 @@ function SneakPeakDrawer({
     setTagDrawerVisible(true);
   };
 
-  const { name } = ticketInformation;
+  /**
+   * Set Notification
+   * @param {string} type of the notification success, info, error or warning
+   * @param {string} message of the notification
+   * @param {string | void} description of the notification
+   */
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message,
+      description
+    });
+  }
+
+  /**
+   * Reopen closed ticket
+   */
+  const onClickReopenTicket = () => {
+    const updatedTicketInformation = {
+      reference,
+      address,
+      name,
+      landline,
+      contactNumber,
+      network,
+      portability,
+      clientPackage,
+      requestedDate,
+      service,
+      status: "Open",
+      createdBy
+    };
+    putTicketStatusToOpen(JSON.stringify(updatedTicketInformation), ticketId);
+    openNotificationWithIcon("info", "Ticket Reopened", null);
+  };
 
   return (
     <Drawer
@@ -62,7 +122,7 @@ function SneakPeakDrawer({
           }}
         > 
           <span style={{ marginRight: 15 }}>{name}</span>
-          {tags.map((tag, index) => (
+          {ticketTags.map((tag, index) => (
             <Tag 
               key={index}
               color={tag.color}
@@ -70,16 +130,29 @@ function SneakPeakDrawer({
               {tag.tag}
             </Tag>
           ))}
-          <Button 
-            icon={<TagsOutlined />}
-            style={{ marginLeft:"auto"}}
-            onClick={() => {
-              getTags(ticketId);
-              showTagDrawer();
-            }}
+          <div style={{ marginLeft: "auto"}}>
+          {status === "Closed" ? (
+            
+            <Button
+              key="1"
+              type="primary"
+              onClick={() => onClickReopenTicket()}
+            >
+              Reopen Ticket
+            </Button>
+          ) : (
+            <Button
+              key="2"
+              icon={<TagsOutlined />}                  
+              onClick={() => {
+                getTags(ticketId);
+                showTagDrawer();          
+              }}
             >
               Add Ticket Tag
             </Button>
+          )}
+          </div>
         </div>
       }
       closable={false} 
@@ -108,17 +181,21 @@ function SneakPeakDrawer({
                     ticketId={ticketId}
                   />
                   <ViewComments comments={comments} /> 
-                  <ViewClosingComment
-                    handleAddComment={addComment}
-                    handleAddHistory={addHistory}
-                    ticketId={ticketId}
-                  />
+                  {status === "Open" && (
+                    <ViewClosingComment
+                      handlePutTicketStatusToClosed={putTicketStatusToOpen}
+                      ticketInformation={ticketInformation}
+                      handleAddComment={addComment}
+                      handleAddHistory={addHistory}
+                      ticketId={ticketId}
+                    />
+                  )}
                   <TagDrawer
                     width={450}
                     closable={false}
                     visible={isTagDrawerVisible}
                     onClose={onTagDrawerClose}
-                    tags={tags}
+                    tags={ticketTags}
                     handleAddTag={addTag}
                     handleDeleteTag={deleteTag}
                     ticketId={ticketId}
@@ -136,7 +213,7 @@ function SneakPeakDrawer({
 const mapStateToProps = (state) => ({
   ticketInformation: state.tickets.ticketInformation,
   loadingComments: state.comments.loading,
-  tags: state.tags.tags
+  ticketTags: state.tags.ticketTags,
 });
 
 export default connect(mapStateToProps, { 
@@ -146,5 +223,6 @@ export default connect(mapStateToProps, {
   addHistory,
   addTag,
   deleteTag,
-  getTags
+  getTags,
+  putTicketStatusToOpen
 })(SneakPeakDrawer);

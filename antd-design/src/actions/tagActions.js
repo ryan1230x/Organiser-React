@@ -13,7 +13,7 @@ export const getAllTags = () => dispatch => {
     .then((res) =>
       dispatch({
         type: constant.GET_ALL_TAGS,
-      payload: res.data.data
+        payload: res.data.data
       })
     )
     .catch((error) => console.error(error));

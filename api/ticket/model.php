@@ -10,7 +10,8 @@ class TicketModel extends Database {
     JOIN client_info USING(ticket_id)
     JOIN client_service USING(ticket_id)
     JOIN tickets USING(ticket_id)
-    JOIN status USING(ticket_id) ORDER BY tickets.id DESC";
+    JOIN status USING(ticket_id) 
+    WHERE status = 'Open' ORDER BY tickets.id DESC";
     $conn = $this->connect();
     $stmt = $conn->prepare($query);
     $stmt->execute();

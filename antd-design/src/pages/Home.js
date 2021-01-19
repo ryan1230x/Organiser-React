@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+
+// import components for routing
 import { Link } from "react-router-dom";
 
 // import redux and actions
@@ -10,10 +12,13 @@ import { addTag, getTags, getAllTags, deleteTag } from "../actions/tagActions.js
 // Import icons
 import { 
   TagsOutlined, 
-  ExportOutlined 
+  ExportOutlined,
+  HomeOutlined
 } from "@ant-design/icons";
 
 // Import Components
+import SneakPeakDrawer from "../components/Home/SneakPeakDrawer";
+import TagDrawer from "../components/Home/TagDrawer";
 import { 
   PageHeader, 
   Table, 
@@ -21,41 +26,31 @@ import {
   Button,
   Tooltip,
   Space,
+  Empty,
+  Breadcrumb
 } from "antd";
-import SneakPeakDrawer from "../components/Home/SneakPeakDrawer";
-import TagDrawer from "../components/Home/TagDrawer";
 
 /**
  * Table Columns
  */
 const tableColumns = [
   {
-    key: "name",
-    title: "Name",
-    dataIndex: "name"
+    key: "client",
+    title: "Client",
+    dataIndex: "client"
   },
   {
     key: "address",
     title: "Address",
     dataIndex: "address",
-    elipsis: true
+    ellipsis: true,
+    render: address => (<Tooltip title={address}>{address}</Tooltip>)
   },
   {
-    key: "package",
-    title: "Package",
-    dataIndex: "package",
-    elipsis: true
-  },
-  {
-    key: "network",
-    title: "Network",
-    dataIndex: "network"
-  },
-  {
-    key: "status",
-    title: "Status",
-    dataIndex: "status",
-    render: (status) => (<strong>{status}</strong>)
+    key: "client package",
+    title: "Client Package",
+    dataIndex: "clientPackage",
+    width: 200
   },
   {
     key: "tags",
@@ -63,17 +58,15 @@ const tableColumns = [
     dataIndex: "tags",
     render: (tags) => (
       <>
-        {tags.map((item, index) => {
-          let color = item.length > 5 ? "geekblue" : "green";
-          if (item === "closed") {
-            color = "red";
-          }
-          return (
-            <Tag color={color} key={index}>
-              {item.toUpperCase()}
-            </Tag>
-          );
-        })}
+        {tags.map(item => (
+          <Tag
+            className="ticket-table-tags"
+            color={item.color} 
+            key={item.tag_id}
+          >
+            {item.tag}
+          </Tag>
+        ))}
       </>
     )
   },
@@ -97,12 +90,19 @@ function Home({
     getComments,
     getTicketInformation,
     loadingTickets,
+    ticketTags
 }) {
 
+  /**
+  * Component state
+  */
   const [isVisible, setVisible] = useState(false);
   const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
   const [id, setId] = useState("");
-  
+
+  /**
+  * Once the Home page is rendered run the functions
+  */
   useEffect(() => {
     getTickets();
     getAllTags();
@@ -128,53 +128,63 @@ function Home({
   };
 
   /**
+   * Show empty icon when there are not tickets,
+   * in other words when tickets === undefined
+   */
+  if (!tickets) { 
+    return (
+      <section className="ticket-empty-icon">
+        <Empty description="Congratulations! There are currently no pending installations" />
+      </section>
+    );
+  }
+
+  /**
    * Table data
    */
   const data = tickets.map((ticket, index) => {
-    const { 
-      ticketId, 
-      name, 
-      address, 
-      status, 
-      network, 
-      clientPackage,
-      tags
-    } = ticket;
+    const { ticketId, name, address, clientPackage, reference } = ticket;
+
     
-    return {
-      key: index,
-      name,
-      address,
-      package: clientPackage,
-      network,
-      tags: [status],
-      status: status,
-      action: (
-        <>
-        <Space wrap size={10}>          
-          <Button type="primary">
-            <Link to={`/ticket/${ticketId}`}>Open Ticket</Link>
-          </Button>
-          <Tooltip title="Add Tag">  
-            <Button shape="circle" icon={<TagsOutlined />} onClick={() => {
-              setId(ticketId);
-              getTags(ticketId);
-              showTagDrawer();
-            }} />
-          </Tooltip>
-          <Tooltip title="Sneak Peak">
-            <Button shape="circle" icon={<ExportOutlined />} onClick={() => {
-              setId(ticketId);              
-              showDrawer();
-              getTags(ticketId);
-              getTicketInformation(ticketId);
-              getComments(ticketId);
-            }} />
-          </Tooltip>
-        </Space>
-        </>
-      )
-    };
+      return {
+        key: index,
+        client: `${reference} - ${name}`,
+        address,
+        clientPackage,
+        tags: tags.filter(tag => tag.ticketId === ticketId),      
+        action: (
+          <>
+          <Space wrap size={10}>          
+            <Button type="primary">
+              <Link to={`/ticket/${ticketId}`}>Open Ticket</Link>
+            </Button>
+            <Tooltip title="Add Tag">  
+              <Button 
+                shape="circle" 
+                icon={<TagsOutlined />} 
+                onClick={() => {
+                  setId(ticketId);
+                  getTags(ticketId);
+                  showTagDrawer();
+                }} />
+            </Tooltip>
+            <Tooltip title="Sneak Peak">
+              <Button 
+                shape="circle" 
+                icon={<ExportOutlined />} 
+                onClick={() => {                  
+                  setId(ticketId);              
+                  showDrawer();
+                  getTags(ticketId);
+                  getTicketInformation(ticketId);
+                  getComments(ticketId);
+                }} />
+            </Tooltip>
+          </Space>
+          </>
+        )
+      }
+    
   });
 
   return (
@@ -183,11 +193,17 @@ function Home({
         "Loading..."
       ) : (
         <>
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <HomeOutlined />
+              <span style={{ marginLeft: 8 }}>Home</span>
+            </Breadcrumb.Item>
+          </Breadcrumb>
           <PageHeader
             title="Home Page"
             subTitle={`${tickets.length} Pending Installations`}
           />
-          <Table columns={tableColumns} dataSource={data} />
+          <Table tableLayout="fixed" columns={tableColumns} dataSource={data} />
           <SneakPeakDrawer 
             closable={false} 
             onClose={onClose} 
@@ -199,7 +215,7 @@ function Home({
           <TagDrawer
             handleAddTag={addTag}
             handleDeleteTag={deleteTag}
-            tags={tags}
+            tags={ticketTags}
             closable={false}
             onClose={onCloseTagDrawer}
             visible={isTagDrawerVisible}
@@ -216,7 +232,9 @@ const mapStateToProps = (state) => ({
   tickets: state.tickets.tickets,
   ticketInformation: state.tickets.ticketInformation,
   loadingTickets: state.tickets.loading,
-  tags: state.tags.tags
+  tags: state.tags.tags,
+  ticketTags: state.tags.ticketTags,
+  users: state.users.users
 });
 
 export default connect(mapStateToProps, { 

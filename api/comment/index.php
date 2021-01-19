@@ -1,13 +1,8 @@
 <?php
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
-
 include_once "../comment/view.php";
 include_once "../validation/index.php";
-
-// Global variables
-$ticket_id = $_GET["ticket_id"];
-
 
 /**
  * route        /api/comments/
@@ -15,6 +10,8 @@ $ticket_id = $_GET["ticket_id"];
  * method       GET
  */
 if($_SERVER["REQUEST_METHOD"] === "GET") {
+
+  $ticket_id = $_GET["ticket_id"];
 
   /**
    * Instanciate classes
@@ -103,7 +100,12 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
   /**
    * Create the comment
    */
-  $set_user = $comment_view->add_comment($comment, $author, $ticket_id, $added_at);
+  $set_user = $comment_view->add_comment(
+    $comment, 
+    $author, 
+    $ticket_id, 
+    $added_at
+  );
   if(!$set_user) {
     echo json_encode(array(
       "success" => false,

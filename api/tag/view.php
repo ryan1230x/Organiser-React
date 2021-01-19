@@ -27,7 +27,7 @@ class TagView extends TagModel {
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
       extract($row);
       $tag_item = array(
-        "id" => $id,
+        "tag_id" => $tag_id,
         "tag" => $tag,
         "ticketId" => $ticket_id,
         "color" => $color
@@ -71,7 +71,7 @@ class TagView extends TagModel {
     while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
       extract($row);
       $tag_item = array(
-        "id" => $id,
+        "tag_id" => $tag_id,
         "tag" => $tag,
         "ticketId" => $ticket_id,
         "color" => $color
@@ -93,8 +93,13 @@ class TagView extends TagModel {
   /**
    * Create a tag
    */
-  public function add_tag(string $ticket_id, string $tag, string $color) {
-    $results = parent::post_tag($ticket_id, $tag, $color);
+  public function add_tag(
+    string $ticket_id,
+    string $tag,
+    string $color,
+    string $tag_id
+  ) {
+    $results = parent::post_tag($tag, $tag_id, $color, $ticket_id);
     if (!$results) return false;
     else return true;
   }
@@ -102,8 +107,8 @@ class TagView extends TagModel {
   /**
    * Delete a tag
    */
-  public function remove_tag(string $ticket_id, int $id) {
-    $results = parent::delete_tag($ticket_id, $id);
+  public function remove_tag(string $id) {
+    $results = parent::delete_tag($id);
     if (!$results) return false;
     else return true;
   }
