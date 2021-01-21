@@ -31,20 +31,23 @@ class CommentModel extends Database {
     string $comment, 
     string $author, 
     string $ticket_id,
-    string $added_at
+    string $added_at,
+    string $comment_id
   ) {
     $query = "INSERT INTO {$this->db_table} 
       SET
         comment = :comment,
         author = :author,
         ticket_id = :ticket_id,
-        added_at = :added_at";
+        added_at = :added_at,
+        comment_id = :comment_id";
     $conn = parent::connect();
     $stmt = $conn->prepare($query);
     $stmt->bindValue(":comment", $comment);
     $stmt->bindValue(":author", $author);
     $stmt->bindValue(":ticket_id", $ticket_id);
     $stmt->bindValue(":added_at", $added_at);
+    $stmt->bindValue(":comment_id", $comment_id);
     $stmt->execute();
     return $stmt;
   }
@@ -60,6 +63,17 @@ class CommentModel extends Database {
     $stmt->bindValue(":comment", $comment);
     $stmt->bindValue(":reference", $reference);
     $stmt->execute();
+    return $stmt;
+  }
+
+  /**
+   * Delete a comment
+   */
+  protected function delete_comment(string $id) {
+    $query = "DELETE FROM comments WHERE comment_id = ?";
+    $conn = parent::connect();
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$id]);
     return $stmt;
   }
 

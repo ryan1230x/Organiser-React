@@ -60,7 +60,7 @@ class CommentView extends CommentModel {
         "comment" => $comment,
         "addedAt" => $added_at,
         "ticketId" => $ticket_id,
-        "authorImg" => $author_img
+        "commentId" => $comment_id
       );
       array_push($comments_array, $comment_item);
     }
@@ -79,9 +79,16 @@ class CommentView extends CommentModel {
       string $comment, 
       string $author, 
       string $ticket_id,
-      string $added_at
+      string $added_at,
+      string $comment_id
   ) {
-    $result = parent::post_comment($comment, $author, $ticket_id, $added_at);
+    $result = parent::post_comment(
+      $comment, 
+      $author, 
+      $ticket_id, 
+      $added_at, 
+      $comment_id
+    );
     if(!$result) return false;
     else return true;
   }
@@ -91,6 +98,15 @@ class CommentView extends CommentModel {
    */
   public function edit_comment(string $comment, string $reference) {
     $result = parent::update_comment($comment, $reference);
+    if(!$result) return false;
+    else return true;
+  }
+
+  /**
+   * Delete a comment
+   */
+  public function remove_comment(string $id) {
+    $result = parent::delete_comment($id);
     if(!$result) return false;
     else return true;
   }

@@ -1,5 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: *");
 header("Content-Type: application/json");
 include_once "../comment/view.php";
 include_once "../validation/index.php";
@@ -11,6 +12,10 @@ include_once "../validation/index.php";
  */
 if($_SERVER["REQUEST_METHOD"] === "GET") {
 
+  
+  /**
+   * Get the ticket id from the URL query params
+   */
   $ticket_id = $_GET["ticket_id"];
 
   /**
@@ -73,7 +78,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
   $author = $data["author"];
   $ticket_id = $data["ticketId"];
   $added_at = $data["addedAt"];
-  $data_array = array($comment, $author, $ticket_id, $added_at);
+  $comment_id = sha1(date("U") . $added_at);
+  $data_array = array($comment, $author, $ticket_id, $added_at, $comment_id);
 
   /**
    * Check if any of the fields are empty
@@ -104,7 +110,8 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     $comment, 
     $author, 
     $ticket_id, 
-    $added_at
+    $added_at,
+    $comment_id
   );
   if(!$set_user) {
     echo json_encode(array(
@@ -121,6 +128,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     "success" => true,
     "message" => "Added successfully",
     "data" => array(
+      "id" => $comment_id,
       "author" => $author,
       "comment" => $comment,
       "ticketId" => $ticket_id,
@@ -202,6 +210,59 @@ if($_SERVER["REQUEST_METHOD"] === "PUT") {
   echo json_encode(array(
     "success" => true,
     "message" => "Updated successfully"        
+  ));
+  exit;
+}
+
+/**
+ * route        /api/comment/?id=:comment_id
+ * description  delete a comment
+ * method       DELETE
+ */
+if($_SERVER["REQUEST_METHOD"] === "DELETE") {
+
+  /**
+   * Instanciate classes
+   */
+  $comment_view = new CommentView();
+  $error_handler = new ErrorHandler();
+
+   /**
+    * Get query parameters
+    */
+  $comment_id = $_GET["id"];
+
+  /**
+   * Check if comment id is empty
+   */
+  if (empty($comment_id)) {
+    echo json_encode(array(
+      "message" => "please fill in all the fields"
+    ));
+    exit;
+  }
+
+  /**
+   * Delete comment
+   */
+  $set_delete = $comment_view->remove_comment($comment_id);
+  if(!$set_delete) {
+    echo json_encode(array(
+      "success" => false,
+      "message" => "comment could not be deleted"
+    ));
+    exit;
+  }
+
+  /**
+   * Display success message
+   */
+  echo json_encode(array(
+    "success" => true,
+    "messsage" => "Deleted successfully",
+    "data" => array(
+      "commentId" => $comment_id
+    )
   ));
   exit;
 }
