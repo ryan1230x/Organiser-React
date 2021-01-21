@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import moment from "moment";
 
 // import redux hook
 import { useStore } from "react-redux";
@@ -55,7 +56,7 @@ function ViewAddComment({
       author: displayName,
       comment: newComment,
       ticketId,
-      addedAt: new Date().toLocaleString()
+      addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
     handleAddComment(JSON.stringify(newCommentObject), ticketId);
   };
@@ -68,7 +69,7 @@ function ViewAddComment({
       author: displayName,
       action: "added a comment",
       ticketId,
-      addedAt: new Date().toLocaleString()
+      addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
     handleAddHistory(JSON.stringify(newHistoryObject));
   };

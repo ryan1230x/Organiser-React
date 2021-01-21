@@ -42,3 +42,24 @@ export const addComment = (comment, ticketId) => (dispatch) => {
     )
     .catch((error) => console.error(error));
 };
+
+/**
+ * Delete comment
+ */
+export const deleteComment = (commentId) => dispatch => {
+  const config = {
+    header: {
+      "Content-Type":"application/json"
+    }
+  };
+
+  axios
+    .delete(`${BASE_URL}?id=${commentId}`, config)
+    .then((res) =>
+      dispatch({
+        type: constant.DELETE_COMMENT,
+        payload: commentId
+      })
+    )
+    .catch((error) => console.error(error));
+};

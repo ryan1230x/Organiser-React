@@ -75,7 +75,7 @@ export const deleteTag = (id) => dispatch => {
     .then((res) =>
       dispatch({
         type: constant.DELETE_TAG,
-        payload: id
+        payload: res.data.data
       })
     )
     .catch((error) => console.error(error));

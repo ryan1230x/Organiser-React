@@ -1,16 +1,22 @@
 import React from "react";
 
-// import redux
-import { useStore } from "react-redux";
+// import redux and actions
+import { useDispatch, useStore } from "react-redux";
+import { deleteComment } from "../../actions/commentActions";
 
 // import icons
 import { DeleteOutlined } from "@ant-design/icons"
 
 // Import Components
-import { Typography, Comment, Avatar, Tooltip } from "antd";
+import { Typography, Comment, Avatar, Tooltip, notification } from "antd";
 const { Title, Paragraph, Text } = Typography;
 
 function ViewComments({ comments }) {  
+
+  /**
+   * Init Redux hook
+   */
+  const dispatch = useDispatch();
 
   /**
    * Get current user
@@ -19,16 +25,25 @@ function ViewComments({ comments }) {
   let { status } = useStore().getState().tickets.ticketInformation;
 
   /**
-   * Define actions for comments
+   * Set Notification
+   * @param {string} type of the notification success, info, error or warning
+   * @param {string} message of the notification
+   * @param {string | void} description of the notification
    */
-  const actions = [
-    <Tooltip title="Delete Comment">
-      <span>      
-        <DeleteOutlined />
-        <span> Delete comment</span>
-      </span>
-    </Tooltip>
-  ];
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message,
+      description
+    });
+  }
+
+  /**
+   * on click delete comment
+   */
+  const onDelete = (id) => {
+    dispatch(deleteComment(id));
+    openNotificationWithIcon("info", "Comment successfully deleted", null);
+  };
 
   return (
     <>
@@ -36,9 +51,9 @@ function ViewComments({ comments }) {
       null : 
       (<Title level={3}>{`${comments.length} Comments`}</Title>)}
 
-    {comments.map((comment, index) => (
+    {comments.map((comment) => (
       <Comment
-        key={index}
+        key={comment.id}
         avatar={
         <Avatar
           style={{ 
@@ -64,9 +79,17 @@ function ViewComments({ comments }) {
             {comment.comment}
           </Paragraph>          
         }
-        actions={
+        actions={        
           status === "Open" && 
-          comment.author === displayName && actions || null
+          comment.author === displayName && 
+          [
+            <Tooltip key="1" title="Delete Comment">
+              <span onClick={() => onDelete(comment.commentId)}>      
+                <DeleteOutlined />
+                <span> Delete comment</span>
+              </span>
+            </Tooltip>
+          ]
         }
       />
     ))}

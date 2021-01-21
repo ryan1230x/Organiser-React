@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getTicketInformation, putTicketStatusToOpen } from "../../actions/ticketActions";
+import { getTicketInformation, putTicketStatusToClosed, putTicketStatusToOpen } from "../../actions/ticketActions";
 import { addComment, getComments } from "../../actions/commentActions";
 import { addHistory } from "../../actions/historyActions";
 import { getTags, deleteTag, addTag } from "../../actions/tagActions";
@@ -38,7 +38,8 @@ function SneakPeakDrawer({
   comments,
   loadingComments,
   ticketTags,
-  putTicketStatusToOpen
+  putTicketStatusToOpen,
+  putTicketStatusToClosed
 }) {
 
   /**
@@ -183,7 +184,7 @@ function SneakPeakDrawer({
                   <ViewComments comments={comments} /> 
                   {status === "Open" && (
                     <ViewClosingComment
-                      handlePutTicketStatusToClosed={putTicketStatusToOpen}
+                      handlePutTicketStatusToClosed={putTicketStatusToClosed}
                       ticketInformation={ticketInformation}
                       handleAddComment={addComment}
                       handleAddHistory={addHistory}
@@ -224,5 +225,6 @@ export default connect(mapStateToProps, {
   addTag,
   deleteTag,
   getTags,
-  putTicketStatusToOpen
+  putTicketStatusToOpen,
+  putTicketStatusToClosed
 })(SneakPeakDrawer);

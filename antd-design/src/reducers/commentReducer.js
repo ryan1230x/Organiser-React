@@ -19,6 +19,12 @@ export default function (state = initialState, action) {
         comments: [action.payload, ...state.comments],
         loading: false
       };
+    case constant.DELETE_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.filter(comment => comment.commentId !== action.payload),
+        loading: false
+      }
     default:
       return state;
   }

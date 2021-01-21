@@ -27,7 +27,9 @@ import {
   Tooltip,
   Space,
   Empty,
-  Breadcrumb
+  Breadcrumb,
+  Form,
+  Input
 } from "antd";
 
 /**
@@ -99,6 +101,9 @@ function Home({
   const [isVisible, setVisible] = useState(false);
   const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
   const [id, setId] = useState("");
+  const [query, setQuery] = useState([]);
+
+  const [form] = Form.useForm();
 
   /**
   * Once the Home page is rendered run the functions
@@ -128,8 +133,43 @@ function Home({
   };
 
   /**
+   * filter table rows on search submit
+   */
+  const onSearchSubmit = (value) => {
+    const filter = value.toUpperCase();
+    const table = document.querySelector("table");
+    const tableTr = table.querySelectorAll("tr");
+
+    tableTr.forEach((value) => {
+      const td = value.getElementsByTagName("td")[1];
+      if (td) {
+        const textValue = td.textContent
+        textValue.toUpperCase().indexOf(filter) > -1 ? 
+          value.style.display = "" : 
+          value.style.display = "none"        
+      }
+    });
+  };
+
+  /**
+   * Pageheader extra
+   */
+  const pageheaderExtra = [   
+    <Form method="GET" form={form} key="1">
+      <Form.Item name="q">
+        <Input.Search
+          allowClear
+          onSearch={onSearchSubmit} 
+          style={{ width: 300 }} 
+          placeholder="search address here..."
+        />
+      </Form.Item>
+    </Form>
+  ];
+
+  /**
    * Show empty icon when there are not tickets,
-   * in other words when tickets === undefined
+   * in other words when tickets === undefined or null
    */
   if (!tickets) { 
     return (
@@ -144,47 +184,44 @@ function Home({
    */
   const data = tickets.map((ticket, index) => {
     const { ticketId, name, address, clientPackage, reference } = ticket;
-
-    
-      return {
-        key: index,
-        client: `${reference} - ${name}`,
-        address,
-        clientPackage,
-        tags: tags.filter(tag => tag.ticketId === ticketId),      
-        action: (
-          <>
-          <Space wrap size={10}>          
-            <Button type="primary">
-              <Link to={`/ticket/${ticketId}`}>Open Ticket</Link>
-            </Button>
-            <Tooltip title="Add Tag">  
-              <Button 
-                shape="circle" 
-                icon={<TagsOutlined />} 
-                onClick={() => {
-                  setId(ticketId);
-                  getTags(ticketId);
-                  showTagDrawer();
-                }} />
-            </Tooltip>
-            <Tooltip title="Sneak Peak">
-              <Button 
-                shape="circle" 
-                icon={<ExportOutlined />} 
-                onClick={() => {                  
-                  setId(ticketId);              
-                  showDrawer();
-                  getTags(ticketId);
-                  getTicketInformation(ticketId);
-                  getComments(ticketId);
-                }} />
-            </Tooltip>
-          </Space>
-          </>
-        )
-      }
-    
+    return {
+      key: index,
+      client: `${reference} - ${name}`,
+      address,
+      clientPackage,
+      tags: tags.filter(tag => tag.ticketId === ticketId),      
+      action: (
+        <>
+        <Space wrap size={10}>          
+          <Button type="primary">
+            <Link to={`/ticket/${ticketId}`}>Open Ticket</Link>
+          </Button>
+          <Tooltip title="Add Tag">  
+            <Button 
+              shape="circle" 
+              icon={<TagsOutlined />} 
+              onClick={() => {
+                setId(ticketId);
+                getTags(ticketId);
+                showTagDrawer();
+              }} />
+          </Tooltip>
+          <Tooltip title="Sneak Peak">
+            <Button 
+              shape="circle" 
+              icon={<ExportOutlined />} 
+              onClick={() => {                  
+                setId(ticketId);              
+                showDrawer();
+                getTags(ticketId);
+                getTicketInformation(ticketId);
+                getComments(ticketId);
+              }} />
+          </Tooltip>
+        </Space>
+        </>
+      )
+    }
   });
 
   return (
@@ -202,6 +239,7 @@ function Home({
           <PageHeader
             title="Home Page"
             subTitle={`${tickets.length} Pending Installations`}
+            extra={pageheaderExtra}
           />
           <Table tableLayout="fixed" columns={tableColumns} dataSource={data} />
           <SneakPeakDrawer 

@@ -102,7 +102,7 @@ function App({
 
   return (  
     
-    // If the user is not null display the page Home page
+    // If the user is logged in display the page Home page
     users === null ? (
       // If the user data is loading display the loginloader
       loadingUser ? (<LoginLoader />) : (<Login />)
@@ -141,7 +141,7 @@ function App({
               </Menu.Item>
             ))}
             <Menu.Item 
-              key="Layout"
+              key="3"
               icon={<ImportOutlined />}
             >
               <Link onClick={() => auth.signOut()}>Logout</Link>

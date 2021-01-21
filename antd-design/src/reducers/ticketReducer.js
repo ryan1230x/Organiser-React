@@ -30,6 +30,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ticketInformation: action.payload,
+        tickets: state.tickets.filter(ticket => ticket.ticketId !== action.payload.ticketId),
         loading: false
       };
     case constant.ADD_TICKET:

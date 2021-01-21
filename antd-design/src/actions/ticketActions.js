@@ -110,7 +110,7 @@ export const putTicketStatusToOpen = (newStatus, ticketId) => dispatch => {
  * @description search the database for tickets that match the query
  * @param {String} UrlParam the ticketId from the URL
  */
-export const searchForTicket = (UrlParam) => (dispatch) => {
+export const searchForTicket = (UrlParam) => dispatch => {
   axios
     .get(`${BASE_URL}?q=${UrlParam}`)
     .then((res) =>

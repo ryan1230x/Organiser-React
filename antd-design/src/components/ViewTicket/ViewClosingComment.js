@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import moment from "moment";
 
 // import redux
 import { useStore } from "react-redux";
@@ -82,7 +83,7 @@ function ViewClosingComment({
       author: displayName,
       action: "closed the ticket",
       ticketId,
-      addedAt: new Date().toLocaleString()
+      addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
     handleAddHistory(JSON.stringify(closingCommentHistoryObject));
   };
@@ -95,7 +96,7 @@ function ViewClosingComment({
       author: displayName,
       comment: closingComment,
       ticketId,
-      addedAt: new Date().toLocaleString()
+      addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
     handleAddComment(JSON.stringify(closingCommentObject), ticketId);
   };

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getComments, addComment } from "../actions/commentActions";
+import { getComments, addComment, deleteComment } from "../actions/commentActions";
 import { getTicketInformation, putTicketStatusToClosed, putTicketStatusToOpen } from "../actions/ticketActions";
 import { getHistory, addHistory } from "../actions/historyActions";
 import { getTags, addTag, deleteTag } from "../actions/tagActions";
@@ -197,7 +197,7 @@ function ViewTicket({
             />
           </Col>
           <Col span={17}>
-            <ViewAddComment
+            <ViewAddComment              
               handleAddHistory={addHistory}
               handleAddComment={addComment}
               ticketId={id}
