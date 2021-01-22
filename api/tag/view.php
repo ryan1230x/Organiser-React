@@ -5,8 +5,96 @@ class TagView extends TagModel {
   /**
    * Get all the tags
    */
-  public function show_tags() {
-    $results = parent::get_tags();
+  public function show_all_tags() {
+    $results = parent::get_all_tags();
+    $num_of_rows = $results->rowCount();
+
+    /**
+     * Check if there are any tags
+     */
+    if ($num_of_rows <= 0) {
+      echo json_encode(array(
+        "message" => "None found",
+        "data" => array()
+      ));
+      exit;
+    }
+
+    /**
+    * Create array of tag-items
+    */
+    $tags_array = array();
+    while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
+      extract($row);
+      $tag_item = array(
+        "tag_id" => $tag_id,
+        "tag" => $tag,
+        "ticketId" => $ticket_id,
+        "color" => $color
+      );
+      array_push($tags_array, $tag_item);
+    }
+
+    /**
+     * Display successfull message
+     */
+    echo json_encode(array(
+      "count" => $num_of_rows,
+      "success" => true,
+      "data" => $tags_array
+    ));
+    exit;
+  }
+
+  /**
+   * Get all the tags for open tickets
+   */
+  public function show_tags_for_open_tickets() {
+    $results = parent::get_all_tags_for_open_tickets();
+    $num_of_rows = $results->rowCount();
+
+    /**
+     * Check if there are any tags
+     */
+    if ($num_of_rows <= 0) {
+      echo json_encode(array(
+        "message" => "None found",
+        "data" => array()
+      ));
+      exit;
+    }
+
+    /**
+    * Create array of tag-items
+    */
+    $tags_array = array();
+    while ($row = $results->fetch(PDO::FETCH_ASSOC)) {
+      extract($row);
+      $tag_item = array(
+        "tag_id" => $tag_id,
+        "tag" => $tag,
+        "ticketId" => $ticket_id,
+        "color" => $color
+      );
+      array_push($tags_array, $tag_item);
+    }
+
+    /**
+     * Display successfull message
+     */
+    echo json_encode(array(
+      "count" => $num_of_rows,
+      "success" => true,
+      "data" => $tags_array
+    ));
+    exit;
+  }
+
+    /**
+   * Get all the tags for open tickets
+   */
+  public function show_tags_for_closed_tickets() {
+    $results = parent::get_all_tags_for_closed_tickets();
     $num_of_rows = $results->rowCount();
 
     /**

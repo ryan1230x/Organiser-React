@@ -9,10 +9,42 @@ const BASE_URL = "http://localhost/2020-organiser/api/tag/";
  */
 export const getAllTags = () => dispatch => {
   axios
-    .get(BASE_URL)
+    .get(`${BASE_URL}?status=all`)
     .then((res) =>
       dispatch({
         type: constant.GET_ALL_TAGS,
+        payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
+};
+
+/**
+ * @description Get all tags for all open tickets
+ * @method GET
+ */
+export const getAllTagsForOpenTickets = () => dispatch => {
+  axios
+    .get(`${BASE_URL}?status=open`)
+    .then((res) =>
+      dispatch({
+        type: constant.GET_ALL_TAGS_FOR_OPEN_TICKETS,
+        payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
+};
+
+/**
+ * @description Get all tags for all open tickets
+ * @method GET
+ */
+export const getAllTagsForClosedTickets = () => dispatch => {
+  axios
+    .get(`${BASE_URL}?status=closed`)
+    .then((res) =>
+      dispatch({
+        type: constant.GET_ALL_TAGS_CLOSED_TICKETS,
         payload: res.data.data
       })
     )
@@ -75,7 +107,7 @@ export const deleteTag = (id) => dispatch => {
     .then((res) =>
       dispatch({
         type: constant.DELETE_TAG,
-        payload: res.data.data
+        payload: id
       })
     )
     .catch((error) => console.error(error));

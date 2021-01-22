@@ -2,10 +2,34 @@
 include_once "../config/Database.php";
 class TagModel extends Database {
 
-  protected function get_tags() {
+  /**
+   * Get all tags
+   */
+  protected function get_all_tags() {
+    $query = "SELECT * FROM tags
+    JOIN status USING(ticket_id)";
+    $stmt = parent::connect()->query($query);
+    return $stmt;
+  }
+
+  /**
+   * Get all tags for open tickets
+   */
+  protected function get_all_tags_for_open_tickets() {
     $query = "SELECT * FROM tags
     JOIN status USING(ticket_id)
     WHERE status = 'Open'";
+    $stmt = parent::connect()->query($query);
+    return $stmt;
+  }
+
+  /**
+   * Get all tags for closed tickets
+   */
+  protected function get_all_tags_for_closed_tickets() {
+    $query = "SELECT * FROM tags
+    JOIN status USING(ticket_id)
+    WHERE status = 'Closed'";
     $stmt = parent::connect()->query($query);
     return $stmt;
   }

@@ -8,8 +8,9 @@ import { useStore } from "react-redux";
 import { EditOutlined } from "@ant-design/icons";
 
 // Import Components
-import { Form, Input, Button, notification} from "antd";
+import { Form, Input, notification, Typography, Dropdown, Menu } from "antd";
 const { TextArea } = Input;
+const { Title } = Typography;
 
 function ViewAddComment({
   ticketId, 
@@ -22,6 +23,15 @@ function ViewAddComment({
    */
   const [newComment, setNewComment] = useState("");
   const [form] = Form.useForm();
+
+  /**
+   * Dropdown button menu 
+   */
+  const menu = (
+    <Menu>
+      <Menu.Item>Canned Responses</Menu.Item>
+    </Menu>
+  )
 
   /**
    * Set Notification
@@ -85,40 +95,43 @@ function ViewAddComment({
   };
   
   return (
-    <Form
-      form={form}
-      layout="vertical" 
-      onFinish={addCommentOnSubmit} 
-      style={{marginBottom: 32}}
-    >
-      <Form.Item
-        name="new-comment"
-        label="Add Comment"
-        rules={[
-          {            
-            required: true,
-            message: "Can not be empty!"
-          }
-        ]}
+    <>
+      <Title level={3}>Add Comment</Title>
+      <Form
+        form={form}
+        layout="vertical" 
+        onFinish={addCommentOnSubmit} 
+        style={{marginBottom: 32}}
       >
-        <TextArea          
-          allowClear
-          rows={4}
-          placeholder="Type here to add a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
+        <Form.Item
+          name="new-comment"
+          rules={[
+            {            
+              required: true,
+              message: "Can not be empty!"
+            }
+          ]}
+        >
+          <TextArea          
+            allowClear
+            rows={4}
+            placeholder="Type here to add a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
         </Form.Item>
         <Form.Item>
-          <Button
+          <Dropdown.Button            
+            overlay={menu}
             htmlType="submit" 
             style={{float: "right"}}
             icon={<EditOutlined />}
           >
             Add Comment
-          </Button>
+          </Dropdown.Button>
         </Form.Item>
-    </Form>
+      </Form>
+    </>
   )
 }
 

@@ -23,7 +23,7 @@ class HistoryModel extends Database {
   }
 
   /**
-   * Created history entry
+   * Create history entry
    */
   protected function post_history(
     string $author, 

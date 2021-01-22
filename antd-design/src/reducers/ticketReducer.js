@@ -8,11 +8,23 @@ const initialState = {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case constant.GET_TICKETS:
+    case constant.GET_OPEN_TICKETS:
       return {
         ...state,
         tickets: action.payload,
         loading: false
+      };
+    case constant.GET_CLOSED_TICKETS:
+      return {
+        ...state,
+        tickets: action.payload,
+        loading: false
+      };
+    case constant.GET_ALL_TICKETS:
+      return {
+        ...state,
+	      tickets: action.payload,
+	      loading: false
       };
     case constant.GET_TICKET_INFORMATION:
       return {

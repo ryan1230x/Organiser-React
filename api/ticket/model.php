@@ -3,15 +3,47 @@ include_once "../config/Database.php";
 class TicketModel extends Database {
 
   /**
-  * get all tickets
+  * Get all tickets open and closed
   */
-  protected function get_tickets() {
+  protected function get_all_tickets() {
+    $query = "SELECT * FROM client_address
+    JOIN client_info USING(ticket_id)
+    JOIN client_service USING(ticket_id)
+    JOIN tickets USING(ticket_id)
+    JOIN status USING(ticket_id) 
+    ORDER BY tickets.id DESC";
+    $conn = $this->connect();
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    return $stmt;
+  }
+
+  /**
+  * get all open tickets
+  */
+  protected function get_open_tickets() {
     $query = "SELECT * FROM client_address
     JOIN client_info USING(ticket_id)
     JOIN client_service USING(ticket_id)
     JOIN tickets USING(ticket_id)
     JOIN status USING(ticket_id) 
     WHERE status = 'Open' ORDER BY tickets.id DESC";
+    $conn = $this->connect();
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    return $stmt;
+  }
+
+  /**
+  * get all closed tickets
+  */
+  protected function get_closed_tickets() {
+    $query = "SELECT * FROM client_address
+    JOIN client_info USING(ticket_id)
+    JOIN client_service USING(ticket_id)
+    JOIN tickets USING(ticket_id)
+    JOIN status USING(ticket_id) 
+    WHERE status = 'Closed' ORDER BY tickets.id DESC";
     $conn = $this->connect();
     $stmt = $conn->prepare($query);
     $stmt->execute();
@@ -31,21 +63,6 @@ class TicketModel extends Database {
     $conn = $this->connect();
     $stmt = $conn->prepare($query);
     $stmt->execute([$ticket_id]);
-    return $stmt;
-  }
-
-  /**
-  * Get all tickets that match the query search
-  */
-  protected function search_tickets(string $param) {
-    $query = "SELECT * FROM client_address
-    JOIN client_info USING(ticket_id)
-    JOIN client_service USING(ticket_id)
-    JOIN tickets USING(ticket_id)
-    JOIN status USING(ticket_id)
-    WHERE address LIKE '%$param%'
-    ORDER BY tickets.id DESC";
-    $stmt = $this->connect()->query($query);
     return $stmt;
   }
 

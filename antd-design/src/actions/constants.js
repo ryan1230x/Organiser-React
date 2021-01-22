@@ -1,4 +1,6 @@
-export const GET_TICKETS = "GET_TICKETS";
+export const GET_OPEN_TICKETS = "GET_OPEN_TICKETS";
+export const GET_CLOSED_TICKETS = "GET_CLOSED_TICKETS";
+export const GET_ALL_TICKETS = "GET_ALL_TICKETS";
 export const ADD_TICKET = "ADD_TICKET";
 export const GET_TICKET_INFORMATION = "GET_TICKET_INFORMATION";
 
@@ -15,6 +17,8 @@ export const GET_HISTORY = "GET_HISTORY";
 export const ADD_HISTORY = "ADD_HISTORY";
 
 export const GET_ALL_TAGS = "GET_ALL_TAGS";
+export const GET_ALL_TAGS_FOR_OPEN_TICKETS = "GET_ALL_TAGS_FOR_OPEN_TICKETS";
+export const GET_ALL_TAGS_CLOSED_TICKETS = "GET_ALL_TAGS_CLOSED_TICKETS";
 export const GET_TAGS = "GET_TAGS";
 export const ADD_TAG = "ADD_TAG";
 export const DELETE_TAG = "DELETE_TAG";

@@ -4,15 +4,47 @@ import axios from "axios";
 const BASE_URL = "http://localhost/2020-organiser/api/ticket/";
 
 /**
- * @description Get all created tickets
+ * @description Get all tickets open and closed
  * @method GET
  */
-export const getTickets = () => (dispatch) => {
+export const getAllTickets = () => (dispatch) => {
   axios
-    .get(BASE_URL)
+    .get(`${BASE_URL}?status=all`)
     .then((res) =>
       dispatch({
-        type: constant.GET_TICKETS,
+        type: constant.GET_ALL_TICKETS,
+	      payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
+};
+
+/**
+ * @description Get all open tickets
+ * @method GET
+ */
+export const getOpenTickets = () => (dispatch) => {
+  axios
+    .get(`${BASE_URL}?status=open`)
+    .then((res) =>
+      dispatch({
+        type: constant.GET_OPEN_TICKETS,
+        payload: res.data.data
+      })
+    )
+    .catch((error) => console.error(error));
+};
+
+/**
+ * @description Get all closed tickets
+ * @method GET
+ */
+export const getClosedTickets = () => (dispatch) => {
+  axios
+    .get(`${BASE_URL}?status=closed`)
+    .then((res) =>
+      dispatch({
+        type: constant.GET_CLOSED_TICKETS,
         payload: res.data.data
       })
     )

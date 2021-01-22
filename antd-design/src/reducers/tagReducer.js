@@ -20,6 +20,18 @@ export default function(state = intitalState, action) {
         tags: action.payload,
         loading:false
       };
+    case constant.GET_ALL_TAGS_FOR_OPEN_TICKETS:
+      return {
+        ...state,
+        tags: action.payload,
+        loading: false
+      };
+    case constant.GET_ALL_TAGS_CLOSED_TICKETS:
+      return {
+        ...state,
+        tags: action.payload,
+        loading: false
+      };
     case constant.ADD_TAG:
       return {
         ...state,

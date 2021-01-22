@@ -50,8 +50,37 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     exit;
   }
 
-  $tag_view->show_tags();
-  exit;
+  /**
+   * Check to see if there is a status query parameter
+   * if so run the code below
+   * route  /api/tag/?status=:status
+   */
+  if(isset($_GET["status"])) {
+    
+    /**
+     * Get all the tags for open tickets
+     */
+    if($_GET["status"] === "open") {
+      $tag_view->show_tags_for_open_tickets();
+      exit;
+    }
+
+    /**
+     * Get all the tags for closed
+     */
+    if($_GET["status"] === "closed") {
+      $tag_view->show_tags_for_closed_tickets();
+      exit;
+    }
+
+    /**
+     * Get all the tags
+     */
+    if($_GET["status"] === "all") {
+      $tag_view->show_all_tags();
+      exit;
+    }
+  }
 }
 
 /**

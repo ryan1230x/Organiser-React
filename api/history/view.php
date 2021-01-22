@@ -2,16 +2,25 @@
 include_once "../history/model.php";
 class HistoryView extends HistoryModel {
 
+  /**
+   * get all history
+   */
   public function show_history() {
     $results = parent::get_history();
     $num_of_row = $results->rowCount();
 
+    /**
+     * Check if there are any results
+     */
     if($num_of_row <= 0) {
       echo json_encode(array(
         "message" => "None found"
       ));
     }
 
+    /**
+     * create array of history
+     */
     $history_array = array();
     while($row = $results->fetch(PDO::FETCH_ASSOC)) {
       extract($row);
@@ -25,6 +34,9 @@ class HistoryView extends HistoryModel {
       array_push($history_array, $history_item);
     }
 
+    /**
+     * Display successfull message
+     */
     echo json_encode(array(
       "count" => $num_of_row,
       "success" => true,
@@ -32,10 +44,16 @@ class HistoryView extends HistoryModel {
     ));
   }
 
+  /**
+   * get all history for a ticket
+   */
   public function show_single_history(string $ticket_id) {
     $results = parent::get_single_history($ticket_id);
     $num_of_row = $results->rowCount();
 
+    /**
+     * Check if there are any results
+     */
     if($num_of_row <= 0) {
       echo json_encode(array(
         "message" => "None found",
@@ -43,7 +61,10 @@ class HistoryView extends HistoryModel {
       ));
       exit;
     }
-
+    
+    /**
+     * create array of history
+     */
     $history_array = array();
     while($row = $results->fetch(PDO::FETCH_ASSOC)) {
       extract($row);
@@ -57,6 +78,9 @@ class HistoryView extends HistoryModel {
       array_push($history_array, $history_item);
     }
 
+    /**
+     * Display successfull message
+     */
     echo json_encode(array(
       "count" => $num_of_row,
       "success" => true,
@@ -64,6 +88,9 @@ class HistoryView extends HistoryModel {
     ));
   }
 
+  /**
+   * create a history entry
+   */
   public function add_history(
     string $author,
     string $action,

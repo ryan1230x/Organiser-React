@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-//
+// Import routing components
 import { Link } from "react-router-dom";
 
 // Import redux and actions
@@ -168,6 +168,7 @@ function CreateTicket({ users, addTicket }) {
           ]}        
         >
           <InputNumber
+	    style={{ width:"100%" }}
             min={0}             
             onChange={(number) => setReference(number)} 
             value={reference}
@@ -202,7 +203,8 @@ function CreateTicket({ users, addTicket }) {
             }
           ]}
         >
-          <DatePicker 
+          <DatePicker
+	    style={{ width: "100%" }}
             onChange={(_, dateString) => setrequestedDate(dateString)} 
             value={requestedDate}
             format={dateFormatList}            
@@ -327,7 +329,8 @@ function CreateTicket({ users, addTicket }) {
             }
           ]}
         >
-          <InputNumber 
+          <InputNumber
+	    style={{ width: "100%" }}
             onChange={(number) => setlandline(number)} 
             value={landline} 
           />
@@ -345,7 +348,8 @@ function CreateTicket({ users, addTicket }) {
             }
           ]}
         >
-          <InputNumber 
+          <InputNumber
+	    style={{ width: "100%" }}
             onChange={(number) => setcontactNumber(number)} 
             value={contactNumber}
           />

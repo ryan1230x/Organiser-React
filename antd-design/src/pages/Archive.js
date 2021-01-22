@@ -5,21 +5,16 @@ import { Link } from "react-router-dom";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getTicketInformation, getOpenTickets } from "../actions/ticketActions";
+import { getTicketInformation, getClosedTickets, getAllTickets } from "../actions/ticketActions";
 import { getComments } from "../actions/commentActions";
-import { 
-  addTag, 
-  getAllTagsForOpenTickets, 
-  deleteTag, 
-  getAllTags,
-  getTags
-} from "../actions/tagActions.js";
+import { addTag, getTags, getAllTags, deleteTag, getAllTagsForClosedTickets } from "../actions/tagActions.js";
 
 // Import icons
 import { 
   TagsOutlined, 
   ExportOutlined,
-  HomeOutlined
+  HomeOutlined,
+  ProjectOutlined
 } from "@ant-design/icons";
 
 // Import Components
@@ -61,6 +56,12 @@ const tableColumns = [
     width: 200
   },
   {
+    key: "status",
+    title: "Status",
+    dataIndex: "status",
+    render: (status) => (<strong>{status}</strong>)
+  },
+  {
     key: "tags",
     title: "Tags",
     dataIndex: "tags",
@@ -85,21 +86,20 @@ const tableColumns = [
   }
 ];
 
-function Home({
+function Archive({
     tickets,
     comments,
     ticketInformation,
     addTag,
-    deleteTag,
-    getAllTagsForOpenTickets,
-    getAllTags,
-    tags,
     getTags,
-    getOpenTickets,
+    deleteTag,
+    tags,
     getComments,
     getTicketInformation,
     loadingTickets,
-    ticketTags
+    ticketTags,
+    getAllTickets,
+    getAllTags
 }) {
 
   /**
@@ -115,9 +115,9 @@ function Home({
   * Once the Home page is rendered run the functions
   */
   useEffect(() => {
-    getOpenTickets();
-    getAllTagsForOpenTickets();
-  }, [getOpenTickets, getAllTagsForOpenTickets])
+    getAllTickets();
+    getAllTags();
+  }, [getAllTickets])
 
   /**
    * Drawer functions
@@ -174,27 +174,16 @@ function Home({
   ];
 
   /**
-   * Show empty icon when there are not tickets,
-   * in other words when tickets === undefined or null
-   */
-  if (!tickets) { 
-    return (
-      <section className="ticket-empty-icon">
-        <Empty description="Congratulations! There are currently no pending installations" />
-      </section>
-    );
-  }
-
-  /**
    * Table data
    */
   const data = tickets.map((ticket, index) => {
-    const { ticketId, name, address, clientPackage, reference } = ticket;
+    const { ticketId, name, address, clientPackage, reference, status } = ticket;
     return {
       key: index,
       client: `${reference} - ${name}`,
       address,
       clientPackage,
+      status,
       tags: tags.filter(tag => tag.ticketId === ticketId),      
       action: (
         <>
@@ -238,13 +227,19 @@ function Home({
         <>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <HomeOutlined />
-              <span style={{ marginLeft: 8 }}>Home</span>
+              <Link to="/">
+                <HomeOutlined />
+                <span style={{ marginLeft: 8 }}>Home</span>            
+              </Link>            
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <ProjectOutlined />
+              <span style={{ marginLeft: 8 }}>Archive</span>
             </Breadcrumb.Item>
           </Breadcrumb>
           <PageHeader
-            title="Home Page"
-            subTitle={`${tickets.length} Pending Installations`}
+            title="Installation Archive"
+            subTitle={`${tickets.length} Total Installations`}
             extra={pageheaderExtra}
           />
           <Table tableLayout="fixed" columns={tableColumns} dataSource={data} />
@@ -282,12 +277,13 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { 
-  getOpenTickets, 
+  getAllTickets,
+  getClosedTickets, 
   getTicketInformation,
   getComments,
   addTag,
-  getAllTagsForOpenTickets,
-  getAllTags,
+  getTags,
   deleteTag,
-  getTags
-})(Home);
+  getAllTags,
+  getAllTagsForClosedTickets
+})(Archive);

@@ -38,39 +38,36 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
   }
 
   /**
-   * Search the database for query matches
+   * Check to see if there is a status query parameter
+   * if so run the code below
+   * route    /api/ticket/?status=:status
    */
-  if(isset($_GET["q"])) {
+  if(isset($_GET["status"])) {
 
     /**
-     * Get the search from query string parameter
+     * Get all tickets
      */
-    $query_request = $_GET["q"]; 
-
-    /**
-     * sanitize and validated the query-request
-     */
-    $is_sanitized = $error_handler->sanitize_string(array($query_request));
-    $is_validated = $error_handler->validate_string(array($query_request));
-    if(!$is_sanitized && !$is_validated) {
-      echo json_encode(array(
-        "message" => "Could not sanitize and validate"
-      ));
+    if($_GET["status"] === "all") {
+      $ticket_view->show_all_tickets();
       exit;
-  }
+    }
 
     /**
-     * Display all the entries that match
+     * Get all open tickets
      */
-    $ticket_view->show_search_tickets($query_request);
-    exit;
-  }
+    if($_GET["status"] === "open") {
+      $ticket_view->show_open_tickets();
+      exit;
+    }
 
-  /**
-  * Get all tickets
-   */
-  $ticket_view->show_tickets();
-  exit;
+    /**
+     * Get all closed tickets
+     */
+    if($_GET["status"] === "closed") {
+      $ticket_view->show_closed_tickets();
+      exit;
+    }
+  }
 }
 
 /**
@@ -105,31 +102,31 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
   $ticket_id = sha1(date("U") . $reference);
   $data_array_int = array($reference, $landline, $contact_number);
   $data_array_strings = array(
-      $name,      
-      $address,
-      $network,
-      $portability,
-      $package,
-      $service,
-      $requested_date,
-      $created_by,
-      $ticket_id,
-      $status
+    $name,      
+    $address,
+    $network,
+    $portability,
+    $package,
+    $service,
+    $requested_date,
+    $created_by,
+    $ticket_id,
+    $status
   );
   $data_array = array(
-      $name,
-      $landline,
-      $contact_number,
-      $reference,
-      $address,
-      $network,
-      $portability,
-      $package,
-      $service,
-      $requested_date,
-      $created_by,
-      $ticket_id,
-      $status
+    $name,
+    $landline,
+    $contact_number,
+    $reference,
+    $address,
+    $network,
+    $portability,
+    $package,
+    $service,
+    $requested_date,
+    $created_by,
+    $ticket_id,
+    $status
   );
 
   /**
@@ -167,19 +164,19 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
    * Create ticket
    */
   $set_ticket = $ticket_view->add_ticket(
-      $name,
-      $landline,
-      $contact_number,
-      $reference,
-      $address,
-      $network,
-      $portability,
-      $package,
-      $service,
-      $requested_date,
-      $created_by,
-      $ticket_id,
-      $status
+    $name,
+    $landline,
+    $contact_number,
+    $reference,
+    $address,
+    $network,
+    $portability,
+    $package,
+    $service,
+    $requested_date,
+    $created_by,
+    $ticket_id,
+    $status
   );
   if(!$set_ticket) {
     echo json_encode(array(
@@ -221,119 +218,119 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
  */
 if($_SERVER["REQUEST_METHOD"] === "PUT") {
 
-    /**
-     * Get the ticket id from the url
-     */
-    $ticket_id = $_GET["ticket_id"];
+  /**
+   * Get the ticket id from the url
+   */
+  $ticket_id = $_GET["ticket_id"];
 
-    /**
-     * instanciate classes
-     */
-    $ticket_view = new TicketView();
-    $error_handler = new ErrorHandler();
+  /**
+   * instanciate classes
+   */
+  $ticket_view = new TicketView();
+  $error_handler = new ErrorHandler();
 
-    /**
-     * get JSON data
-     */
-    $data = json_decode(file_get_contents("php://input"), true);
-    $reference = $data["reference"]; 
-    $address = $data["address"]; 
-    $name = $data["name"];
-    $landline = $data["landline"];
-    $contact_number = $data["contactNumber"];
-    $network = $data["network"];
-    $portability = $data["portability"];
-    $package = $data["clientPackage"];
-    $requested_date = $data["requestedDate"];
-    $service = $data["service"];
-    $status = $data["status"];
-    $created_by = $data["createdBy"];
-    $data_array_int = array($reference, $landline, $contact_number);
-    $data_array_strings = array(
-        $name,      
-        $address,
-        $network,
-        $portability,
-        $package,
-        $service,
-        $requested_date,
-        $created_by,
-        $ticket_id,
-        $status,
-        $ticket_id
+  /**
+   * get JSON data
+   */
+  $data = json_decode(file_get_contents("php://input"), true);
+  $reference = $data["reference"]; 
+  $address = $data["address"]; 
+  $name = $data["name"];
+  $landline = $data["landline"];
+  $contact_number = $data["contactNumber"];
+  $network = $data["network"];
+  $portability = $data["portability"];
+  $package = $data["clientPackage"];
+  $requested_date = $data["requestedDate"];
+  $service = $data["service"];
+  $status = $data["status"];
+  $created_by = $data["createdBy"];
+  $data_array_int = array($reference, $landline, $contact_number);
+  $data_array_strings = array(
+    $name,      
+    $address,
+    $network,
+    $portability,
+    $package,
+    $service,
+    $requested_date,
+    $created_by,
+    $ticket_id,
+    $status,
+    $ticket_id
     );
-    $data_array = array(
-        $name,
-        $landline,
-        $contact_number,
-        $reference,
-        $address,
-        $network,
-        $portability,
-        $package,
-        $service,
-        $requested_date,
-        $created_by,
-        $status,
-        $ticket_id
-    );
+  $data_array = array(
+    $name,
+    $landline,
+    $contact_number,
+    $reference,
+    $address,
+    $network,
+    $portability,
+    $package,
+    $service,
+    $requested_date,
+    $created_by,
+    $status,
+    $ticket_id
+  );
 
-    /**
-     * Check if there are empty fields
-     */
-    $is_emtpy = $error_handler->validate_empty_values($data_array);
-    if ($is_emtpy) {
-      echo json_encode(array(
-        "message" => "Please fill in all fields"
-      ));
-      exit;
-    }
-
-    /**
-     * update ticket
-     */
-    $update_ticket = $ticket_view->update_ticket(
-        $address,
-        $name,
-        $landline,
-        $contact_number,
-        $network,
-        $service,
-        $portability,
-        $package,
-        $requested_date,
-        $status,
-        $ticket_id
-    );
-    
-    if(!$update_ticket) {
-        echo json_encode(array(
-            "message" => "Could not update ticket"
-        ));
-        exit;
-    }
-
-    /**
-     * display successfull message
-     */
+  /**
+   * Check if there are empty fields
+   */
+  $is_emtpy = $error_handler->validate_empty_values($data_array);
+  if ($is_emtpy) {
     echo json_encode(array(
-        "success" => true,
-        "message" => "Updated successfully",
-        "data" => array(
-            "reference" => $reference,
-            "name" => $name,
-            "address" => $address,
-            "landline" => $landline,
-            "contactNumber" => $contact_number,
-            "network" => $network,
-            "service" => $service,
-            "portability" => $portability,
-            "clientPackage" => $package,
-            "status" => $status,
-            "requestedDate" => $requested_date,
-            "createdBy" => $created_by,
-            "ticketId" => $ticket_id,
-        )
+      "message" => "Please fill in all fields"
     ));
-    exit; 
+    exit;
+  }
+
+  /**
+   * update ticket
+   */
+  $update_ticket = $ticket_view->update_ticket(
+    $address,
+    $name,
+    $landline,
+    $contact_number,
+    $network,
+    $service,
+    $portability,
+    $package,
+    $requested_date,
+    $status,
+    $ticket_id
+  );
+    
+  if(!$update_ticket) {
+    echo json_encode(array(
+      "message" => "Could not update ticket"
+    ));
+    exit;
+  }
+
+  /**
+   * display successfull message
+   */
+  echo json_encode(array(
+    "success" => true,
+    "message" => "Updated successfully",
+    "data" => array(
+      "reference" => $reference,
+      "name" => $name,
+      "address" => $address,
+      "landline" => $landline,
+      "contactNumber" => $contact_number,
+      "network" => $network,
+      "service" => $service,
+      "portability" => $portability,
+      "clientPackage" => $package,
+      "status" => $status,
+      "requestedDate" => $requested_date,
+      "createdBy" => $created_by,
+      "ticketId" => $ticket_id,
+    )
+  ));
+  exit; 
 }

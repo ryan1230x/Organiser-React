@@ -26,12 +26,14 @@ import Home from "./pages/Home";
 import CreateTicket from "./pages/CreateTicket";
 import ViewTicket from "./pages/ViewTicket";
 import Login from "./pages/Login";
+import Archive from "./pages/Archive";
 
 // Import Icons
 import { 
     HomeOutlined,
     EditOutlined,    
-    ImportOutlined
+    ImportOutlined,
+    ProjectOutlined
 } from "@ant-design/icons";
 
 // Import Components
@@ -51,6 +53,11 @@ const menuItems = [
     to: "/create",
     value: "Create",
     icon: <EditOutlined />
+  },
+  {
+    to:"/archive",
+    value: "Archive",
+    icon: <ProjectOutlined />
   }
 ]
 
@@ -74,7 +81,6 @@ function App({
         */
         login({
           uuid: authUser.uid,
-          photo: authUser.photoURL,
           email: authUser.email,
           displayName: authUser.displayName
         });
@@ -164,6 +170,9 @@ function App({
                 <Route path="/create">
                   <CreateTicket />
                 </Route>
+	        <Route path="/archive">
+                  <Archive />
+	        </Route>
                 <Route path="/ticket/:id" children={<ViewTicket />} />
               </Switch>
             </main>

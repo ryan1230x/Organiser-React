@@ -144,7 +144,6 @@ function ViewClosingComment({
       >
         <Form.Item
           name="closing-comment"
-          label="Closing Comment"
           rules={[
             {
               required: true,
