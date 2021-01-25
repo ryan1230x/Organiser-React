@@ -1,7 +1,7 @@
 import * as constant from "./constants";
 import axios from "axios";
 
-const BASE_URL = "http://localhost/2020-organiser/api/tag/";
+const BASE_URL = "/api/tag/";
 
 /**
  * @description Get all tags

@@ -1,7 +1,7 @@
 import * as constant from "./constants";
 import axios from "axios";
 
-const BASE_URL = "http://localhost/2020-organiser/api/snippet/";
+const BASE_URL = "/api/snippet/";
 
 export const getAllSnippetsForUser =  (username) => dispatch => {
   axios

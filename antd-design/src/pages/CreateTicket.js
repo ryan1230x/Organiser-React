@@ -323,14 +323,14 @@ function CreateTicket({ users, addTicket }) {
           name="landline"
           rules={[
             {
-              type: "number",
+              type: "string",
               required: true,
               message: "Required"
             }
           ]}
         >
-          <InputNumber
-	    style={{ width: "100%" }}
+          <Input
+	          style={{ width: "100%" }}
             onChange={(number) => setlandline(number)} 
             value={landline} 
           />
@@ -341,15 +341,14 @@ function CreateTicket({ users, addTicket }) {
           name="contactNumber"
           rules={[
             {
-              type: "number",
+              type: "string",
               required: true,
               message: "Required",
-              min:0
             }
           ]}
         >
-          <InputNumber
-	    style={{ width: "100%" }}
+          <Input
+	          style={{ width: "100%" }}
             onChange={(number) => setcontactNumber(number)} 
             value={contactNumber}
           />

@@ -1,7 +1,7 @@
 import * as constant from "./constants";
 import axios from "axios";
 
-const BASE_URL = "http://localhost/2020-organiser/api/ticket/";
+const BASE_URL = "/api/ticket/";
 
 /**
  * @description Get all tickets open and closed

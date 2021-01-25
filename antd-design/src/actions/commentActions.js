@@ -1,7 +1,7 @@
 import * as constant from "./constants";
 import axios from "axios";
 
-const BASE_URL = "http://localhost/2020-organiser/api/comment/";
+const BASE_URL = "/api/comment/";
 
 /**
  * @description Get all the comments for a single ticket
