@@ -2,7 +2,11 @@ import React, { useState } from "react";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getTicketInformation, putTicketStatusToClosed, putTicketStatusToOpen } from "../../actions/ticketActions";
+import { 
+  getTicketInformation, 
+  putTicketStatusToClosed, 
+  putTicketStatusToOpen 
+} from "../../actions/ticketActions";
 import { addComment, getComments } from "../../actions/commentActions";
 import { addHistory } from "../../actions/historyActions";
 import { getTags, deleteTag, addTag } from "../../actions/tagActions";
@@ -176,11 +180,13 @@ function SneakPeakDrawer({
                   <ViewDescriptions 
                     ticketInformation={ticketInformation}
                   />
-                  <ViewAddComment
-                    handleAddComment={addComment}
-                    handleAddHistory={addHistory}
-                    ticketId={ticketId}
-                  />
+                  {status === "Open" && (
+                    <ViewAddComment
+                      handleAddComment={addComment}
+                      handleAddHistory={addHistory}
+                      ticketId={ticketId}
+                    />
+                  )}
                   <ViewComments comments={comments} /> 
                   {status === "Open" && (
                     <ViewClosingComment

@@ -128,11 +128,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
     "success" => true,
     "message" => "Added successfully",
     "data" => array(
-      "id" => $comment_id,
       "author" => $author,
       "comment" => $comment,
       "ticketId" => $ticket_id,
-      "addedAt" => $added_at
+      "addedAt" => $added_at,
+      "commentId" => $comment_id
     )
   ));
   exit;

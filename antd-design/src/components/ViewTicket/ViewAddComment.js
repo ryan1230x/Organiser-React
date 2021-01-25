@@ -7,29 +7,57 @@ import { useStore } from "react-redux";
 // import icons
 import { EditOutlined } from "@ant-design/icons";
 
+// Import component
+import Snippet from "./Snippet";
+
 // Import Components
-import { Form, Input, notification, Typography, Dropdown, Menu } from "antd";
+import { 
+  Form,
+  Input, 
+  notification, 
+  Typography, 
+  Dropdown, 
+  Menu, 
+} from "antd";
 const { TextArea } = Input;
 const { Title } = Typography;
 
-function ViewAddComment({
+function ViewAddComment({ 
   ticketId, 
   handleAddComment, 
-  handleAddHistory,
-}) {
+  handleAddHistory, 
+  visible,
+ }) {
 
   /**
    * Component state
    */
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment]               = useState("");
+  const [isSnippetsVisible, setSnippetsVisible]   = useState(false);
+
   const [form] = Form.useForm();
+
+  /**
+   * Helper functions to open and close drawer
+   */
+  const onSnippetsClose = () => {
+    setSnippetsVisible(false);
+  };
+
+  const showSnippets = () => {
+    setSnippetsVisible(true);
+  };
 
   /**
    * Dropdown button menu 
    */
   const menu = (
     <Menu>
-      <Menu.Item>Canned Responses</Menu.Item>
+      <Menu.Item 
+        onClick={() => showSnippets(!visible)}
+      >
+        Snippets
+      </Menu.Item>
     </Menu>
   )
 
@@ -121,7 +149,7 @@ function ViewAddComment({
           />
         </Form.Item>
         <Form.Item>
-          <Dropdown.Button            
+          <Dropdown.Button          
             overlay={menu}
             htmlType="submit" 
             style={{float: "right"}}
@@ -131,8 +159,13 @@ function ViewAddComment({
           </Dropdown.Button>
         </Form.Item>
       </Form>
+      <Snippet
+        closable={false}
+        onClose={onSnippetsClose}
+        visible={isSnippetsVisible}
+      />
     </>
   )
 }
 
-export default ViewAddComment;
+export default ViewAddComment

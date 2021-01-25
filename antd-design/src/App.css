@@ -93,7 +93,6 @@ main {
 }
 
 .ant-comment:not(:last-child) {
-  border: 1px solid #ccc;
   border-left: none;
   border-right: none;
   border-top: none;

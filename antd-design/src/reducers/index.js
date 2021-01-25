@@ -7,6 +7,8 @@ import historyReducer from "./historyReducer";
 import tagReducer from "./tagReducer";
 import pageReducer from "./pageReducer";
 import userReducer from "./userReducer";
+import snippetReducer from "./snippetReducer";
+
 
 export default combineReducers({
   // Reducers go here...
@@ -15,5 +17,6 @@ export default combineReducers({
   histories: historyReducer,
   tags: tagReducer,
   pages: pageReducer,
-  users: userReducer
+  users: userReducer,
+  snippets: snippetReducer
 });

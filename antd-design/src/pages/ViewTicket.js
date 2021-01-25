@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 // import redux and actions
 import { connect } from "react-redux";
-import { getComments, addComment, deleteComment } from "../actions/commentActions";
+import { getComments, addComment } from "../actions/commentActions";
 import { getTicketInformation, putTicketStatusToClosed, putTicketStatusToOpen } from "../actions/ticketActions";
 import { getHistory, addHistory } from "../actions/historyActions";
 import { getTags, addTag, deleteTag } from "../actions/tagActions";
@@ -17,7 +17,7 @@ import ViewAddComment from "../components/ViewTicket/ViewAddComment";
 import ViewComments from "../components/ViewTicket/ViewComments";
 import ViewTimeline from "../components/ViewTicket/ViewTimeline";
 import ViewClosingComment from "../components/ViewTicket/ViewClosingComment";
-import TagDrawer from "../components/Home/TagDrawer.js";
+import TagDrawer from "../components/Home/TagDrawer";
 
 import { TagsOutlined } from "@ant-design/icons";
 
@@ -190,18 +190,20 @@ function ViewTicket({
                   </Tag>
                 ))
               }
-            />
-            {}
+            />            
             <ViewDescriptions
               ticketInformation={ticketInformation}
             />
           </Col>
           <Col span={17}>
-            <ViewAddComment              
-              handleAddHistory={addHistory}
-              handleAddComment={addComment}
-              ticketId={id}
-            />
+            {/* If the ticket is open show the textarea to add comments */}
+            {status === "Open" && (
+              <ViewAddComment              
+                handleAddHistory={addHistory}
+                handleAddComment={addComment}
+                ticketId={id}
+              />
+            )}
             <ViewComments 
               comments={comments}
               usersInfo={users}
@@ -218,6 +220,7 @@ function ViewTicket({
             span={17}
             style={{margin: "32px 0px"}}
           >            
+            {/* If the ticket is open show the textarea to add closing comment */}
             {status === "Open" && (              
               <ViewClosingComment
                 handlePutTicketStatusToClosed={putTicketStatusToClosed}

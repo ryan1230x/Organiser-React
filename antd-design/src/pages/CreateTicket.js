@@ -287,9 +287,9 @@ function CreateTicket({ users, addTicket }) {
             onChange={(value) => setclientPackage(value)} 
             value={clientPackage}
           >
-            <Option value="option1">Option1</Option>
-            <Option value="option1">Option1</Option>
-            <Option value="option1">Option1</Option>
+            <Option value="Basic">Basic</Option>
+            <Option value="middle">middle</Option>
+            <Option value="Advanced">Advanced</Option>
           </Select>
         </Form.Item>
         {/* Portability */}

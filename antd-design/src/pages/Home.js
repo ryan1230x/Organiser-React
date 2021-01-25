@@ -45,20 +45,27 @@ const tableColumns = [
   {
     key: "client",
     title: "Client",
-    dataIndex: "client"
+    dataIndex: "client",
+    sorter: (a,b) => a.client.length - b.client.length,
+    onFilter: (value, record) => record.client.indexOf(value) === 0,
+    
   },
   {
     key: "address",
     title: "Address",
     dataIndex: "address",
     ellipsis: true,
-    render: address => (<Tooltip title={address}>{address}</Tooltip>)
+    render: address => (<Tooltip title={address}>{address}</Tooltip>),
+    sorter: (a,b) => a.address.length - b.address.length,
+    onFilter: (value, record) => record.address.indexOf(value) === 0
   },
   {
-    key: "client package",
+    key: "clientPackage",
     title: "Client Package",
     dataIndex: "clientPackage",
-    width: 200
+    width: 200,
+    sorter: (a,b) => a.clientPackage.length - b.clientPackage.length,
+    onFilter: (value, record) => record.clientPackage.indexOf(value) === 0
   },
   {
     key: "tags",
@@ -76,7 +83,9 @@ const tableColumns = [
           </Tag>
         ))}
       </>
-    )
+    ),
+    sorter: (a,b) => a.tags.length - b.tags.length,
+    onFilter: (value, record) => record.tags.indexOf(value) === 0
   },
   {
     key: "action",
@@ -84,6 +93,10 @@ const tableColumns = [
     dataIndex: "action"
   }
 ];
+
+function onChange(pagination, filters, sorter, extra) {
+  console.log('params', pagination, filters, sorter, extra);
+}
 
 function Home({
     tickets,
@@ -105,9 +118,9 @@ function Home({
   /**
   * Component state
   */
-  const [isVisible, setVisible] = useState(false);
+  const [isVisible, setVisible]                   = useState(false);
   const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
-  const [id, setId] = useState("");
+  const [id, setId]                               = useState("");
 
   const [form] = Form.useForm();
 
@@ -247,7 +260,12 @@ function Home({
             subTitle={`${tickets.length} Pending Installations`}
             extra={pageheaderExtra}
           />
-          <Table tableLayout="fixed" columns={tableColumns} dataSource={data} />
+          <Table 
+            tableLayout="fixed" 
+            columns={tableColumns} 
+            dataSource={data} 
+            onChange={onChange}
+          />
           <SneakPeakDrawer 
             closable={false} 
             onClose={onClose} 
