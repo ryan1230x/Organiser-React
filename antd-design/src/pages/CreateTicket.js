@@ -168,7 +168,7 @@ function CreateTicket({ users, addTicket }) {
           ]}        
         >
           <InputNumber
-	    style={{ width:"100%" }}
+      	    style={{ width:"100%" }}
             min={0}             
             onChange={(number) => setReference(number)} 
             value={reference}
@@ -204,7 +204,7 @@ function CreateTicket({ users, addTicket }) {
           ]}
         >
           <DatePicker
-	    style={{ width: "100%" }}
+	          style={{ width: "100%" }}
             onChange={(_, dateString) => setrequestedDate(dateString)} 
             value={requestedDate}
             format={dateFormatList}            
@@ -323,7 +323,6 @@ function CreateTicket({ users, addTicket }) {
           name="landline"
           rules={[
             {
-              type: "string",
               required: true,
               message: "Required"
             }
@@ -331,7 +330,7 @@ function CreateTicket({ users, addTicket }) {
         >
           <Input
 	          style={{ width: "100%" }}
-            onChange={(number) => setlandline(number)} 
+            onChange={(e) => setlandline(e.target.value)} 
             value={landline} 
           />
         </Form.Item>
@@ -341,7 +340,6 @@ function CreateTicket({ users, addTicket }) {
           name="contactNumber"
           rules={[
             {
-              type: "string",
               required: true,
               message: "Required",
             }
@@ -349,7 +347,7 @@ function CreateTicket({ users, addTicket }) {
         >
           <Input
 	          style={{ width: "100%" }}
-            onChange={(number) => setcontactNumber(number)} 
+            onChange={(e) => setcontactNumber(e.target.value)} 
             value={contactNumber}
           />
         </Form.Item>
