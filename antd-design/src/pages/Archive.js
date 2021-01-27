@@ -263,7 +263,18 @@ function Archive({
             subTitle={`${tickets.length} Total Installations`}
             extra={pageheaderExtra}
           />
-          <Table tableLayout="fixed" columns={tableColumns} dataSource={data} />
+          <Table
+            pagination={{
+              defaultPageSize:50,
+              pageSizeOptions:["50", "100", "250"],
+              total: tickets.length,
+              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} tickets`,
+              showSizeChanger: true,
+              position:["bottomRight", "topRight"]
+            }} 
+            tableLayout="fixed"
+            columns={tableColumns} 
+            dataSource={data} />
           <SneakPeakDrawer 
             closable={false} 
             onClose={onClose} 
