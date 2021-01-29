@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import PropsTypes from "prop-types";
+
 // import redux and actions
 import { connect } from "react-redux";
 import { 
@@ -215,6 +217,23 @@ function SneakPeakDrawer({
       </Row>
     </Drawer>
   )
+}
+
+SneakPeakDrawer.PropsTypes = {
+  ticketId: PropsTypes.string.isRequired,
+  onClose: PropsTypes.func.isRequired,
+  visible: PropsTypes.bool.isRequired,
+  addComment: PropsTypes.func.isRequired,
+  addHistory: PropsTypes.func.isRequired,
+  getTags: PropsTypes.func.isRequired,
+  deleteTag: PropsTypes.func.isRequired,
+  addTag: PropsTypes.func.isRequired,
+  ticketInformation: PropsTypes.object.isRequired,
+  comments: PropsTypes.array.isRequired,
+  loadingComments: PropsTypes.bool.isRequired,
+  ticketTags: PropsTypes.array.isRequired,
+  putTicketStatusToOpen: PropsTypes.func.isRequired,
+  putTicketStatusToClosed: PropsTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => ({

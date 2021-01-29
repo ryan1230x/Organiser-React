@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // Import Components
 import { Timeline, Typography } from "antd";
@@ -23,6 +24,10 @@ function ViewTimeline({histories}) {
       </Timeline>
     </section>          
   )
+}
+
+ViewTimeline.propTypes = {
+  histories: PropTypes.array.isRequired
 }
 
 export default ViewTimeline;

@@ -1,8 +1,14 @@
 import React, { useState } from "react"
+import PropTypes from "prop-types";
 import moment from "moment";
 
 // import redux
-import { useStore } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
+
+// Import actions
+import { addComment } from "../../actions/commentActions";
+import { addHistory } from "../../actions/historyActions";
+import { putTicketStatusToClosed } from "../../actions/ticketActions";
 
 // Import icons
 import { CheckOutlined } from "@ant-design/icons"
@@ -18,19 +24,18 @@ import {
 const { TextArea } = Input
 const { Title } = Typography  
 
-function ViewClosingComment({
-  handleAddComment, 
-  handleAddHistory, 
-  ticketId,
-  ticketInformation,
-  handlePutTicketStatusToClosed
-}) {
+function ViewClosingComment({ ticketId, ticketInformation }) {
 
   /**
    * Component state
    */
   const [closingComment, setClosingComment] = useState(""); 
   const [form] = Form.useForm();
+
+  /**
+   * Init redux hook
+   */
+  const dispatch = useDispatch();
 
   /**
    * Get current User
@@ -85,7 +90,7 @@ function ViewClosingComment({
       ticketId,
       addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
-    handleAddHistory(JSON.stringify(closingCommentHistoryObject));
+    dispatch(addHistory(JSON.stringify(closingCommentHistoryObject)));
   };
 
   /**
@@ -98,7 +103,7 @@ function ViewClosingComment({
       ticketId,
       addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
-    handleAddComment(JSON.stringify(closingCommentObject), ticketId);
+    dispatch(addComment(JSON.stringify(closingCommentObject), ticketId));
   };
 
   /**
@@ -119,7 +124,7 @@ function ViewClosingComment({
       status: "Closed",
       createdBy
     };
-    handlePutTicketStatusToClosed(JSON.stringify(updatedTicketInformation), ticketId);
+    dispatch(putTicketStatusToClosed(JSON.stringify(updatedTicketInformation), ticketId));
     openNotificationWithIcon("info", "Ticket Closed", null)
   };
 
@@ -171,6 +176,11 @@ function ViewClosingComment({
       </Form>
     </>
   )
+}
+
+ViewClosingComment.propTypes = {
+  ticketId: PropTypes.string.isRequired,
+  ticketInformation: PropTypes.object.isRequired,
 }
 
 export default ViewClosingComment;

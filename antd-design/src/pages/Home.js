@@ -94,10 +94,6 @@ const tableColumns = [
   }
 ];
 
-function onChange(pagination, filters, sorter, extra) {
-  console.log('params', pagination, filters, sorter, extra);
-}
-
 function Home({
     tickets,
     comments,
@@ -272,7 +268,6 @@ function Home({
             tableLayout="fixed" 
             columns={tableColumns} 
             dataSource={data} 
-            onChange={onChange}
           />
           <SneakPeakDrawer 
             closable={false} 

@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
+
+// import actions + redux 
+import { addTag, deleteTag } from "../../actions/tagActions";
+import { useDispatch } from "react-redux";
 
 // import icons
 import { DeleteOutlined, MinusCircleOutlined } from "@ant-design/icons";
@@ -21,8 +26,6 @@ function TagDrawer({
   ticketId,
   onClose,
   visible,
-  handleAddTag,
-  handleDeleteTag,
   tags,
 }) {
   
@@ -34,6 +37,11 @@ function TagDrawer({
   const [tagBadgeIcon, setTagBadgeIcon] = useState(false);
 
   const [form] = Form.useForm();
+
+  /**
+   * init redux hook
+   */
+  const dispatch = useDispatch();
 
   /**
   * All available tag colors
@@ -56,8 +64,7 @@ function TagDrawer({
       tag: tagInput.toUpperCase(),
       color: colorValue
     };
-
-    handleAddTag(JSON.stringify(newTagObject), ticketId);
+    dispatch(addTag(JSON.stringify(newTagObject), ticketId));
     resetFields();
   }; 
 
@@ -168,7 +175,7 @@ function TagDrawer({
                     cursor: "pointer"
                   }} 
                   count={<MinusCircleOutlined />}
-                  onClick={() => handleDeleteTag(tag.tag_id)}
+                  onClick={() => dispatch(deleteTag((tag.tag_id)))}
                 >
                   <Tag 
                     key={index}
@@ -186,6 +193,13 @@ function TagDrawer({
       </Row>
     </Drawer>
   )
+}
+
+TagDrawer.propTypes = {
+  ticketId: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired,
+  tags: PropTypes.array.isRequired
 }
 
 export default TagDrawer; 

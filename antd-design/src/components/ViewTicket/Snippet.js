@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import moment from "moment";
 
 import { 
@@ -31,10 +32,7 @@ import {
 } from "antd";
 const { Panel } = Collapse;
 
-function Snippet({
-  onClose,
-  visible,
-}) {
+function Snippet({ onClose, visible }) {
   
   /**
   * Component state
@@ -188,6 +186,11 @@ function Snippet({
       )}
     </Drawer>
   )
+}
+
+Snippet.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  visible: PropTypes.bool.isRequired
 }
 
 export default Snippet; 

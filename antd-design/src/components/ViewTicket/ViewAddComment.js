@@ -1,8 +1,13 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import moment from "moment";
 
 // import redux hook
-import { useStore } from "react-redux";
+import { useDispatch, useStore } from "react-redux";
+
+// import actions
+import { addComment } from "../../actions/commentActions";
+import { addHistory } from "../../actions/historyActions";
 
 // import icons
 import { EditOutlined } from "@ant-design/icons";
@@ -22,12 +27,7 @@ import {
 const { TextArea } = Input;
 const { Title } = Typography;
 
-function ViewAddComment({ 
-  ticketId, 
-  handleAddComment, 
-  handleAddHistory, 
-  visible,
- }) {
+function ViewAddComment({ ticketId }) {
 
   /**
    * Component state
@@ -36,6 +36,16 @@ function ViewAddComment({
   const [isSnippetsVisible, setSnippetsVisible]   = useState(false);
 
   const [form] = Form.useForm();
+
+  /**
+   * init redux hook
+   */
+  const dispatch = useDispatch();
+
+  /**
+  * Get user information from the store
+  */
+  const { displayName } = useStore().getState().users.users; 
 
   /**
    * Helper functions to open and close drawer
@@ -54,7 +64,7 @@ function ViewAddComment({
   const menu = (
     <Menu>
       <Menu.Item 
-        onClick={() => showSnippets(!visible)}
+        onClick={() => showSnippets(!isSnippetsVisible)}
       >
         Snippets
       </Menu.Item>
@@ -75,11 +85,6 @@ function ViewAddComment({
   }  
 
   /**
-  * Get user information from the store
-  */
-  const { displayName } = useStore().getState().users.users; 
-
-  /**
    * Reset form
    */
   const resetForm = () => {
@@ -96,7 +101,7 @@ function ViewAddComment({
       ticketId,
       addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
-    handleAddComment(JSON.stringify(newCommentObject), ticketId);
+    dispatch(addComment(JSON.stringify(newCommentObject), ticketId));
   };
 
   /**
@@ -109,7 +114,7 @@ function ViewAddComment({
       ticketId,
       addedAt: moment().format('MMMM Do YYYY, h:mm:ss a')
     };
-    handleAddHistory(JSON.stringify(newHistoryObject));
+    dispatch(addHistory(JSON.stringify(newHistoryObject)));
   };
 
   /**
@@ -166,6 +171,10 @@ function ViewAddComment({
       />
     </>
   )
+}
+
+ViewAddComment.propTypes = {
+  ticketId: PropTypes.string.isRequired,
 }
 
 export default ViewAddComment

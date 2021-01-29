@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // Import Components
 import { Descriptions } from "antd";
@@ -50,5 +51,9 @@ function ViewDescriptions({ ticketInformation }) {
     </Descriptions>
   );
 };
+
+ViewDescriptions.propTypes = {
+  ticketInformation: PropTypes.array.isRequired
+} 
 
 export default ViewDescriptions;

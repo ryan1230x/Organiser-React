@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // import redux and actions
 import { useDispatch, useStore } from "react-redux";
@@ -96,5 +97,9 @@ function ViewComments({ comments }) {
     </>
   );
 };
+
+ViewComments.propTypes = {
+  comments: PropTypes.array.isRequired
+}
 
 export default ViewComments;

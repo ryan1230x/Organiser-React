@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // import component for routing
 import { Link } from "react-router-dom";
@@ -30,6 +31,10 @@ function ViewBreadCrumbs({ticketInformation}) {
       </Breadcrumb.Item>
     </Breadcrumb>
   )
+}
+
+ViewBreadCrumbs.propTypes = {
+  ticketInformation: PropTypes.object.isRequired
 }
 
 export default ViewBreadCrumbs;

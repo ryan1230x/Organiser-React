@@ -32,10 +32,7 @@ import {
 } from "antd";
 
 function ViewTicket({
-  addComment,
-  addHistory,  
   getComments,
-  addTag,
   getHistory,
   getTicketInformation,
   getTags,
@@ -46,9 +43,7 @@ function ViewTicket({
   loadingComments,
   loadingHistories,
   loadingTags,
-  putTicketStatusToClosed,
   putTicketStatusToOpen,
-  deleteTag,
   users
 }) {
 
@@ -199,8 +194,6 @@ function ViewTicket({
             {/* If the ticket is open show the textarea to add comments */}
             {status === "Open" && (
               <ViewAddComment              
-                handleAddHistory={addHistory}
-                handleAddComment={addComment}
                 ticketId={id}
               />
             )}
@@ -223,17 +216,12 @@ function ViewTicket({
             {/* If the ticket is open show the textarea to add closing comment */}
             {status === "Open" && (              
               <ViewClosingComment
-                handlePutTicketStatusToClosed={putTicketStatusToClosed}
                 ticketInformation={ticketInformation}
-                handleAddComment={addComment}
-                handleAddHistory={addHistory}
                 ticketId={id}
               />)}            
           </Col>
         </Row>
         <TagDrawer
-          handleAddTag={addTag}
-          handleDeleteTag={deleteTag}
           tags={ticketTags}
           closable={false}
           onClose={onTagClose}

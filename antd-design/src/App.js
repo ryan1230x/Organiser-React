@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, PureComponent } from "react";
+import PropTypes from "prop-types";
 
 // import stylesheets
 import './App.css';
@@ -195,5 +196,12 @@ const mapStateToProps = (state) => ({
   users: state.users.users,
   loadingUser: state.users.loading
 })
+
+App.propTypes = {
+  login: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired,
+  loadingUser: PropTypes.bool.isRequired
+}
 
 export default connect(mapStateToProps, { login, logout })(App);
