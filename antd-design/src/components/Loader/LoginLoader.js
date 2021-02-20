@@ -1,8 +1,5 @@
 import React from 'react'
 
-// import logo
-import logo from "../../dtLogo.png";
-
 function LoginLoader() {
   return (
     <div style={{
@@ -12,7 +9,8 @@ function LoginLoader() {
       transform: "translate(-50%, -50%)"
     }}>
       <div style={{ textAlign: "center" }}>
-        <img src={logo} />
+        {/* If you have a logo add it below */}
+        {/* <img src={logo} /> */}
         <h1>Redirecting to the application. Please wait...</h1>
       </div>
     </div>

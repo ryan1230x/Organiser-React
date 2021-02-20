@@ -50,11 +50,7 @@ function CreateTicket({ users, addTicket }) {
   /**
    * Network options
    */
-  const networkOptions = [
-    {option: "Layer4",},
-    {option: "MásMóvil Direct"},
-    {option: "MásMóvil NEBA"}
-  ];
+  const networkOptions = [];
 
   /**
    * service options
@@ -69,10 +65,7 @@ function CreateTicket({ users, addTicket }) {
   /**
    * Portability options
    */
-  const portabilityOptions = [
-    {option: "Yes"},
-    {option: "No"}
-  ];
+  const portabilityOptions = [];
 
   /**
    * Requested Date, date format

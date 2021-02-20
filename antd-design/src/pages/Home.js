@@ -10,9 +10,9 @@ import { getClosedTickets, getClosedTicketsByNetwork, getOpenTickets } from "../
  * array of FTTH providers
  */
 const network = [
-  {name: "Layer4"},
-  {name: "MásMóvil Direct"},
-  {name: "MásMóvil NEBA"} 
+  {name: "option1"},
+  {name: "option2"},
+  {name: "option3"} 
 ]
 
 function Home() {

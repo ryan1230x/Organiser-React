@@ -20,11 +20,12 @@ function Login() {
         alt="login screen background"
       />
       <section className="login-panel">
-        <img
+        {/* If you have a logo add below */}
+        {/* <img
           className="login-panel-logo"
-          src="https://direct-telecom.es/wp-content/uploads/2014/08/dt.png"
-          alt="direct-telecom logo"
-        />
+          src="..."
+          alt="logo"
+        /> */}
         <div className="login-panel-overlay"></div>
         <Button
           style={{ width: 268 }}

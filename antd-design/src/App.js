@@ -5,9 +5,6 @@ import PropTypes from "prop-types";
 import './App.css';
 import 'antd/dist/antd.css';
 
-// import logo
-import logo from "./dtLogo.png";
-
 // import components for routing
 import {
   BrowserRouter as Router,
@@ -110,12 +107,13 @@ function App({
           collapsible 
           collapsed={collapsed} 
           onCollapse={handleCollapse}>
-          <img
+          {/* If you have a logo add the logo below */}
+          {/* <img
             className="side-logo"
             width={collapsed ? 80 : 200}
             src={logo} 
             alt="Logo"
-          />
+          /> */}
           <Menu 
             style={{height: "100vh"}} 
             defaultSelectedKeys={["0"]} 
