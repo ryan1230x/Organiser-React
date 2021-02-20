@@ -2,6 +2,9 @@ import * as constant from "../actions/constants";
 
 const initialState = {
   tickets: [],
+  openTickets:[],
+  closedTickets:[],
+  closedTicketNetwork:[],
   ticketInformation: {},
   loading: true
 };
@@ -11,13 +14,13 @@ export default function (state = initialState, action) {
     case constant.GET_OPEN_TICKETS:
       return {
         ...state,
-        tickets: action.payload,
+        openTickets: action.payload,
         loading: false
       };
     case constant.GET_CLOSED_TICKETS:
       return {
         ...state,
-        tickets: action.payload,
+        closedTickets: action.payload,
         loading: false
       };
     case constant.GET_ALL_TICKETS:
@@ -30,6 +33,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         ticketInformation: action.payload,
+        loading: false
+      };
+    case constant.GET_CLOSED_TICKETS_BY_NETWORK:
+      return {
+        ...state,
+        closedTicketNetwork: action.payload,
         loading: false
       };
     case constant.SEARCH_FOR_TICKET:

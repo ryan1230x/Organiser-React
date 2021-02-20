@@ -68,6 +68,21 @@ if($_SERVER["REQUEST_METHOD"] === "GET") {
       exit;
     }
   }
+
+  /**
+   * Check to see if there is an operator query parameter
+   * if so run the code below
+   * route /api/ticket/?network=:network
+   */
+  if(isset($_GET["network"])) {
+
+    if($_GET["network"] === "all") {
+      $ticket_view->show_closed_tickets_by_network();
+      exit;
+    }
+
+  }
+
 }
 
 /**

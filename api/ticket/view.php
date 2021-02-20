@@ -125,6 +125,42 @@ class TicketView extends TicketModel  {
     ));
   }
 
+  public function show_closed_tickets_by_network() {
+    $results = parent::get_closed_ticket_by_network();
+    $num_of_rows = $results->rowCount();
+    
+    $network_options = parent::get_closed_ticket_networks();
+
+    if ($num_of_rows <= 0) {
+      echo json_encode(array(
+        "message" => "None found",
+        "num" => $num_of_rows
+      ));
+      exit;
+    }
+
+   $network_options_array = array();
+    while($row = $network_options->fetch(PDO::FETCH_ASSOC)) {
+      extract($row);
+      $network_options_item = $network;
+      array_push($network_options_array, $network_options_item);
+    }
+    
+    $ticket_array = array();
+    while($row = $results->fetch(PDO::FETCH_ASSOC)) {
+      extract($row);
+      $ticket_item = $network;
+      array_push($ticket_array, $ticket_item);
+    }
+
+    echo json_encode(array(
+      "success" => true,
+      "networkOptions" => $network_options_array,
+      "data" => $ticket_array
+    ));
+
+  }
+
   public function show_single_ticket(string $ticket_id) {
     $results = parent::get_single_ticket($ticket_id);
     $num_of_rows = $results->rowCount();

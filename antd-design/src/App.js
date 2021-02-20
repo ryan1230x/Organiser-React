@@ -28,39 +28,22 @@ import CreateTicket from "./pages/CreateTicket";
 import ViewTicket from "./pages/ViewTicket";
 import Login from "./pages/Login";
 import Archive from "./pages/Archive";
+import TicketTable from "./pages/TicketTable";
+
 
 // Import Icons
 import { 
     HomeOutlined,
     EditOutlined,    
     ImportOutlined,
-    ProjectOutlined
+    ProjectOutlined,
+    FileTextOutlined
 } from "@ant-design/icons";
 
 // Import Components
 import { Layout, Menu } from "antd";
 import LoginLoader from "./components/Loader/LoginLoader";
 const { Sider, Content, Footer } = Layout;
-
-
-// Menu Items, navigation links for Sider
-const menuItems = [
-  {   
-    to: "/",
-    value: "Home",
-    icon: <HomeOutlined />
-  },
-  {   
-    to: "/create",
-    value: "Create",
-    icon: <EditOutlined />
-  },
-  {
-    to:"/archive",
-    value: "Archive",
-    icon: <ProjectOutlined />
-  }
-]
 
 function App({ 
   login, 
@@ -138,17 +121,37 @@ function App({
             defaultSelectedKeys={["0"]} 
             theme={"light"}
             mode="inline"
-          >
-            {menuItems.map((item, index) => (
-              <Menu.Item 
-                key={index} 
-                icon={item.icon}
-              >
-                <Link to={item.to}>{item.value}</Link>
-              </Menu.Item>
-            ))}
+          > 
             <Menu.Item 
+              key="1"
+              icon={<HomeOutlined />}
+            >
+              <Link to="/">Home</Link>
+            </Menu.Item>
+            <Menu.Item
+              key="2"
+              icon={<EditOutlined />}
+            >
+              <Link to="/create">Create</Link>
+            </Menu.Item>
+            <Menu.Item
               key="3"
+              icon={<FileTextOutlined />}
+            >
+              <Link to="/tickets">
+                Tickets
+              </Link>
+            </Menu.Item>
+            <Menu.Item 
+              key="4" 
+              icon={<ProjectOutlined />}
+            >
+              <Link to="/archive">
+                Archive
+              </Link>
+            </Menu.Item>
+            <Menu.Item 
+              key="999"
               icon={<ImportOutlined />}
             >
               <Link onClick={() => auth.signOut()}>Logout</Link>
@@ -168,12 +171,15 @@ function App({
                 <Route exact path="/">
                   <Home />
                 </Route>
+                <Route path="/tickets">
+                  <TicketTable />
+                </Route>
                 <Route path="/create">
                   <CreateTicket />
                 </Route>
-	        <Route path="/archive">
+	              <Route path="/archive">
                   <Archive />
-	        </Route>
+	              </Route>
                 <Route path="/ticket/:id" children={<ViewTicket />} />
               </Switch>
             </main>

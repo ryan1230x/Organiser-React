@@ -49,6 +49,33 @@ class TicketModel extends Database {
     $stmt->execute();
     return $stmt;
   }
+  
+  /**
+   * get all closed tickets by network 
+   */
+  protected function get_closed_ticket_by_network() {
+    $query = "SELECT network, status 
+    FROM client_service
+    JOIN status USING(ticket_id)
+    WHERE status = 'Closed'";
+    $conn = parent::connect();
+    $stmt= $conn->prepare($query);
+    $stmt->execute();
+    return $stmt;
+  }
+
+  /**
+   * get all closed tickets different networks
+   */
+  protected function get_closed_ticket_networks() {
+    $query = "SELECT DISTINCT network FROM client_service 
+    JOIN status USING(ticket_id)
+    WHERE status = 'Closed'";
+    $conn = parent::connect();
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    return $stmt;
+  }
 
   /**
   * Get a ticket with a unique ticket-id

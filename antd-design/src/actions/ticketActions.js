@@ -74,6 +74,23 @@ export const addTicket = (ticketData) => (dispatch) => {
 };
 
 /**
+ * @description Get all all tickets by network provider
+ * @param {string} Network 
+ * @method GET
+ */
+export const getClosedTicketsByNetwork = () => dispatch => {
+  axios
+    .get(`${BASE_URL}?network=all`)
+    .then((res) => {
+      dispatch({
+        type: constant.GET_CLOSED_TICKETS_BY_NETWORK,
+        payload: res.data.data
+      })
+    })
+    .catch((error) => console.error(error));
+}
+
+/**
  * @description Get all the ticket information for a ticket
  * @param {string} ticketId ticketId unique hash
  * @method GET

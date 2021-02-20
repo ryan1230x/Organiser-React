@@ -1,314 +1,107 @@
-import React, { useEffect, useState } from "react";
-
-// import components for routing
+import { Breadcrumb, Card, Col, PageHeader, Row, Statistic } from "antd";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-// import redux and actions
-import { connect } from "react-redux";
-import { getTicketInformation, getOpenTickets } from "../actions/ticketActions";
-import { getComments } from "../actions/commentActions";
-import { 
-  addTag, 
-  getAllTagsForOpenTickets, 
-  deleteTag, 
-  getAllTags,
-  getTags
-} from "../actions/tagActions.js";
-
-// Import icons
-import { 
-  TagsOutlined, 
-  ExportOutlined,
-  HomeOutlined
-} from "@ant-design/icons";
-
-// Import Components
-import SneakPeakDrawer from "../components/Home/SneakPeakDrawer";
-import TagDrawer from "../components/Home/TagDrawer";
-import { 
-  PageHeader, 
-  Table, 
-  Tag, 
-  Button,
-  Tooltip,
-  Space,
-  Empty,
-  Breadcrumb,
-  Form,
-  Input
-} from "antd";
+import { HomeOutlined  } from "@ant-design/icons"
+import { useDispatch, useStore, useSelector } from "react-redux";
+import { getClosedTickets, getClosedTicketsByNetwork, getOpenTickets } from "../actions/ticketActions";
 
 /**
- * Table Columns
+ * array of FTTH providers
  */
-const tableColumns = [
-  {
-    key: "client",
-    title: "Client",
-    dataIndex: "client",
-    sorter: (a,b) => a.client.length - b.client.length,
-    onFilter: (value, record) => record.client.indexOf(value) === 0,
-    
-  },
-  {
-    key: "address",
-    title: "Address",
-    dataIndex: "address",
-    ellipsis: true,
-    render: address => (<Tooltip title={address}>{address}</Tooltip>),
-    sorter: (a,b) => a.address.length - b.address.length,
-    onFilter: (value, record) => record.address.indexOf(value) === 0
-  },
-  {
-    key: "clientPackage",
-    title: "Client Package",
-    dataIndex: "clientPackage",
-    width: 200,
-    sorter: (a,b) => a.clientPackage.length - b.clientPackage.length,
-    onFilter: (value, record) => record.clientPackage.indexOf(value) === 0
-  },
-  {
-    key: "tags",
-    title: "Tags",
-    dataIndex: "tags",
-    render: (tags) => (
-      <>
-        {tags.map(item => (
-          <Tag
-            className="ticket-table-tags"
-            color={item.color} 
-            key={item.tag_id}
-          >
-            {item.tag}
-          </Tag>
-        ))}
-      </>
-    ),
-    sorter: (a,b) => a.tags.length - b.tags.length,
-    onFilter: (value, record) => record.tags.indexOf(value) === 0
-  },
-  {
-    key: "action",
-    title: "Action",
-    dataIndex: "action"
-  }
-];
+const network = [
+  {name: "Layer4"},
+  {name: "MásMóvil Direct"},
+  {name: "MásMóvil NEBA"} 
+]
 
-function Home({
-    tickets,
-    comments,
-    ticketInformation,
-    addTag,
-    deleteTag,
-    getAllTagsForOpenTickets,
-    getAllTags,
-    tags,
-    getTags,
-    getOpenTickets,
-    getComments,
-    getTicketInformation,
-    loadingTickets,
-    ticketTags
-}) {
-
+function Home() {
+  
   /**
-  * Component state
-  */
-  const [isVisible, setVisible]                   = useState(false);
-  const [isTagDrawerVisible, setTagDrawerVisible] = useState(false);
-  const [id, setId]                               = useState("");
+   * init redux
+   */
+  const dispatch = useDispatch();
 
-  const [form] = Form.useForm();
-
-  /**
-  * Once the Home page is rendered run the functions
-  */
   useEffect(() => {
-    getOpenTickets();
-    getAllTagsForOpenTickets();
-  }, [getOpenTickets, getAllTagsForOpenTickets])
+    dispatch(getOpenTickets());
+    dispatch(getClosedTickets());
+    dispatch(getClosedTicketsByNetwork());
+  }, [getClosedTickets, getOpenTickets, getClosedTicketsByNetwork]);
 
   /**
-   * Drawer functions
+   * Get data from redux store
    */
-  const showDrawer = () => {
-    setVisible(true);
-  };
-
-  const onClose = () => {
-    setVisible(false);
-  };
-
-  const showTagDrawer = () => {
-    setTagDrawerVisible(true);
-  };
-
-  const onCloseTagDrawer = () => {
-    setTagDrawerVisible(false);
-  };
+  const openTickets = useSelector(state => state.tickets.openTickets);
+  const closedTickets = useSelector(state => state.tickets.closedTickets); 
+  const closedTicketNetwork = useSelector(state => state.tickets.closedTicketNetwork);
 
   /**
-   * filter table rows on search submit
+   * Helper function to get the length of closed ticket for a specific 
+   * provider
    */
-  const onSearchSubmit = (value) => {
-    const filter = value.toUpperCase();
-    const table = document.querySelector("table");
-    const tableTr = table.querySelectorAll("tr");
-
-    tableTr.forEach((value) => {
-      const td = value.getElementsByTagName("td")[1];
-      if (td) {
-        const textValue = td.textContent
-        textValue.toUpperCase().indexOf(filter) > -1 ? 
-          value.style.display = "" : 
-          value.style.display = "none"        
+  const getClosedTicketsByNetworkLength = (network) => {
+    const arr = [];
+    for(const i in closedTicketNetwork){
+      if (closedTicketNetwork[i] === network) {
+        arr.push(closedTicketNetwork[i]);
       }
-    });
+    }
+    return arr.length;
   };
 
   /**
-   * Pageheader extra
+   * Get data from redux store
    */
-  const pageheaderExtra = [   
-    <Form method="GET" form={form} key="1">
-      <Form.Item name="q">
-        <Input.Search
-          allowClear
-          onSearch={onSearchSubmit} 
-          style={{ width: 300 }} 
-          placeholder="search address here..."
-        />
-      </Form.Item>
-    </Form>
-  ];
+  const { displayName } = useStore().getState().users.users;
 
-  /**
-   * Show empty icon when there are not tickets,
-   * in other words when tickets === undefined or null
-   */
-  if (!tickets) { 
-    return (
-      <section className="ticket-empty-icon">
-        <Empty description="Congratulations! There are currently no pending installations" />
-      </section>
-    );
-  }
-
-  /**
-   * Table data
-   */
-  const data = tickets.map((ticket, index) => {
-    const { ticketId, name, address, clientPackage, reference } = ticket;
-    return {
-      key: index,
-      client: `${reference} - ${name}`,
-      address,
-      clientPackage,
-      tags: tags.filter(tag => tag.ticketId === ticketId),      
-      action: (
-        <>
-        <Space wrap size={10}>          
-          <Button type="primary">
-            <Link to={`/ticket/${ticketId}`}>Open Ticket</Link>
-          </Button>
-          <Tooltip title="Add Tag">  
-            <Button 
-              shape="circle" 
-              icon={<TagsOutlined />} 
-              onClick={() => {
-                setId(ticketId);
-                getTags(ticketId);
-                showTagDrawer();
-              }} />
-          </Tooltip>
-          <Tooltip title="Sneak Peak">
-            <Button 
-              shape="circle" 
-              icon={<ExportOutlined />} 
-              onClick={() => {                  
-                setId(ticketId);              
-                showDrawer();
-                getTags(ticketId);
-                getTicketInformation(ticketId);
-                getComments(ticketId);
-              }} />
-          </Tooltip>
-        </Space>
-        </>
-      )
-    }
-  });
-
-  return (
+  return ( 
     <>
-      {loadingTickets ? (
-        "Loading..."
-      ) : (
-        <>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <HomeOutlined />
-              <span style={{ marginLeft: 8 }}>Home</span>
-            </Breadcrumb.Item>
-          </Breadcrumb>
-          <PageHeader
-            title="Home Page"
-            subTitle={`${tickets.length} Pending Installations`}
-            extra={pageheaderExtra}
-          />
-          <Table 
-            pagination={{ 
-              defaultPageSize: 50, 
-              pageSizeOptions:["50", "100", "250"],
-              total: tickets.length,
-              showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} tickets`,
-              showSizeChanger:true,
-              position:["bottomRight", "topRight"]
-            }}
-            tableLayout="fixed" 
-            columns={tableColumns} 
-            dataSource={data} 
-          />
-          <SneakPeakDrawer 
-            closable={false} 
-            onClose={onClose} 
-            visible={isVisible}            
-            ticketId={id}
-            ticketInformation={ticketInformation}
-            comments={comments}
-          />
-          <TagDrawer
-            handleAddTag={addTag}
-            handleDeleteTag={deleteTag}
-            tags={ticketTags}
-            closable={false}
-            onClose={onCloseTagDrawer}
-            visible={isTagDrawerVisible}
-            ticketId={id}
-          />
-        </>
-      )}
+      <Breadcrumb>
+        <Breadcrumb.Item>
+         <Link to="/">
+           <HomeOutlined />
+          <span style={{marginLeft: 8}}>Home</span>
+         </Link> 
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <PageHeader
+        title={`Hi! Welcome ${displayName}`}
+        subTitle="Overview"
+      />
+      <section>
+        <Row gutter={16} style={{background: "#f5f5f5", padding: "40px 20px 20px 20px" }}>
+          <Col span={12}>
+            <Card>
+              <Statistic
+                title="Open Tickets"
+                value={openTickets.length}
+              />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card>
+              <Statistic
+                title="Closed Tickets"
+                value={closedTickets.length}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={16} style={{ background: "#f5f5f5", padding: "20px 20px 40px 20px" }}>
+          {network.map(networkProvider => (
+            <Col span={8}>
+              <Card>
+                <Statistic
+                  title={networkProvider.name}
+                  value={getClosedTicketsByNetworkLength(networkProvider.name)}
+                />
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </section>
     </>
-  );
+  )
 }
 
-const mapStateToProps = (state) => ({
-  comments: state.comments.comments,
-  tickets: state.tickets.tickets,
-  ticketInformation: state.tickets.ticketInformation,
-  loadingTickets: state.tickets.loading,
-  tags: state.tags.tags,
-  ticketTags: state.tags.ticketTags,
-  users: state.users.users
-});
-
-export default connect(mapStateToProps, { 
-  getOpenTickets, 
-  getTicketInformation,
-  getComments,
-  addTag,
-  getAllTagsForOpenTickets,
-  getAllTags,
-  deleteTag,
-  getTags
-})(Home);
+export default Home;
